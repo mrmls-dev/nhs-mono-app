@@ -1,0 +1,185 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { ArrowLeft, Phone } from "lucide-react";
+import { Badge } from "@workspace/ui/components/badge";
+import regionsData from "@/data/regions.json";
+import type { Community, FloorPlan } from "@/components/CommunityCard";
+import CommunityGallery from "@/components/CommunityGallery";
+import ExpandableText from "@/components/ExpandableText";
+import ScheduleVisitButton from "@/components/ScheduleVisitButton";
+
+const allCommunities = regionsData.regions
+    .flatMap((r) => r.counties)
+    .flatMap((c) => c.communities) as unknown as Community[];
+
+export function generateStaticParams() {
+    return allCommunities.flatMap((c) =>
+        (c.floorPlans ?? []).map((p) => ({ id: c.id, planId: p.id })),
+    );
+}
+
+type Props = { params: Promise<{ id: string; planId: string }> };
+
+export async function generateMetadata({ params }: Props) {
+    const { id, planId } = await params;
+    const community = allCommunities.find((c) => c.id === id);
+    const plan = community?.floorPlans?.find((p) => p.id === planId);
+    if (!community || !plan) return { title: "Floor plan not found" };
+    return {
+        title: `${plan.name} — ${community.name} — National House Search`,
+        description: `Explore the ${plan.name} floor plan at ${community.name}.${plan.startingPrice ? ` ${plan.startingPrice}.` : ""}`,
+    };
+}
+
+export default async function FloorPlanPage({ params }: Props) {
+    const { id, planId } = await params;
+    const community = allCommunities.find((c) => c.id === id);
+    const plan = community?.floorPlans?.find((p) => p.id === planId) as
+        | FloorPlan
+        | undefined;
+
+    if (!community || !plan) notFound();
+
+    const stats = [
+        plan.beds && { label: "Bedrooms", value: plan.beds },
+        plan.baths && { label: "Bathrooms", value: plan.baths },
+        plan.garage && { label: "Garage", value: plan.garage },
+        plan.stories && { label: "Stories", value: plan.stories },
+        plan.sqft && { label: "Sq. Ft.", value: plan.sqft },
+    ].filter(Boolean) as { label: string; value: string }[];
+
+    return (
+        <main className="container mx-auto px-4 md:px-5 py-6 md:py-8 flex flex-col gap-8 md:gap-12">
+            <div className="flex flex-col gap-3">
+                <nav className="text-sm text-muted-foreground">
+                    <Link href="/" className="hover:text-primary">
+                        Communities
+                    </Link>
+                    <span className="mx-2">/</span>
+                    <Link
+                        href={`/communities/${community.id}`}
+                        className="hover:text-primary"
+                    >
+                        {community.name}
+                    </Link>
+                    <span className="mx-2">/</span>
+                    <span className="text-foreground">{plan.name}</span>
+                </nav>
+                <Link
+                    href={`/communities/${community.id}`}
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+                >
+                    <ArrowLeft className="size-4" aria-hidden />
+                    Back to {community.name}
+                </Link>
+            </div>
+
+            {plan.gallery && plan.gallery.length > 0 && (
+                <CommunityGallery
+                    items={plan.gallery}
+                    fallbackImage={plan.image}
+                    communityName={`${community.name} — ${plan.name}`}
+                />
+            )}
+
+            <section className="flex flex-col gap-4 md:flex-row md:justify-between items-start">
+                <div className="flex flex-col gap-4">
+                    <p className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
+                        {community.brand
+                            ? `${community.brand} · ${community.name}`
+                            : community.name}
+                    </p>
+                    <div className="flex flex-wrap items-end gap-4">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground">
+                            {plan.name}
+                        </h1>
+                        {plan.startingPrice && (
+                            <Badge className="px-3 py-1 md:px-4 md:py-1.5 bg-primary text-primary-foreground text-base md:text-lg font-bold rounded-full hover:bg-primary">
+                                {plan.startingPrice}
+                            </Badge>
+                        )}
+                    </div>
+
+                    {stats.length > 0 && (
+                        <dl className="flex flex-wrap gap-6 pt-2">
+                            {stats.map((s) => (
+                                <div key={s.label} className="flex flex-col gap-0.5">
+                                    <dt className="text-xs uppercase tracking-wide text-muted-foreground">
+                                        {s.label}
+                                    </dt>
+                                    <dd className="text-lg font-semibold text-foreground">
+                                        {s.value}
+                                    </dd>
+                                </div>
+                            ))}
+                        </dl>
+                    )}
+                </div>
+
+                <div className="flex flex-wrap gap-3 pt-2 md:justify-end">
+                    <ScheduleVisitButton size="lg" comm={community.name} fpModel={plan.name} />
+                    <a
+                        href="tel:5617040091"
+                        className="inline-flex items-center gap-2 px-6 py-3 text-base font-semibold rounded-lg border border-border text-foreground hover:bg-muted transition-colors"
+                    >
+                        <Phone className="size-4 shrink-0" aria-hidden />
+                        561-704-0091
+                    </a>
+                </div>
+            </section>
+
+            {plan.description && (
+                <section className="max-w-2xl flex flex-col gap-3">
+                    <h2 className="text-2xl font-bold text-foreground">About this floor plan</h2>
+                    <ExpandableText text={plan.description} />
+                </section>
+            )}
+
+            <section className="flex flex-col gap-4">
+                <h2 className="text-2xl font-bold text-foreground">Floor plan diagram</h2>
+                {plan.diagramImage ? (
+                    <div className="bg-muted rounded-xl border border-border overflow-hidden">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                            src={plan.diagramImage}
+                            alt={`${plan.name} floor plan diagram`}
+                            className="w-full object-contain max-h-[50vh] md:max-h-[70vh]"
+                        />
+                    </div>
+                ) : (
+                    <div className="flex items-center gap-2">
+                        <span className="size-2 rounded-full bg-primary animate-pulse" />
+                        <span className="text-sm font-medium text-muted-foreground">
+                            Coming Soon
+                        </span>
+                    </div>
+                )}
+            </section>
+
+            <section className="rounded-xl bg-secondary text-secondary-foreground px-8 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="flex flex-col gap-1 text-center md:text-left">
+                    <h2 className="text-xl font-bold">Love the {plan.name}?</h2>
+                    <p className="text-secondary-foreground/70 text-sm">
+                        Schedule a visit and see it in person — our team is ready to help.
+                    </p>
+                </div>
+                <ScheduleVisitButton
+                    size="lg"
+                    className="shrink-0"
+                    comm={community.name}
+                    fpModel={plan.name}
+                />
+            </section>
+
+            <div>
+                <Link
+                    href={`/communities/${community.id}`}
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+                >
+                    <ArrowLeft className="size-4" aria-hidden />
+                    Back to {community.name}
+                </Link>
+            </div>
+        </main>
+    );
+}

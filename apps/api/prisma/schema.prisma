@@ -1,0 +1,184 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider     = "prisma-client"
+  output       = "./generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum CommunityStatus {
+  NOW_SELLING
+  COMING_SOON
+  SOLD_OUT
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+// ─── Geography ────────────────────────────────────────────────────────────────
+
+model Region {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  name      String
+  state     String   @default("Florida")
+  counties  County[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model County {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  name        String
+  // Bounding box for map viewport fitting
+  boundsNorth Float
+  boundsSouth Float
+  boundsEast  Float
+  boundsWest  Float
+  regionId    String
+  region      Region      @relation(fields: [regionId], references: [id])
+  communities Community[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+// ─── Community ────────────────────────────────────────────────────────────────
+
+model Community {
+  id           String             @id @default(cuid())
+  slug         String             @unique
+  name         String
+  brand        String?
+  location     String
+  image        String
+  status       CommunityStatus
+  homesForSale Int                @default(0)
+  // Bedroom range — single value sets min = max
+  bedsMin      Int
+  bedsMax      Int
+  // Bath range — supports fractional (e.g. 2.5)
+  bathsMin     Decimal            @db.Decimal(4, 1)
+  bathsMax     Decimal            @db.Decimal(4, 1)
+  // Garage range
+  garageMin    Int
+  garageMax    Int
+  // Story range
+  storiesMin   Int
+  storiesMax   Int
+  // Smallest available floor plan in sq ft
+  sqftFrom     Int
+  // Lowest starting price in whole dollars
+  priceFrom    Int
+  // Map coordinates
+  lat          Float
+  lng          Float
+  about        String             @db.Text
+  countyId     String
+  county       County             @relation(fields: [countyId], references: [id])
+  gallery      CommunityMedia[]
+  amenities    CommunityAmenity[]
+  schools      School[]
+  floorPlans   FloorPlanModel[]
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  @@index([countyId])
+  @@index([status])
+  @@index([priceFrom])
+  @@index([lat, lng])
+}
+
+model CommunityMedia {
+  id          String    @id @default(cuid())
+  type        MediaType
+  src         String
+  alt         String
+  caption     String?
+  sortOrder   Int       @default(0)
+  communityId String
+  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+
+  @@index([communityId])
+}
+
+model Amenity {
+  id          String             @id @default(cuid())
+  name        String             @unique
+  communities CommunityAmenity[]
+}
+
+model CommunityAmenity {
+  communityId String
+  amenityId   String
+  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  amenity     Amenity   @relation(fields: [amenityId], references: [id], onDelete: Cascade)
+
+  @@id([communityId, amenityId])
+}
+
+model School {
+  id          String     @id @default(cuid())
+  name        String
+  type        String
+  grades      String
+  // Display string preserved (e.g. "0.9 mi.") — not used for filtering
+  distance    String
+  communityId String
+  community   Community  @relation(fields: [communityId], references: [id], onDelete: Cascade)
+
+  @@index([communityId])
+}
+
+// ─── Floor Plans ──────────────────────────────────────────────────────────────
+
+model FloorPlanModel {
+  id            String          @id @default(cuid())
+  // slug is unique per community, not globally (same plan name can appear in multiple communities)
+  slug          String
+  name          String
+  brand         String?
+  // Starting price in whole dollars
+  startingPrice Int
+  beds          Int
+  // Supports fractional baths (e.g. 2.5)
+  baths         Decimal         @db.Decimal(4, 1)
+  garage        Int
+  stories       Int
+  sqft          Int
+  image         String
+  modelVideo    String?
+  description   String?         @db.Text
+  diagramImage  String?
+  communityId   String
+  community     Community       @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  gallery       FloorPlanModelMedia[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@unique([communityId, slug])
+  @@index([communityId])
+  @@index([startingPrice])
+}
+
+model FloorPlanModelMedia {
+  id          String    @id @default(cuid())
+  type        MediaType
+  src         String
+  alt         String
+  caption     String?
+  sortOrder   Int       @default(0)
+  floorPlanId String
+  floorPlan   FloorPlanModel @relation(fields: [floorPlanId], references: [id], onDelete: Cascade)
+
+  @@index([floorPlanId])
+}

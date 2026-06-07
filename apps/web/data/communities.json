@@ -1,0 +1,412 @@
+[
+	{
+		"id": "sun-n-lake",
+		"name": "Sun N Lake",
+		"location": "5530 Savona Dr, Sebring, FL 33872",
+		"image": "/images/communities/sun-n-lake.jpg",
+		"status": "Now Selling",
+		"homesForSale": 7,
+		"beds": "3 - 5 Bed",
+		"baths": "2 - 3 Bath",
+		"garage": "2 Garage",
+		"stories": "1 Story",
+		"sqftFrom": "1,328",
+		"priceFrom": "$275,190",
+		"coords": { "lat": 27.4956, "lng": -81.4634 },
+		"about": "Welcome to Sun N Lake, a master-planned community nestled in the heart of Sebring, FL. Surrounded by mature oaks, sparkling lakes, and a championship golf course, our neighborhood blends resort-style amenities with the comfort of small-town Florida living. Whether you're starting out, raising a family, or planning your retirement, you'll find a home built for the way you live.",
+		"gallery": [
+			{ "type": "image", "src": "/images/communities/sun-n-lake/gallery-1.jpg", "alt": "Sun N Lake community entrance" },
+			{ "type": "image", "src": "/images/communities/sun-n-lake/gallery-2.jpg", "alt": "Community pool" },
+			{ "type": "image", "src": "/images/communities/sun-n-lake/gallery-3.jpg", "alt": "Golf course view" },
+			{ "type": "image", "src": "/images/communities/sun-n-lake/gallery-4.jpg", "alt": "Model home exterior" },
+			{ "type": "video", "src": "/images/communities/sun-n-lake/tour.mp4", "alt": "Community walkthrough video", "poster": "/images/communities/sun-n-lake/gallery-1.jpg" }
+		],
+		"amenities": [
+			"Dog Park",
+			"Golf",
+			"Pickleball",
+			"Tennis",
+			"Basketball Court",
+			"Club House",
+			"Community Pools"
+		],
+		"schools": [
+			{ "name": "Sun 'n Lake Elementary", "type": "Public", "grades": "K-5", "distance": "0.9 mi." },
+			{ "name": "Hill-Gustat Middle School", "type": "Public", "grades": "6-8", "distance": "2.3 mi." },
+			{ "name": "Avon Park High School", "type": "Public", "grades": "9-12", "distance": "3.6 mi." }
+		],
+		"homes": [
+			{
+				"image": "/images/communities/sun-n-lake/home-1.jpg",
+				"price": "$306,990",
+				"monthly": "$1,968.46/monthly*",
+				"address": "6712 San Bruno Drive",
+				"beds": "4 Bed",
+				"baths": "2 Bath",
+				"garage": "2 Garage",
+				"stories": "1 Story",
+				"sqft": "1,828 Sq. Ft.",
+				"lot": "Lot 41"
+			},
+			{
+				"image": "/images/communities/sun-n-lake/home-2.jpg",
+				"price": "$289,500",
+				"monthly": "$1,852.10/monthly*",
+				"address": "6720 San Bruno Drive",
+				"beds": "3 Bed",
+				"baths": "2 Bath",
+				"garage": "2 Garage",
+				"stories": "1 Story",
+				"sqft": "1,612 Sq. Ft.",
+				"lot": "Lot 42"
+			},
+			{
+				"image": "/images/communities/sun-n-lake/home-3.jpg",
+				"price": "$324,750",
+				"monthly": "$2,074.21/monthly*",
+				"address": "6738 San Bruno Drive",
+				"beds": "4 Bed",
+				"baths": "3 Bath",
+				"garage": "2 Garage",
+				"stories": "1 Story",
+				"sqft": "2,011 Sq. Ft.",
+				"lot": "Lot 44"
+			}
+		],
+		"floorPlans": [
+			{
+				"id": "archer-ii",
+				"name": "Archer II",
+				"startingPrice": "Starting in the $276s",
+				"beds": "3 Bed",
+				"baths": "2 Bath",
+				"garage": "2 Garage",
+				"stories": "1 Story",
+				"sqft": "1,328 Sq. Ft.",
+				"image": "/images/communities/sun-n-lake/plan-archer-ii.jpg"
+			},
+			{
+				"id": "barrett",
+				"name": "Barrett",
+				"startingPrice": "Starting in the $295s",
+				"beds": "4 Bed",
+				"baths": "2 Bath",
+				"garage": "2 Garage",
+				"stories": "1 Story",
+				"sqft": "1,612 Sq. Ft.",
+				"image": "/images/communities/sun-n-lake/plan-barrett.jpg"
+			},
+			{
+				"id": "cresswind",
+				"name": "Cresswind",
+				"startingPrice": "Starting in the $328s",
+				"beds": "4 Bed",
+				"baths": "3 Bath",
+				"garage": "2 Garage",
+				"stories": "1 Story",
+				"sqft": "2,011 Sq. Ft.",
+				"image": "/images/communities/sun-n-lake/plan-cresswind.jpg"
+			}
+		]
+	},
+	{
+		"id": "lakewood-ranch",
+		"name": "Lakewood Ranch",
+		"location": "8520 Heritage Blvd, Bradenton, FL 34202",
+		"image": "/images/communities/lakewood-ranch.jpg",
+		"status": "Coming Soon",
+		"homesForSale": 12,
+		"beds": "3 - 4 Bed",
+		"baths": "2 - 3 Bath",
+		"garage": "2 Garage",
+		"stories": "1 - 2 Story",
+		"sqftFrom": "1,540",
+		"priceFrom": "$329,900",
+		"coords": { "lat": 27.4216, "lng": -82.4332 },
+		"about": "Set among shaded preserves and quiet lakes, Lakewood Ranch is one of the country's best-selling master-planned communities. Walking trails, top-rated schools, and a vibrant downtown are all minutes from your front door.",
+		"gallery": [
+			{ "type": "image", "src": "/images/communities/lakewood-ranch/gallery-1.jpg", "alt": "Lakewood Ranch entrance" },
+			{ "type": "image", "src": "/images/communities/lakewood-ranch/gallery-2.jpg", "alt": "Lakefront homes" },
+			{ "type": "image", "src": "/images/communities/lakewood-ranch/gallery-3.jpg", "alt": "Community trail" }
+		],
+		"amenities": [
+			"Dog Park",
+			"Golf",
+			"Pickleball",
+			"Tennis",
+			"Club House",
+			"Community Pools"
+		],
+		"schools": [
+			{ "name": "Robert E. Willis Elementary", "type": "Public", "grades": "K-5", "distance": "1.1 mi." },
+			{ "name": "Nolan Middle School", "type": "Public", "grades": "6-8", "distance": "2.0 mi." },
+			{ "name": "Lakewood Ranch High School", "type": "Public", "grades": "9-12", "distance": "3.4 mi." }
+		],
+		"homes": [
+			{
+				"image": "/images/communities/lakewood-ranch/home-1.jpg",
+				"price": "$359,900",
+				"monthly": "$2,302.18/monthly*",
+				"address": "8602 Heritage Blvd",
+				"beds": "4 Bed",
+				"baths": "3 Bath",
+				"garage": "2 Garage",
+				"stories": "2 Story",
+				"sqft": "2,184 Sq. Ft.",
+				"lot": "Lot 12"
+			},
+			{
+				"image": "/images/communities/lakewood-ranch/home-2.jpg",
+				"price": "$329,900",
+				"monthly": "$2,110.55/monthly*",
+				"address": "8612 Heritage Blvd",
+				"beds": "3 Bed",
+				"baths": "2 Bath",
+				"garage": "2 Garage",
+				"stories": "1 Story",
+				"sqft": "1,540 Sq. Ft.",
+				"lot": "Lot 13"
+			}
+		],
+		"floorPlans": [
+			{
+				"id": "magnolia",
+				"name": "Magnolia",
+				"startingPrice": "Starting in the $329s",
+				"beds": "3 Bed",
+				"baths": "2 Bath",
+				"garage": "2 Garage",
+				"stories": "1 Story",
+				"sqft": "1,540 Sq. Ft.",
+				"image": "/images/communities/lakewood-ranch/plan-magnolia.jpg"
+			},
+			{
+				"id": "heritage",
+				"name": "Heritage",
+				"startingPrice": "Starting in the $359s",
+				"beds": "4 Bed",
+				"baths": "3 Bath",
+				"garage": "2 Garage",
+				"stories": "2 Story",
+				"sqft": "2,184 Sq. Ft.",
+				"image": "/images/communities/lakewood-ranch/plan-heritage.jpg"
+			}
+		]
+	},
+	{
+		"id": "babcock-ranch",
+		"name": "Babcock Ranch",
+		"location": "42850 Crescent Loop, Punta Gorda, FL 33982",
+		"image": "/images/communities/babcock-ranch.jpg",
+		"status": "Now Selling",
+		"homesForSale": 9,
+		"beds": "3 - 5 Bed",
+		"baths": "2 - 4 Bath",
+		"garage": "2 - 3 Garage",
+		"stories": "1 - 2 Story",
+		"sqftFrom": "1,672",
+		"priceFrom": "$345,000",
+		"coords": { "lat": 26.7831, "lng": -81.7064 },
+		"about": "Babcock Ranch is America's first solar-powered town — a forward-looking community where sustainable living, technology, and Florida nature meet.",
+		"gallery": [
+			{ "type": "image", "src": "/images/communities/babcock-ranch/gallery-1.jpg", "alt": "Babcock Ranch downtown" },
+			{ "type": "image", "src": "/images/communities/babcock-ranch/gallery-2.jpg", "alt": "Solar fields" }
+		],
+		"amenities": [
+			"Dog Park",
+			"Pickleball",
+			"Tennis",
+			"Basketball Court",
+			"Club House",
+			"Community Pools"
+		],
+		"schools": [
+			{ "name": "Babcock Neighborhood School", "type": "Charter", "grades": "K-8", "distance": "0.5 mi." },
+			{ "name": "Babcock High School", "type": "Public", "grades": "9-12", "distance": "1.2 mi." }
+		],
+		"homes": [
+			{
+				"image": "/images/communities/babcock-ranch/home-1.jpg",
+				"price": "$345,000",
+				"monthly": "$2,213.40/monthly*",
+				"address": "42910 Crescent Loop",
+				"beds": "3 Bed",
+				"baths": "2 Bath",
+				"garage": "2 Garage",
+				"stories": "1 Story",
+				"sqft": "1,672 Sq. Ft.",
+				"lot": "Lot 7"
+			}
+		],
+		"floorPlans": [
+			{
+				"id": "solera",
+				"name": "Solera",
+				"startingPrice": "Starting in the $345s",
+				"beds": "3 Bed",
+				"baths": "2 Bath",
+				"garage": "2 Garage",
+				"stories": "1 Story",
+				"sqft": "1,672 Sq. Ft.",
+				"image": "/images/communities/babcock-ranch/plan-solera.jpg"
+			}
+		]
+	},
+	{
+		"id": "tradition",
+		"name": "Tradition",
+		"location": "10521 SW Tradition Pkwy, Port St. Lucie, FL 34987",
+		"image": "/images/communities/tradition.jpg",
+		"status": "Now Selling",
+		"homesForSale": 5,
+		"beds": "3 - 4 Bed",
+		"baths": "2 - 3 Bath",
+		"garage": "2 Garage",
+		"stories": "1 Story",
+		"sqftFrom": "1,420",
+		"priceFrom": "$298,500",
+		"coords": { "lat": 27.2734, "lng": -80.4234 },
+		"about": "Tradition is a charming, walkable community in Port St. Lucie, built around a town square and miles of trails connecting parks, shops, and dining.",
+		"gallery": [
+			{ "type": "image", "src": "/images/communities/tradition/gallery-1.jpg", "alt": "Tradition town square" },
+			{ "type": "image", "src": "/images/communities/tradition/gallery-2.jpg", "alt": "Walking trail" }
+		],
+		"amenities": ["Dog Park", "Pickleball", "Tennis", "Club House", "Community Pools"],
+		"schools": [
+			{ "name": "Manatee K-8 Academy", "type": "Public", "grades": "K-8", "distance": "1.4 mi." },
+			{ "name": "St. Lucie West Centennial High", "type": "Public", "grades": "9-12", "distance": "2.8 mi." }
+		],
+		"homes": [
+			{
+				"image": "/images/communities/tradition/home-1.jpg",
+				"price": "$298,500",
+				"monthly": "$1,914.62/monthly*",
+				"address": "10545 SW Tradition Pkwy",
+				"beds": "3 Bed",
+				"baths": "2 Bath",
+				"garage": "2 Garage",
+				"stories": "1 Story",
+				"sqft": "1,420 Sq. Ft.",
+				"lot": "Lot 3"
+			}
+		],
+		"floorPlans": [
+			{
+				"id": "harbor",
+				"name": "Harbor",
+				"startingPrice": "Starting in the $298s",
+				"beds": "3 Bed",
+				"baths": "2 Bath",
+				"garage": "2 Garage",
+				"stories": "1 Story",
+				"sqft": "1,420 Sq. Ft.",
+				"image": "/images/communities/tradition/plan-harbor.jpg"
+			}
+		]
+	},
+	{
+		"id": "lake-nona",
+		"name": "Lake Nona",
+		"location": "9801 Lake Nona Blvd, Orlando, FL 32827",
+		"image": "/images/communities/lake-nona.jpg",
+		"status": "Coming Soon",
+		"homesForSale": 14,
+		"beds": "3 - 5 Bed",
+		"baths": "2 - 4 Bath",
+		"garage": "2 - 3 Garage",
+		"stories": "1 - 2 Story",
+		"sqftFrom": "1,780",
+		"priceFrom": "$389,990",
+		"coords": { "lat": 28.4002, "lng": -81.2519 },
+		"about": "Lake Nona is a tech-forward community south of Orlando known for its medical city, innovation campuses, and wide-open lakefront living.",
+		"gallery": [
+			{ "type": "image", "src": "/images/communities/lake-nona/gallery-1.jpg", "alt": "Lake Nona skyline" },
+			{ "type": "image", "src": "/images/communities/lake-nona/gallery-2.jpg", "alt": "Town center" }
+		],
+		"amenities": ["Golf", "Pickleball", "Tennis", "Basketball Court", "Club House", "Community Pools"],
+		"schools": [
+			{ "name": "Northlake Park Community School", "type": "Public", "grades": "K-8", "distance": "0.8 mi." },
+			{ "name": "Lake Nona High School", "type": "Public", "grades": "9-12", "distance": "1.7 mi." }
+		],
+		"homes": [
+			{
+				"image": "/images/communities/lake-nona/home-1.jpg",
+				"price": "$389,990",
+				"monthly": "$2,502.10/monthly*",
+				"address": "9821 Lake Nona Blvd",
+				"beds": "4 Bed",
+				"baths": "3 Bath",
+				"garage": "2 Garage",
+				"stories": "2 Story",
+				"sqft": "2,310 Sq. Ft.",
+				"lot": "Lot 21"
+			}
+		],
+		"floorPlans": [
+			{
+				"id": "innovation",
+				"name": "Innovation",
+				"startingPrice": "Starting in the $389s",
+				"beds": "4 Bed",
+				"baths": "3 Bath",
+				"garage": "2 Garage",
+				"stories": "2 Story",
+				"sqft": "2,310 Sq. Ft.",
+				"image": "/images/communities/lake-nona/plan-innovation.jpg"
+			}
+		]
+	},
+	{
+		"id": "ave-maria",
+		"name": "Ave Maria",
+		"location": "5076 Annunciation Cir, Ave Maria, FL 34142",
+		"image": "/images/communities/ave-maria.jpg",
+		"status": "Now Selling",
+		"homesForSale": 6,
+		"beds": "3 - 4 Bed",
+		"baths": "2 - 3 Bath",
+		"garage": "2 Garage",
+		"stories": "1 Story",
+		"sqftFrom": "1,512",
+		"priceFrom": "$312,400",
+		"coords": { "lat": 26.3367, "lng": -81.4226 },
+		"about": "Ave Maria is a vibrant, master-planned town in southwest Florida featuring a walkable town center, parks, and a tight-knit community feel.",
+		"gallery": [
+			{ "type": "image", "src": "/images/communities/ave-maria/gallery-1.jpg", "alt": "Ave Maria town center" },
+			{ "type": "image", "src": "/images/communities/ave-maria/gallery-2.jpg", "alt": "Community park" }
+		],
+		"amenities": ["Dog Park", "Pickleball", "Tennis", "Basketball Court", "Club House", "Community Pools"],
+		"schools": [
+			{ "name": "Estates Elementary School", "type": "Public", "grades": "K-5", "distance": "1.6 mi." },
+			{ "name": "Corkscrew Middle School", "type": "Public", "grades": "6-8", "distance": "2.9 mi." },
+			{ "name": "Palmetto Ridge High School", "type": "Public", "grades": "9-12", "distance": "3.8 mi." }
+		],
+		"homes": [
+			{
+				"image": "/images/communities/ave-maria/home-1.jpg",
+				"price": "$312,400",
+				"monthly": "$2,004.10/monthly*",
+				"address": "5102 Annunciation Cir",
+				"beds": "3 Bed",
+				"baths": "2 Bath",
+				"garage": "2 Garage",
+				"stories": "1 Story",
+				"sqft": "1,512 Sq. Ft.",
+				"lot": "Lot 9"
+			}
+		],
+		"floorPlans": [
+			{
+				"id": "annunciation",
+				"name": "Annunciation",
+				"startingPrice": "Starting in the $312s",
+				"beds": "3 Bed",
+				"baths": "2 Bath",
+				"garage": "2 Garage",
+				"stories": "1 Story",
+				"sqft": "1,512 Sq. Ft.",
+				"image": "/images/communities/ave-maria/plan-annunciation.jpg"
+			}
+		]
+	}
+]
