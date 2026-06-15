@@ -14,18 +14,25 @@ export type CustomHostnameResult = {
  * Cloudflare for SaaS — manages agent custom domains via the Custom Hostnames
  * API (custom hostname → SSL → Vercel origin).
  *
- * Runs in **mock mode** whenever `CLOUDFLARE_API_TOKEN` is unset (i.e. local
- * dev): no network calls are made and a deterministic `pending` result is
- * returned so the domain UI is fully exercisable without credentials. Set the
- * three CLOUDFLARE_* / CF_SAAS_FALLBACK_ORIGIN env vars to hit the real API.
+ * Runs in **mock mode** whenever `CLOUDFLARE_API_TOKEN`/`CLOUDFLARE_ZONE_ID`
+ * are unset (i.e. local dev): no network calls are made and a deterministic
+ * `pending` result is returned so the domain UI is fully exercisable without
+ * credentials. Set the CLOUDFLARE_* env vars to hit the real API.
  */
 @Injectable()
 export class CloudflareService {
     private readonly logger = new Logger(CloudflareService.name);
     private readonly apiToken = process.env.CLOUDFLARE_API_TOKEN;
     private readonly zoneId = process.env.CLOUDFLARE_ZONE_ID;
-    private readonly fallbackOrigin =
-        process.env.CF_SAAS_FALLBACK_ORIGIN ?? "cname.vercel-dns.com";
+    /**
+     * The proxied hostname in our zone that agents CNAME their custom domain
+     * at. This is the Cloudflare-for-SaaS *CNAME target* — distinct from the
+     * SaaS fallback origin (which is configured in the CF dashboard, not via
+     * the API). Routing it through a dedicated record lets us repoint the
+     * fallback origin later without every agent having to update DNS.
+     */
+    private readonly cnameTarget =
+        process.env.CF_SAAS_CNAME_TARGET ?? "agents.nationalhousesearch.com";
 
     /** Whether real Cloudflare API calls are configured. */
     get isLive(): boolean {
@@ -33,8 +40,9 @@ export class CloudflareService {
     }
 
     private dnsInstructions(hostname: string) {
-        // The agent points their apex/subdomain at our SaaS fallback origin.
-        return [{ type: "CNAME", name: hostname, value: this.fallbackOrigin }];
+        // The agent points their apex/subdomain at our proxied CNAME target,
+        // which routes through Cloudflare for SaaS to the Vercel origin.
+        return [{ type: "CNAME", name: hostname, value: this.cnameTarget }];
     }
 
     async addHostname(hostname: string): Promise<CustomHostnameResult> {
@@ -63,7 +71,7 @@ export class CloudflareService {
         return {
             id: result?.id ?? null,
             hostname,
-            status: result?.status === "active" ? "active" : "pending",
+            status: isActive(result) ? "active" : "pending",
             dnsInstructions: this.dnsInstructions(hostname),
         };
     }
@@ -82,8 +90,7 @@ export class CloudflareService {
             `/zones/${this.zoneId}/custom_hostnames/${id}`,
             "GET"
         );
-        const result = asObject(res.result);
-        return result?.status === "active" ? "active" : "pending";
+        return isActive(asObject(res.result)) ? "active" : "pending";
     }
 
     async removeHostname(hostname: string): Promise<void> {
@@ -112,11 +119,7 @@ export class CloudflareService {
         path: string,
         method: "GET" | "POST" | "DELETE",
         body?: unknown
-    ): Promise<{
-        result?:
-            | { id?: string; status?: string }
-            | { id?: string; status?: string }[];
-    }> {
+    ): Promise<{ result?: CfHostname | CfHostname[] }> {
         const res = await fetch(`https://api.cloudflare.com/client/v4${path}`, {
             method,
             headers: {
@@ -128,9 +131,7 @@ export class CloudflareService {
         const json = (await res.json()) as {
             success: boolean;
             errors?: unknown;
-            result?:
-                | { id?: string; status?: string }
-                | { id?: string; status?: string }[];
+            result?: CfHostname | CfHostname[];
         };
         if (!res.ok || !json.success) {
             this.logger.error(
@@ -142,12 +143,26 @@ export class CloudflareService {
     }
 }
 
+/** Shape of a Cloudflare custom_hostname object (only the fields we read). */
+type CfHostname = {
+    id?: string;
+    /** Hostname verification: "pending" | "active" | "blocked" | … */
+    status?: string;
+    /** Certificate state: "pending_validation" | "pending_issuance" | "active" | … */
+    ssl?: { status?: string };
+};
+
 /** Narrow a CF `result` (object or array) to its single-object form. */
 function asObject(
-    result:
-        | { id?: string; status?: string }
-        | { id?: string; status?: string }[]
-        | undefined
-): { id?: string; status?: string } | undefined {
+    result: CfHostname | CfHostname[] | undefined
+): CfHostname | undefined {
     return Array.isArray(result) ? result[0] : result;
+}
+
+/**
+ * A custom hostname is only truly serving once both the hostname is verified
+ * AND its certificate has been issued — until then HTTPS requests fail.
+ */
+function isActive(result: CfHostname | undefined): boolean {
+    return result?.status === "active" && result.ssl?.status === "active";
 }

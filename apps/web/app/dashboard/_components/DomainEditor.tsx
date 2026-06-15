@@ -29,8 +29,11 @@ import {
 } from "@/api/agent";
 import { DomainStatusBadge } from "./StatusChips";
 
-// Mirrors the API's Cloudflare for SaaS fallback origin (CF_SAAS_FALLBACK_ORIGIN).
-const FALLBACK_ORIGIN = "cname.vercel-dns.com";
+// The proxied Cloudflare-for-SaaS CNAME target agents point their domain at.
+// Mirrors the API's CF_SAAS_CNAME_TARGET; override per-environment.
+const CNAME_TARGET =
+    process.env.NEXT_PUBLIC_AGENT_CNAME_TARGET ??
+    "agents.nationalhousesearch.com";
 
 const domainSchema = z.object({
     domain: z
@@ -45,7 +48,7 @@ const domainSchema = z.object({
 type DomainValues = z.infer<typeof domainSchema>;
 
 function dnsRecords(domain: string) {
-    return [{ type: "CNAME", name: domain, value: FALLBACK_ORIGIN }];
+    return [{ type: "CNAME", name: domain, value: CNAME_TARGET }];
 }
 
 export function DomainEditor({ agent }: { agent: Agent }) {
@@ -165,7 +168,7 @@ export function DomainEditor({ agent }: { agent: Agent }) {
                                 <div className="flex flex-col">
                                     <span className="font-medium">{domain}</span>
                                     <span className="text-xs text-muted-foreground">
-                                        Points to {FALLBACK_ORIGIN}
+                                        Points to {CNAME_TARGET}
                                     </span>
                                 </div>
                             </div>

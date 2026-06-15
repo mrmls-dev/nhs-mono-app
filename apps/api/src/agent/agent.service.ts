@@ -548,6 +548,8 @@ const RESERVED_SUBDOMAINS = new Set([
     "static",
     "assets",
     "customers",
+    "agents", // Cloudflare-for-SaaS CNAME target
+    "origin", // SaaS fallback origin
 ]);
 
 /** Lowercase, strip port + leading www. */
