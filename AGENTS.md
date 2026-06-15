@@ -68,4 +68,4 @@ The `.agents/skills/` directory contains project-specific rule files that **must
 - When using form always use React Hook Form
 - Use Zod for form validation
 - Use Lucide React Icons only
-- For server data fetching Do NOT fetch directly inside components repeatedly. Instead fetch inside `apps/web/api/*.ts` — this becomes reusable everywhere. After that inside the component or page hydrate with Tanstack Query.
+- For server data fetching Do NOT fetch directly inside components repeatedly. Instead fetch inside the fetcher layer at `apps/web/lib/api/*.ts`, imported via the `@/api/*` alias (e.g. `import { getMyAgent } from "@/api/agent"`) — this becomes reusable everywhere. After that inside the component or page hydrate with Tanstack Query. NOTE: the files live in `lib/api/`, not a root-level `apps/web/api/`, because Vercel treats a project-root `api/` folder as zero-config Serverless Functions (compiled without tsconfig paths), which breaks the build. The `@/api/*` import path is unchanged by the move.
