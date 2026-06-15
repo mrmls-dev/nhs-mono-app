@@ -1,11 +1,11 @@
 import { Module } from "@nestjs/common";
 import { PrismaModule } from "../prisma/prisma.module";
-import { CloudflareModule } from "../cloudflare/cloudflare.module";
+import { VercelModule } from "../vercel/vercel.module";
 import { AgentService } from "./agent.service";
 import { AgentController } from "./agent.controller";
 
 @Module({
-    imports: [PrismaModule, CloudflareModule],
+    imports: [PrismaModule, VercelModule],
     controllers: [AgentController],
     providers: [AgentService],
     exports: [AgentService],

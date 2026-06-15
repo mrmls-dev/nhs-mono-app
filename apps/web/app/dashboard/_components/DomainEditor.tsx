@@ -29,11 +29,10 @@ import {
 } from "@/api/agent";
 import { DomainStatusBadge } from "./StatusChips";
 
-// The proxied Cloudflare-for-SaaS CNAME target agents point their domain at.
-// Mirrors the API's CF_SAAS_CNAME_TARGET; override per-environment.
+// What agents CNAME their custom domain at — Vercel issues + serves the cert.
+// Mirrors the API's VERCEL_CNAME_TARGET; override per-environment.
 const CNAME_TARGET =
-    process.env.NEXT_PUBLIC_AGENT_CNAME_TARGET ??
-    "agents.nationalhousesearch.com";
+    process.env.NEXT_PUBLIC_AGENT_CNAME_TARGET ?? "cname.vercel-dns.com";
 
 const domainSchema = z.object({
     domain: z

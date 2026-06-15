@@ -4,10 +4,11 @@ import {
     Inject,
     Injectable,
     InternalServerErrorException,
+    Logger,
     NotFoundException,
 } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
-import { CloudflareService } from "../cloudflare/cloudflare.service";
+import { VercelDomainsService } from "../vercel/vercel.service";
 import {
     AUTH_INSTANCE,
     PLATFORM_ADMIN_ROLE,
@@ -29,10 +30,12 @@ const orgWithOwner = {
 
 @Injectable()
 export class AgentService {
+    private readonly logger = new Logger(AgentService.name);
+
     constructor(
         @Inject(AUTH_INSTANCE) private readonly auth: Auth,
         private readonly prisma: PrismaService,
-        private readonly cloudflare: CloudflareService
+        private readonly vercel: VercelDomainsService
     ) {}
 
     // ── Reads ────────────────────────────────────────────────────────────────
@@ -198,6 +201,10 @@ export class AgentService {
         });
         if (!org)
             throw new InternalServerErrorException("Agent creation failed");
+
+        // Give the new agent their free, always-on public subdomain.
+        await this.registerSubdomain(dto.slug);
+
         return this.toAdminAgent(org);
     }
 
@@ -277,6 +284,12 @@ export class AgentService {
             }
         });
 
+        // Slug drives the subdomain — repoint it on Vercel when it changes.
+        if (dto.slug !== org.slug) {
+            await this.unregisterSubdomain(org.slug);
+            await this.registerSubdomain(dto.slug);
+        }
+
         const updated = await this.prisma.organization.findUnique({
             where: { id },
             include: orgWithOwner,
@@ -315,7 +328,7 @@ export class AgentService {
 
     /**
      * Admin-only: permanently delete an agent and everything tied to it.
-     *  - Cloudflare custom hostname (if any) is removed first.
+     *  - Vercel domains (custom domain + free subdomain) are detached first.
      *  - The organization is deleted, cascading its members + invitations.
      *  - Each former member's login user is deleted too (cascading their
      *    sessions + accounts) — UNLESS they're a platform admin or still belong
@@ -341,11 +354,13 @@ export class AgentService {
         });
         const userIds = [...new Set(members.map((m) => m.userId))];
 
-        // External cleanup first — if Cloudflare rejects, we abort before
-        // touching the database so nothing is half-deleted.
+        // External cleanup first — if Vercel rejects the custom-domain removal,
+        // we abort before touching the database so nothing is half-deleted.
         if (org.customDomain) {
-            await this.cloudflare.removeHostname(org.customDomain);
+            await this.vercel.removeDomain(org.customDomain);
         }
+        // The free subdomain is best-effort (won't block deletion).
+        await this.unregisterSubdomain(org.slug);
 
         await this.prisma.$transaction(async (tx) => {
             // Cascades members + invitations.
@@ -390,7 +405,7 @@ export class AgentService {
             );
         }
 
-        const result = await this.cloudflare.addHostname(domain);
+        const result = await this.vercel.addDomain(domain);
         await this.prisma.organization.update({
             where: { id },
             data: { customDomain: domain, domainStatus: result.status },
@@ -403,9 +418,7 @@ export class AgentService {
         if (!org.customDomain) {
             throw new BadRequestException("Agent has no custom domain");
         }
-        const status = await this.cloudflare.getHostnameStatus(
-            org.customDomain
-        );
+        const status = await this.vercel.getDomainStatus(org.customDomain);
         await this.prisma.organization.update({
             where: { id },
             data: { domainStatus: status },
@@ -416,12 +429,45 @@ export class AgentService {
     async removeDomain(id: string) {
         const org = await this.assertExists(id);
         if (org.customDomain) {
-            await this.cloudflare.removeHostname(org.customDomain);
+            await this.vercel.removeDomain(org.customDomain);
         }
         await this.prisma.organization.update({
             where: { id },
             data: { customDomain: null, domainStatus: null },
         });
+    }
+
+    // ── Free `{slug}` subdomain registration (best-effort) ──────────────────────
+
+    /**
+     * Attach the agent's always-on subdomain (`{slug}.{base}`) to Vercel so it
+     * gets a certificate. Best-effort: a Vercel hiccup must not fail agent
+     * creation — the subdomain can be re-synced later. No-op when no subdomain
+     * base is configured (local dev).
+     */
+    private async registerSubdomain(slug: string) {
+        const sub = agentSubdomain(slug);
+        if (!sub) return;
+        try {
+            await this.vercel.addDomain(sub);
+        } catch (err) {
+            this.logger.warn(
+                `Failed to register subdomain ${sub}: ${(err as Error).message}`
+            );
+        }
+    }
+
+    /** Detach an agent's subdomain from Vercel (best-effort). */
+    private async unregisterSubdomain(slug: string) {
+        const sub = agentSubdomain(slug);
+        if (!sub) return;
+        try {
+            await this.vercel.removeDomain(sub);
+        } catch (err) {
+            this.logger.warn(
+                `Failed to remove subdomain ${sub}: ${(err as Error).message}`
+            );
+        }
     }
 
     // ── Authorization helpers ──────────────────────────────────────────────────
