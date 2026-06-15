@@ -1,15 +1,35 @@
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import regionsData from "@/data/regions.json";
-import type { Community } from "@/components/CommunityCard";
+import { getCommunity } from "@/api/community";
+import {
+    formatRange,
+    formatGarage,
+    formatPrice,
+    STATUS_LABELS,
+} from "@/lib/format";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const communities = regionsData.regions
-    .flatMap((r) => r.counties)
-    .flatMap((c) => c.communities) as unknown as Community[];
+/**
+ * Fetch a remote (R2/CDN) image and return it as a base64 data URL for Satori.
+ * Returns undefined on any failure so the card still renders without the photo.
+ * Only absolute http(s) URLs are fetched — community/plan images are stored as
+ * full R2 URLs, so nothing is read off the function's filesystem.
+ */
+async function fetchImageDataUrl(url: string): Promise<string | undefined> {
+    if (!/^https?:\/\//.test(url)) return undefined;
+    try {
+        const res = await fetch(url);
+        if (!res.ok) return undefined;
+        const mime = res.headers.get("content-type") ?? "image/jpeg";
+        const b64 = Buffer.from(await res.arrayBuffer()).toString("base64");
+        return `data:${mime};base64,${b64}`;
+    } catch {
+        return undefined;
+    }
+}
 
 export default async function Image({
     params,
@@ -17,7 +37,7 @@ export default async function Image({
     params: Promise<{ id: string }>;
 }) {
     const { id } = await params;
-    const community = communities.find((c) => c.id === id);
+    const community = await getCommunity(id).catch(() => null);
 
     if (!community) {
         return new ImageResponse(
@@ -39,33 +59,24 @@ export default async function Image({
         );
     }
 
-    const [logoResult, communityImgResult] = await Promise.allSettled([
-        readFile(join(process.cwd(), "public", "images", "logo.png")),
-        readFile(
-            join(
-                process.cwd(),
-                "public",
-                ...(community.image.startsWith("/")
-                    ? community.image.slice(1)
-                    : community.image
-                ).split("/"),
-            ),
+    const [logoBuf, imgSrc] = await Promise.all([
+        readFile(join(process.cwd(), "public", "images", "logo.png")).catch(
+            () => null,
         ),
+        fetchImageDataUrl(community.image),
     ]);
 
-    // @ts-expect-error — Satori accepts ArrayBuffer/TypedArray as img src at runtime
-    const logoSrc: string | undefined =
-        logoResult.status === "fulfilled"
-            ? Uint8Array.from(logoResult.value).buffer
-            : undefined;
+    const logoSrc = logoBuf
+        ? `data:image/png;base64,${logoBuf.toString("base64")}`
+        : undefined;
 
-    // @ts-expect-error — Satori accepts ArrayBuffer/TypedArray as img src at runtime
-    const imgSrc: string | undefined =
-        communityImgResult.status === "fulfilled"
-            ? Uint8Array.from(communityImgResult.value).buffer
-            : undefined;
-
-    const isSelling = community.status.toLowerCase().includes("now");
+    const isSelling = community.status === "NOW_SELLING";
+    const status = STATUS_LABELS[community.status] ?? community.status;
+    const specs = [
+        formatRange(community.bedsMin, community.bedsMax, "Bed"),
+        formatRange(community.bathsMin, community.bathsMax, "Bath"),
+        formatGarage(community.garageMin, community.garageMax),
+    ].join(" · ");
     const IMG_W = 500;
 
     return new ImageResponse(
@@ -126,7 +137,7 @@ export default async function Image({
                 )}
 
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                    {community.floorPlans?.length && (
+                    {community.floorPlans?.length ? (
                         <span
                             style={{
                                 color: "rgba(255,255,255,0.42)",
@@ -136,9 +147,9 @@ export default async function Image({
                                 textTransform: "uppercase",
                             }}
                         >
-                            {community.floorPlans?.length} Floor Plans Available
+                            {community.floorPlans.length} Floor Plans Available
                         </span>
-                    )}
+                    ) : null}
 
                     <h1
                         style={{
@@ -192,15 +203,15 @@ export default async function Image({
                                 borderRadius: "100px",
                             }}
                         >
-                            {community.status}
+                            {status}
                         </span>
                         <span style={{ color: "#c9a84c", fontSize: "26px", fontWeight: 700 }}>
-                            From {community.priceFrom}
+                            From {formatPrice(community.priceFrom)}
                         </span>
                     </div>
 
                     <span style={{ color: "rgba(255,255,255,0.42)", fontSize: "15px" }}>
-                        {[community.beds, community.baths, community.garage].join(" · ")}
+                        {specs}
                     </span>
                 </div>
             </div>
