@@ -85,6 +85,8 @@ Maps default to SE Florida: `[-80.3, 26.35]`, zoom `7.75`.
 
 `NEXT_PUBLIC_MAPBOX_TOKEN` is required for all map components. Set it in `apps/web/.env.local`.
 
+`MAPBOX_SERVER_TOKEN` (server-only, **no** `NEXT_PUBLIC_` prefix) powers the `/api/mapbox/[...path]` proxy. Because tenants run on arbitrary custom domains/subdomains, a URL-restricted public token would 403 the map on every new domain. Instead, the map's `transformRequest` (`apps/web/lib/mapbox.ts`) reroutes all `*.mapbox.com` traffic through the proxy, which injects this unrestricted token server-side. It needs scopes `styles:read`, `styles:tiles`, `fonts:read` and **no URL restrictions**. Set it in `apps/web/.env.local` locally and in the Vercel project env for production.
+
 ## Coding Conventions & Agent Skills
 
 See [AGENTS.md](AGENTS.md) for all coding requirements and the full list of agent skill files to read before writing code.

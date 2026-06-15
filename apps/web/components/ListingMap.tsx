@@ -11,6 +11,7 @@ import Map, {
 import type { MapRef } from "react-map-gl/mapbox";
 import Link from "next/link";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { mapTransformRequest } from "@/lib/mapbox";
 
 export type CommunityPin = {
     id: string;
@@ -133,6 +134,7 @@ export default function ListingMap({
         <Map
             ref={mapRef}
             mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
+            transformRequest={mapTransformRequest}
             initialViewState={initialViewState}
             style={{ width: "100%", height: "100%" }}
             mapStyle="mapbox://styles/mapbox/streets-v12"

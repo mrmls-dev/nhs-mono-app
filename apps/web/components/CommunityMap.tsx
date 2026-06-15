@@ -9,6 +9,7 @@ import Map, {
 } from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import type { School } from "./CommunityCard";
+import { mapTransformRequest } from "@/lib/mapbox";
 
 export default function CommunityMap({
     name,
@@ -29,6 +30,7 @@ export default function CommunityMap({
         <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-border shadow-sm">
             <Map
                 mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
+                transformRequest={mapTransformRequest}
                 initialViewState={{
                     longitude: coords.lng,
                     latitude: coords.lat,
