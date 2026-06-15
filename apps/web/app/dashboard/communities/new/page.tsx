@@ -1,20 +1,22 @@
 import type { Metadata } from "next";
-import regionsData from "@/data/regions.json";
 import { CommunityForm } from "./CommunityForm";
 
 export const metadata: Metadata = {
     title: "Add Community | Dashboard",
 };
 
-export default function NewCommunityPage() {
-    // Flatten the region → county hierarchy for the county selector.
-    const counties = regionsData.regions.flatMap((region) =>
-        region.counties.map((county) => ({
-            id: county.id,
-            name: county.name,
-            region: region.name,
-        })),
-    );
+type County = { id: string; name: string; region: { name: string } };
+
+async function getCounties(): Promise<{ id: string; name: string; region: string }[]> {
+    const apiUrl = process.env.API_URL ?? "http://localhost:3001";
+    const res = await fetch(`${apiUrl}/counties`, { cache: "no-store" });
+    if (!res.ok) return [];
+    const counties: County[] = await res.json();
+    return counties.map((c) => ({ id: c.id, name: c.name, region: c.region.name }));
+}
+
+export default async function NewCommunityPage() {
+    const counties = await getCounties();
 
     return (
         <div className="mx-auto flex w-full max-w-4xl flex-col gap-6">

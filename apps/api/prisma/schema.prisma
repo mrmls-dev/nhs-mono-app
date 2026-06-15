@@ -85,7 +85,6 @@ model Community {
   about        String             @db.Text
   countyId     String
   county       County             @relation(fields: [countyId], references: [id])
-  gallery      CommunityMedia[]
   amenities    CommunityAmenity[]
   schools      School[]
   floorPlans   FloorPlanModel[]
@@ -96,19 +95,6 @@ model Community {
   @@index([status])
   @@index([priceFrom])
   @@index([lat, lng])
-}
-
-model CommunityMedia {
-  id          String    @id @default(cuid())
-  type        MediaType
-  src         String
-  alt         String
-  caption     String?
-  sortOrder   Int       @default(0)
-  communityId String
-  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
-
-  @@index([communityId])
 }
 
 model Amenity {
@@ -181,4 +167,146 @@ model FloorPlanModelMedia {
   floorPlan   FloorPlanModel @relation(fields: [floorPlanId], references: [id], onDelete: Cascade)
 
   @@index([floorPlanId])
+}
+
+// ─── Auth & Agents (Better Auth) ──────────────────────────────────────────────
+// Generated/aligned with `better-auth` core + organization + admin plugins.
+// An "agent" (white-label reseller) is modelled as a Better Auth Organization —
+// the org table is a Better Auth requirement; everything we surface calls it an
+// "agent". The global catalog (Community/County/Region) is intentionally NOT
+// scoped here — every agent's site shows the same platform-managed communities.
+
+model User {
+  id            String       @id @default(cuid())
+  name          String
+  email         String       @unique
+  emailVerified Boolean      @default(true) // kept; no verification flow (admin-created = verified)
+  image         String?
+  role          String? // admin plugin: "admin" = platform super-admin (us); null/other = agent
+  banned        Boolean? // admin plugin (present but unused — access control is Organization.serviceStatus)
+  banReason     String?
+  banExpires    DateTime?
+  sessions      Session[]
+  accounts      Account[]
+  members       Member[]
+  invitations   Invitation[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@map("user")
+}
+
+model Session {
+  id                   String   @id @default(cuid())
+  token                String   @unique
+  userId               String
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activeOrganizationId String? // org plugin: which agent the user is acting on
+  impersonatedBy       String? // admin plugin
+  ipAddress            String?
+  userAgent            String?
+  expiresAt            DateTime
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  password              String? // email/password hash
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("verification")
+}
+
+// The Agent. Better Auth `organization` table + white-label additionalFields.
+model Organization {
+  id               String       @id @default(cuid())
+  name             String
+  slug             String       @unique
+  logo             String? // R2 URL (built-in)
+  metadata         String? // built-in, JSON string
+  // --- additionalFields: white-label branding + access control ---
+  serviceStatus    String       @default("active") // "active" | "suspended" (payment gate)
+  customDomain     String?      @unique // agent domain, resolved by Host header
+  domainStatus     String? // "pending" | "active" (Cloudflare)
+  brandColor       String? // primary theme color (hex) — legacy single-color fallback
+  theme            String?      @db.Text // JSON-serialized ThemeConfig (colors + radius + fonts, light/dark)
+  siteName         String? // site name + <title>/SEO
+  contactPhone     String?
+  footerText       String?
+  ghlScheduleEmbed String?      @db.Text // per-agent /schedule embed
+  // ── GHL sub-account fields (stored at creation; sent to GHL API once integrated) ──
+  ownerFirstName                String?
+  ownerLastName                 String?
+  businessEmail                 String?  // GHL prospectInfo.email (may differ from login email)
+  website                       String?
+  address                       String?
+  city                          String?
+  state                         String?
+  postalCode                    String?
+  country                       String?  @default("US")
+  timezone                      String?
+  businessType                  String?
+  ghlLocationId                 String?  @unique // set once the GHL sub-account is created
+  // GHL location settings (persisted so the future API call can send them verbatim)
+  ghlAllowDuplicateContact      Boolean  @default(false)
+  ghlAllowDuplicateOpportunity  Boolean  @default(false)
+  ghlAllowFacebookNameMerge     Boolean  @default(false)
+  ghlDisableContactTimezone     Boolean  @default(false)
+  members          Member[]
+  invitations      Invitation[]
+  createdAt        DateTime     @default(now())
+
+  @@map("organization")
+}
+
+model Member {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           String // "owner" | "admin" | "member" (org-scoped)
+  createdAt      DateTime     @default(now())
+
+  @@unique([organizationId, userId])
+  @@map("member")
+}
+
+model Invitation {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String
+  role           String?
+  status         String // "pending" | "accepted" | "canceled"
+  expiresAt      DateTime
+  inviterId      String
+  inviter        User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
+
+  @@map("invitation")
 }

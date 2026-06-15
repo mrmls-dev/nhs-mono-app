@@ -1,28 +1,27 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Phone, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Phone } from "lucide-react";
 import { Badge } from "@workspace/ui/components/badge";
 import { Card, CardContent } from "@workspace/ui/components/card";
-import regionsData from "@/data/regions.json";
-import type { Community } from "@/components/CommunityCard";
+import { getCommunity } from "@/api/community";
+import {
+    formatRange,
+    formatStories,
+    formatGarage,
+    formatPrice,
+    formatStat,
+    STATUS_LABELS,
+} from "@/lib/format";
 import CommunityGallery from "@/components/CommunityGallery";
 import ExpandableText from "@/components/ExpandableText";
 import CommunityMap from "@/components/CommunityMap";
 import ScheduleVisitButton from "@/components/ScheduleVisitButton";
 
-const data = regionsData.regions
-    .flatMap((r) => r.counties)
-    .flatMap((c) => c.communities) as unknown as Community[];
-
-export function generateStaticParams() {
-    return data.map((c) => ({ id: c.id }));
-}
-
 type Props = { params: Promise<{ id: string }> };
 
 export async function generateMetadata({ params }: Props) {
     const { id } = await params;
-    const community = data.find((c) => c.id === id);
+    const community = await getCommunity(id);
     if (!community) return { title: "Community not found" };
     return {
         title: `${community.name} — National House Search`,
@@ -32,10 +31,23 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function CommunityPage({ params }: Props) {
     const { id } = await params;
-    const community = data.find((c) => c.id === id);
+    const community = await getCommunity(id);
     if (!community) notFound();
 
-    const isSelling = community.status.toLowerCase().includes("now");
+    const isSelling = community.status === "NOW_SELLING";
+    const status = STATUS_LABELS[community.status] ?? community.status;
+
+    // Merge all floor plan galleries for the hero gallery component
+    const galleryItems = community.floorPlans.flatMap((fp) =>
+        fp.gallery.map((m) => ({
+            type: m.type.toLowerCase() as "image" | "video",
+            src: m.src,
+            alt: m.alt,
+            caption: m.caption ?? undefined,
+        })),
+    );
+
+    const amenityNames = community.amenities.map((a) => a.amenity.name);
 
     return (
         <main className="container mx-auto px-4 md:px-5 py-6 md:py-8 flex flex-col gap-8 md:gap-12">
@@ -57,7 +69,7 @@ export default async function CommunityPage({ params }: Props) {
             </div>
 
             <CommunityGallery
-                items={community.gallery ?? []}
+                items={galleryItems}
                 fallbackImage={community.image}
                 communityName={community.name}
             />
@@ -80,31 +92,32 @@ export default async function CommunityPage({ params }: Props) {
                                     : "bg-secondary text-secondary-foreground hover:bg-secondary"
                             }`}
                         >
-                            {community.status}
+                            {status}
                         </Badge>
                     </div>
                     <p className="text-muted-foreground">{community.location}</p>
                     <p className="text-sm font-semibold text-primary">
-                        {community.floorPlans?.length || 0} Floor Plans Available
+                        {community.floorPlans.length} Floor{" "}
+                        {community.floorPlans.length === 1 ? "Plan" : "Plans"} Available
                     </p>
                     <p className="text-foreground">
-                        {community.beds}
+                        {formatRange(community.bedsMin, community.bedsMax, "Bed")}
                         <span className="mx-2 text-secondary/50">|</span>
-                        {community.baths}
+                        {formatRange(Number(community.bathsMin), Number(community.bathsMax), "Bath")}
                         <span className="mx-2 text-secondary/50">|</span>
-                        {community.garage}
+                        {formatGarage(community.garageMin, community.garageMax)}
                     </p>
                     <p className="text-foreground">
-                        {community.stories}
+                        {formatStories(community.storiesMin, community.storiesMax)}
                         <span className="mx-2 text-secondary/50">|</span>
-                        From {community.sqftFrom} Sq. Ft.
+                        From {Number(community.sqftFrom).toLocaleString()} Sq. Ft.
                     </p>
                     <div className="pt-3 border-t border-border">
                         <p className="text-xs uppercase tracking-wide text-muted-foreground">
                             Pricing starting from
                         </p>
                         <p className="text-2xl md:text-3xl font-bold text-foreground">
-                            From {community.priceFrom}
+                            From {formatPrice(community.priceFrom)}
                         </p>
                     </div>
                 </div>
@@ -124,16 +137,14 @@ export default async function CommunityPage({ params }: Props) {
             <section className="grid md:grid-cols-2 gap-14">
                 <div className="flex flex-col gap-3">
                     <h2 className="text-2xl font-bold text-foreground">About our community</h2>
-                    <ExpandableText
-                        text={community.about ?? `Learn more about life at ${community.name}.`}
-                    />
+                    <ExpandableText text={community.about} />
                 </div>
 
                 <div className="flex flex-col gap-3">
                     <h2 className="text-2xl font-bold text-foreground">Community amenities</h2>
-                    {community.amenities && community.amenities.length > 0 ? (
+                    {amenityNames.length > 0 ? (
                         <ul className="grid grid-cols-2 gap-2">
-                            {community.amenities.map((a) => (
+                            {amenityNames.map((a) => (
                                 <li key={a} className="flex items-center gap-2 text-foreground">
                                     <span aria-hidden className="size-1.5 rounded-full bg-primary" />
                                     {a}
@@ -150,7 +161,7 @@ export default async function CommunityPage({ params }: Props) {
 
             <section className="flex flex-col gap-4">
                 <h2 className="text-2xl font-bold text-foreground">Schools</h2>
-                {community.schools && community.schools.length > 0 ? (
+                {community.schools.length > 0 ? (
                     <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {community.schools.map((s) => (
                             <li key={s.name}>
@@ -183,12 +194,12 @@ export default async function CommunityPage({ params }: Props) {
                         Click any model to explore photos, diagram, and details.
                     </p>
                 </div>
-                {community.floorPlans && community.floorPlans.length > 0 ? (
+                {community.floorPlans.length > 0 ? (
                     <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
                         {community.floorPlans.map((p) => (
                             <li key={p.id}>
                                 <Link
-                                    href={`/communities/${community.id}/plans/${p.id}`}
+                                    href={`/communities/${community.slug}/plans/${p.slug}`}
                                     className="group block"
                                 >
                                     <Card className="overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
@@ -205,38 +216,18 @@ export default async function CommunityPage({ params }: Props) {
                                                 <p className="text-lg md:text-2xl font-bold text-foreground group-hover:text-primary transition-colors">
                                                     {p.name}
                                                 </p>
-                                                {p.startingPrice && (
-                                                    <Badge className="shrink-0 rounded-full bg-primary text-primary-foreground hover:bg-primary">
-                                                        {p.startingPrice}
-                                                    </Badge>
-                                                )}
+                                                <Badge className="shrink-0 rounded-full bg-primary text-primary-foreground hover:bg-primary">
+                                                    {formatPrice(p.startingPrice)}
+                                                </Badge>
                                             </div>
                                             <div className="flex flex-wrap gap-x-2 gap-y-1 text-sm text-foreground">
-                                                {p.beds && (
-                                                    <>
-                                                        <span>{p.beds}</span>{" "}
-                                                        <span className="text-secondary/50">|</span>
-                                                    </>
-                                                )}
-                                                {p.baths && (
-                                                    <>
-                                                        <span>{p.baths}</span>{" "}
-                                                        <span className="text-secondary/50">|</span>
-                                                    </>
-                                                )}
-                                                {p.garage && (
-                                                    <>
-                                                        <span>{p.garage}</span>{" "}
-                                                        <span className="text-secondary/50">|</span>
-                                                    </>
-                                                )}
-                                                {p.stories && (
-                                                    <>
-                                                        <span>{p.stories}</span>{" "}
-                                                        <span className="text-secondary/50">|</span>
-                                                    </>
-                                                )}
-                                                {p.sqft && <span>{p.sqft}</span>}
+                                                <span>{formatStat(p.beds, "Bed")}</span>
+                                                <span className="text-secondary/50">|</span>
+                                                <span>{formatStat(Number(p.baths), "Bath")}</span>
+                                                <span className="text-secondary/50">|</span>
+                                                <span>{p.garage} Car Garage</span>
+                                                <span className="text-secondary/50">|</span>
+                                                <span>{Number(p.sqft).toLocaleString()} Sq. Ft.</span>
                                             </div>
                                             <div className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
                                                 View model
@@ -266,13 +257,13 @@ export default async function CommunityPage({ params }: Props) {
                 <ScheduleVisitButton size="lg" className="shrink-0" comm={community.name} />
             </section>
 
-            {community.coords && (
+            {community.lat !== 0 && community.lng !== 0 && (
                 <section className="flex flex-col gap-4">
                     <h2 className="text-2xl font-bold text-foreground">Community location</h2>
                     <CommunityMap
                         name={community.name}
-                        coords={community.coords}
-                        schools={community.schools ?? []}
+                        coords={{ lat: community.lat, lng: community.lng }}
+                        schools={community.schools}
                     />
                 </section>
             )}

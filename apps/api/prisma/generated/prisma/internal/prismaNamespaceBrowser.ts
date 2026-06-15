@@ -54,12 +54,18 @@ export const ModelName = {
   Region: 'Region',
   County: 'County',
   Community: 'Community',
-  CommunityMedia: 'CommunityMedia',
   Amenity: 'Amenity',
   CommunityAmenity: 'CommunityAmenity',
   School: 'School',
   FloorPlanModel: 'FloorPlanModel',
-  FloorPlanModelMedia: 'FloorPlanModelMedia'
+  FloorPlanModelMedia: 'FloorPlanModelMedia',
+  User: 'User',
+  Session: 'Session',
+  Account: 'Account',
+  Verification: 'Verification',
+  Organization: 'Organization',
+  Member: 'Member',
+  Invitation: 'Invitation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -136,19 +142,6 @@ export const CommunityScalarFieldEnum = {
 export type CommunityScalarFieldEnum = (typeof CommunityScalarFieldEnum)[keyof typeof CommunityScalarFieldEnum]
 
 
-export const CommunityMediaScalarFieldEnum = {
-  id: 'id',
-  type: 'type',
-  src: 'src',
-  alt: 'alt',
-  caption: 'caption',
-  sortOrder: 'sortOrder',
-  communityId: 'communityId'
-} as const
-
-export type CommunityMediaScalarFieldEnum = (typeof CommunityMediaScalarFieldEnum)[keyof typeof CommunityMediaScalarFieldEnum]
-
-
 export const AmenityScalarFieldEnum = {
   id: 'id',
   name: 'name'
@@ -211,6 +204,131 @@ export const FloorPlanModelMediaScalarFieldEnum = {
 } as const
 
 export type FloorPlanModelMediaScalarFieldEnum = (typeof FloorPlanModelMediaScalarFieldEnum)[keyof typeof FloorPlanModelMediaScalarFieldEnum]
+
+
+export const UserScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  emailVerified: 'emailVerified',
+  image: 'image',
+  role: 'role',
+  banned: 'banned',
+  banReason: 'banReason',
+  banExpires: 'banExpires',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const SessionScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  userId: 'userId',
+  activeOrganizationId: 'activeOrganizationId',
+  impersonatedBy: 'impersonatedBy',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
+
+
+export const AccountScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  accountId: 'accountId',
+  providerId: 'providerId',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  idToken: 'idToken',
+  password: 'password',
+  accessTokenExpiresAt: 'accessTokenExpiresAt',
+  refreshTokenExpiresAt: 'refreshTokenExpiresAt',
+  scope: 'scope',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
+
+
+export const VerificationScalarFieldEnum = {
+  id: 'id',
+  identifier: 'identifier',
+  value: 'value',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
+
+
+export const OrganizationScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  logo: 'logo',
+  metadata: 'metadata',
+  serviceStatus: 'serviceStatus',
+  customDomain: 'customDomain',
+  domainStatus: 'domainStatus',
+  brandColor: 'brandColor',
+  theme: 'theme',
+  siteName: 'siteName',
+  contactPhone: 'contactPhone',
+  footerText: 'footerText',
+  ghlScheduleEmbed: 'ghlScheduleEmbed',
+  ownerFirstName: 'ownerFirstName',
+  ownerLastName: 'ownerLastName',
+  businessEmail: 'businessEmail',
+  website: 'website',
+  address: 'address',
+  city: 'city',
+  state: 'state',
+  postalCode: 'postalCode',
+  country: 'country',
+  timezone: 'timezone',
+  businessType: 'businessType',
+  ghlLocationId: 'ghlLocationId',
+  ghlAllowDuplicateContact: 'ghlAllowDuplicateContact',
+  ghlAllowDuplicateOpportunity: 'ghlAllowDuplicateOpportunity',
+  ghlAllowFacebookNameMerge: 'ghlAllowFacebookNameMerge',
+  ghlDisableContactTimezone: 'ghlDisableContactTimezone',
+  createdAt: 'createdAt'
+} as const
+
+export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
+
+
+export const MemberScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  userId: 'userId',
+  role: 'role',
+  createdAt: 'createdAt'
+} as const
+
+export type MemberScalarFieldEnum = (typeof MemberScalarFieldEnum)[keyof typeof MemberScalarFieldEnum]
+
+
+export const InvitationScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  email: 'email',
+  role: 'role',
+  status: 'status',
+  expiresAt: 'expiresAt',
+  inviterId: 'inviterId'
+} as const
+
+export type InvitationScalarFieldEnum = (typeof InvitationScalarFieldEnum)[keyof typeof InvitationScalarFieldEnum]
 
 
 export const SortOrder = {

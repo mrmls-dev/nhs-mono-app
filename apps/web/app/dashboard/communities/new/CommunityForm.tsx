@@ -1,6 +1,7 @@
 "use client";
 
-import { useForm, FormProvider, Controller } from "react-hook-form";
+import { useForm, FormProvider, Controller, useWatch } from "react-hook-form";
+import { ImageSelector } from "./_components/ImageSelector";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Save } from "lucide-react";
 import { toast } from "sonner";
@@ -28,16 +29,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@workspace/ui/components/select";
-import { ImagePicker } from "@/components/ImagePicker";
 import {
     communitySchema,
     type CommunityFormValues,
     type CommunityFormOutput,
 } from "./community-schema";
-import { MediaFieldArray } from "./_components/MediaFieldArray";
 import { SchoolFieldArray } from "./_components/SchoolFieldArray";
 import { FloorPlanFieldArray } from "./_components/FloorPlanFieldArray";
 import { AmenitiesField } from "./_components/AmenitiesField";
+import { createCommunity } from "@/api/community";
 
 type County = { id: string; name: string; region: string };
 
@@ -70,7 +70,6 @@ const defaultValues: CommunityFormValues = {
     about: "",
     countyId: "",
     amenities: [],
-    gallery: [],
     schools: [],
     floorPlans: [],
 };
@@ -90,10 +89,22 @@ export function CommunityForm({ counties }: { counties: County[] }) {
         formState: { errors, isSubmitting },
     } = form;
 
+    const floorPlans = useWatch({ control, name: "floorPlans" });
+    const allGalleryImages = floorPlans
+        .flatMap((fp) => fp.gallery ?? [])
+        .filter((m) => m.type === "IMAGE" && m.src?.startsWith("http"))
+        .map((m) => m.src);
+
     const onSubmit = async (values: CommunityFormOutput) => {
-        // UI + validation only — persistence is not wired yet.
-        console.log("Community payload:", values);
-        toast.success(`Validated "${values.name}" — payload logged to console.`);
+        try {
+            await createCommunity(values);
+            toast.success(`"${values.name}" saved successfully.`);
+            reset();
+        } catch (err: unknown) {
+            toast.error(
+                err instanceof Error ? err.message : "Something went wrong",
+            );
+        }
     };
 
     const onError = () => {
@@ -271,16 +282,19 @@ export function CommunityForm({ counties }: { counties: County[] }) {
 
                             <Field data-invalid={errors.image ? true : undefined}>
                                 <FieldLabel>Hero image</FieldLabel>
+                                <p className="text-sm text-muted-foreground">
+                                    Select one image from the floor plan galleries below.
+                                </p>
                                 <Controller
                                     control={control}
                                     name="image"
                                     render={({ field }) => (
-                                        <ImagePicker
+                                        <ImageSelector
+                                            images={allGalleryImages}
                                             value={field.value}
                                             onChange={field.onChange}
-                                            onBlur={field.onBlur}
                                             invalid={Boolean(errors.image)}
-                                            className="max-w-md"
+                                            emptyText="Add floor plan gallery images first"
                                         />
                                     )}
                                 />
@@ -414,19 +428,6 @@ export function CommunityForm({ counties }: { counties: County[] }) {
                     </CardHeader>
                     <CardContent>
                         <AmenitiesField />
-                    </CardContent>
-                </Card>
-
-                {/* Gallery */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Gallery</CardTitle>
-                        <CardDescription>
-                            Community-level images and videos.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <MediaFieldArray name="gallery" />
                     </CardContent>
                 </Card>
 

@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
 import "@workspace/ui/globals.css";
 import { Toaster } from "@workspace/ui/components/sonner";
-
-const roboto = Roboto({
-    subsets: ["latin"],
-    weight: ["300", "400", "500", "700", "900"],
-});
+import { Providers } from "@/components/providers";
+import { fontVariables } from "@/lib/fonts";
 
 export const metadata: Metadata = {
     title: "National House Search | New Construction Agent Partnership Program",
@@ -22,10 +18,21 @@ export default function RootLayout({
     return (
         <html
             lang="en"
-            className={`${roboto.className} h-full antialiased font-sans`}
+            // All theme fonts declare their CSS variables here (preload:false, so
+            // glyphs are only fetched when a tenant selects the font). `--font-sans`
+            // / `--font-heading` default to Roboto; tenant themes override them on
+            // their `[data-brand]` wrapper.
+            className={`${fontVariables} font-sans h-full antialiased`}
+            style={
+                {
+                    "--font-sans": "var(--font-roboto)",
+                    "--font-heading": "var(--font-roboto)",
+                } as React.CSSProperties
+            }
+            suppressHydrationWarning
         >
             <body className="min-h-full flex flex-col">
-                {children}
+                <Providers>{children}</Providers>
                 <Toaster />
             </body>
         </html>

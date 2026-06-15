@@ -120,7 +120,6 @@ export const communitySchema = z
         // Relations
         countyId: z.string().min(1, "Select a county"),
         amenities: z.array(z.string().min(1)),
-        gallery: z.array(mediaSchema),
         schools: z.array(schoolSchema),
         floorPlans: z.array(floorPlanSchema),
     })

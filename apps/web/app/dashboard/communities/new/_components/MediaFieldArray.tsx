@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
     Controller,
     useFieldArray,
@@ -8,6 +8,7 @@ import {
     useWatch,
 } from "react-hook-form";
 import { Plus, Trash2, ImageIcon, Upload } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@workspace/ui/components/button";
 import {
     Field,
@@ -32,16 +33,23 @@ import {
     EmptyTitle,
 } from "@workspace/ui/components/empty";
 import { ImagePicker } from "@/components/ImagePicker";
+import { uploadFile } from "@/api/storage";
 import type { CommunityFormValues } from "../community-schema";
 
-type MediaArrayName = "gallery" | `floorPlans.${number}.gallery`;
+type MediaArrayName = `floorPlans.${number}.gallery`;
 
 type MediaItemErrors = Record<
     "src" | "alt" | "caption" | "type",
     { message?: string } | undefined
 >;
 
-export function MediaFieldArray({ name }: { name: MediaArrayName }) {
+export function MediaFieldArray({
+    name,
+    folder = "uploads",
+}: {
+    name: MediaArrayName;
+    folder?: string;
+}) {
     const {
         control,
         formState: { errors },
@@ -50,25 +58,41 @@ export function MediaFieldArray({ name }: { name: MediaArrayName }) {
     const { fields, append, remove } = useFieldArray({ control, name });
 
     const bulkInputRef = useRef<HTMLInputElement>(null);
+    const [bulkUploading, setBulkUploading] = useState(false);
 
-    // Bulk image upload: one IMAGE item per selected file.
-    // No upload yet — `src` holds the file name as a placeholder and `alt`
-    // defaults to the file name (sans extension). When the cloud backend is
-    // ready, upload each file and use the returned URL for `src`.
-    const handleBulkFiles = (fileList: FileList | null) => {
+    const handleBulkFiles = async (fileList: FileList | null) => {
         if (!fileList?.length) return;
-        for (const file of Array.from(fileList)) {
-            append({
-                type: "IMAGE",
-                src: file.name,
-                alt: file.name.replace(/\.[^.]+$/, ""),
-                caption: "",
-            });
+        const files = Array.from(fileList);
+        setBulkUploading(true);
+        try {
+            const results = await Promise.allSettled(
+                files.map((f) => uploadFile(f, folder)),
+            );
+            let failed = 0;
+            for (let i = 0; i < files.length; i++) {
+                const result = results[i]!;
+                if (result.status === "fulfilled") {
+                    append({
+                        type: "IMAGE",
+                        src: result.value.url,
+                        alt: files[i]!.name.replace(/\.[^.]+$/, ""),
+                        caption: "",
+                    });
+                } else {
+                    failed++;
+                }
+            }
+            if (failed > 0) {
+                toast.error(
+                    `${failed} image${failed > 1 ? "s" : ""} failed to upload.`,
+                );
+            }
+        } finally {
+            setBulkUploading(false);
+            if (bulkInputRef.current) bulkInputRef.current.value = "";
         }
-        if (bulkInputRef.current) bulkInputRef.current.value = "";
     };
 
-    // Walk the (possibly nested) error object for this array.
     const arrayErrors = name
         .split(".")
         .reduce<Record<string, unknown> | undefined>(
@@ -96,6 +120,7 @@ export function MediaFieldArray({ name }: { name: MediaArrayName }) {
                         key={field.id}
                         name={name}
                         index={index}
+                        folder={folder}
                         errors={arrayErrors?.[index]}
                         onRemove={() => remove(index)}
                     />
@@ -115,15 +140,17 @@ export function MediaFieldArray({ name }: { name: MediaArrayName }) {
                     type="button"
                     variant="outline"
                     size="sm"
+                    disabled={bulkUploading}
                     onClick={() => bulkInputRef.current?.click()}
                 >
                     <Upload data-icon="inline-start" />
-                    Upload images
+                    {bulkUploading ? "Uploading…" : "Upload images"}
                 </Button>
                 <Button
                     type="button"
                     variant="outline"
                     size="sm"
+                    disabled={bulkUploading}
                     onClick={() =>
                         append({ type: "VIDEO", src: "", alt: "", caption: "" })
                     }
@@ -139,11 +166,13 @@ export function MediaFieldArray({ name }: { name: MediaArrayName }) {
 function MediaRow({
     name,
     index,
+    folder,
     errors,
     onRemove,
 }: {
     name: MediaArrayName;
     index: number;
+    folder: string;
     errors?: MediaItemErrors;
     onRemove: () => void;
 }) {
@@ -213,6 +242,7 @@ function MediaRow({
                                     value={f.value}
                                     onChange={f.onChange}
                                     onBlur={f.onBlur}
+                                    folder={folder}
                                     invalid={Boolean(errors?.src)}
                                 />
                             )}

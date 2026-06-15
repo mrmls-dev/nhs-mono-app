@@ -2,51 +2,46 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Phone } from "lucide-react";
 import { Badge } from "@workspace/ui/components/badge";
-import regionsData from "@/data/regions.json";
-import type { Community, FloorPlan } from "@/components/CommunityCard";
+import { getCommunity } from "@/api/community";
+import { formatPrice, formatStat } from "@/lib/format";
 import CommunityGallery from "@/components/CommunityGallery";
 import ExpandableText from "@/components/ExpandableText";
 import ScheduleVisitButton from "@/components/ScheduleVisitButton";
-
-const allCommunities = regionsData.regions
-    .flatMap((r) => r.counties)
-    .flatMap((c) => c.communities) as unknown as Community[];
-
-export function generateStaticParams() {
-    return allCommunities.flatMap((c) =>
-        (c.floorPlans ?? []).map((p) => ({ id: c.id, planId: p.id })),
-    );
-}
 
 type Props = { params: Promise<{ id: string; planId: string }> };
 
 export async function generateMetadata({ params }: Props) {
     const { id, planId } = await params;
-    const community = allCommunities.find((c) => c.id === id);
-    const plan = community?.floorPlans?.find((p) => p.id === planId);
+    const community = await getCommunity(id);
+    const plan = community?.floorPlans.find((p) => p.slug === planId);
     if (!community || !plan) return { title: "Floor plan not found" };
     return {
         title: `${plan.name} — ${community.name} — National House Search`,
-        description: `Explore the ${plan.name} floor plan at ${community.name}.${plan.startingPrice ? ` ${plan.startingPrice}.` : ""}`,
+        description: `Explore the ${plan.name} floor plan at ${community.name}. Starting from ${formatPrice(plan.startingPrice)}.`,
     };
 }
 
 export default async function FloorPlanPage({ params }: Props) {
     const { id, planId } = await params;
-    const community = allCommunities.find((c) => c.id === id);
-    const plan = community?.floorPlans?.find((p) => p.id === planId) as
-        | FloorPlan
-        | undefined;
+    const community = await getCommunity(id);
+    const plan = community?.floorPlans.find((p) => p.slug === planId);
 
     if (!community || !plan) notFound();
 
+    const galleryItems = plan.gallery.map((m) => ({
+        type: m.type.toLowerCase() as "image" | "video",
+        src: m.src,
+        alt: m.alt,
+        caption: m.caption ?? undefined,
+    }));
+
     const stats = [
-        plan.beds && { label: "Bedrooms", value: plan.beds },
-        plan.baths && { label: "Bathrooms", value: plan.baths },
-        plan.garage && { label: "Garage", value: plan.garage },
-        plan.stories && { label: "Stories", value: plan.stories },
-        plan.sqft && { label: "Sq. Ft.", value: plan.sqft },
-    ].filter(Boolean) as { label: string; value: string }[];
+        { label: "Bedrooms", value: formatStat(plan.beds, "Bed") },
+        { label: "Bathrooms", value: formatStat(Number(plan.baths), "Bath") },
+        { label: "Garage", value: `${plan.garage} Car` },
+        { label: "Stories", value: formatStat(plan.stories, "Stor") },
+        { label: "Sq. Ft.", value: Number(plan.sqft).toLocaleString() },
+    ];
 
     return (
         <main className="container mx-auto px-4 md:px-5 py-6 md:py-8 flex flex-col gap-8 md:gap-12">
@@ -57,7 +52,7 @@ export default async function FloorPlanPage({ params }: Props) {
                     </Link>
                     <span className="mx-2">/</span>
                     <Link
-                        href={`/communities/${community.id}`}
+                        href={`/communities/${community.slug}`}
                         className="hover:text-primary"
                     >
                         {community.name}
@@ -66,7 +61,7 @@ export default async function FloorPlanPage({ params }: Props) {
                     <span className="text-foreground">{plan.name}</span>
                 </nav>
                 <Link
-                    href={`/communities/${community.id}`}
+                    href={`/communities/${community.slug}`}
                     className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
                 >
                     <ArrowLeft className="size-4" aria-hidden />
@@ -74,9 +69,9 @@ export default async function FloorPlanPage({ params }: Props) {
                 </Link>
             </div>
 
-            {plan.gallery && plan.gallery.length > 0 && (
+            {galleryItems.length > 0 && (
                 <CommunityGallery
-                    items={plan.gallery}
+                    items={galleryItems}
                     fallbackImage={plan.image}
                     communityName={`${community.name} — ${plan.name}`}
                 />
@@ -93,27 +88,23 @@ export default async function FloorPlanPage({ params }: Props) {
                         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground">
                             {plan.name}
                         </h1>
-                        {plan.startingPrice && (
-                            <Badge className="px-3 py-1 md:px-4 md:py-1.5 bg-primary text-primary-foreground text-base md:text-lg font-bold rounded-full hover:bg-primary">
-                                {plan.startingPrice}
-                            </Badge>
-                        )}
+                        <Badge className="px-3 py-1 md:px-4 md:py-1.5 bg-primary text-primary-foreground text-base md:text-lg font-bold rounded-full hover:bg-primary">
+                            {formatPrice(plan.startingPrice)}
+                        </Badge>
                     </div>
 
-                    {stats.length > 0 && (
-                        <dl className="flex flex-wrap gap-6 pt-2">
-                            {stats.map((s) => (
-                                <div key={s.label} className="flex flex-col gap-0.5">
-                                    <dt className="text-xs uppercase tracking-wide text-muted-foreground">
-                                        {s.label}
-                                    </dt>
-                                    <dd className="text-lg font-semibold text-foreground">
-                                        {s.value}
-                                    </dd>
-                                </div>
-                            ))}
-                        </dl>
-                    )}
+                    <dl className="flex flex-wrap gap-6 pt-2">
+                        {stats.map((s) => (
+                            <div key={s.label} className="flex flex-col gap-0.5">
+                                <dt className="text-xs uppercase tracking-wide text-muted-foreground">
+                                    {s.label}
+                                </dt>
+                                <dd className="text-lg font-semibold text-foreground">
+                                    {s.value}
+                                </dd>
+                            </div>
+                        ))}
+                    </dl>
                 </div>
 
                 <div className="flex flex-wrap gap-3 pt-2 md:justify-end">
@@ -173,7 +164,7 @@ export default async function FloorPlanPage({ params }: Props) {
 
             <div>
                 <Link
-                    href={`/communities/${community.id}`}
+                    href={`/communities/${community.slug}`}
                     className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
                 >
                     <ArrowLeft className="size-4" aria-hidden />

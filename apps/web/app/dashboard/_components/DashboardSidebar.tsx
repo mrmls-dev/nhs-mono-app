@@ -9,7 +9,14 @@ import {
     Map,
     LayoutTemplate,
     Plus,
+    Users,
+    UserCog,
+    Palette,
+    Globe,
+    CalendarClock,
+    Settings,
 } from "lucide-react";
+import { AgentDetailSidebar } from "../agents/[id]/_components/AgentDetailSidebar";
 import {
     Sidebar,
     SidebarContent,
@@ -23,6 +30,7 @@ import {
     SidebarMenuItem,
     SidebarRail,
 } from "@workspace/ui/components/sidebar";
+import { useSession, isPlatformAdmin } from "@/lib/auth-client";
 
 type NavItem = {
     title: string;
@@ -30,23 +38,80 @@ type NavItem = {
     icon: React.ComponentType;
 };
 
-const overview: NavItem[] = [
-    { title: "Overview", href: "/dashboard", icon: LayoutDashboard },
-];
+type NavGroup = {
+    label?: string;
+    items: NavItem[];
+};
 
-const content: NavItem[] = [
-    { title: "Communities", href: "/dashboard/communities", icon: Building2 },
-    { title: "Regions", href: "/dashboard/regions", icon: Map },
-    { title: "Counties", href: "/dashboard/counties", icon: MapPinned },
+const overviewItem: NavItem = {
+    title: "Overview",
+    href: "/dashboard",
+    icon: LayoutDashboard,
+};
+
+const adminGroups: NavGroup[] = [
+    { items: [overviewItem] },
     {
-        title: "Floor Plans",
-        href: "/dashboard/floor-plans",
-        icon: LayoutTemplate,
+        label: "Catalog",
+        items: [
+            { title: "Communities", href: "/dashboard/communities", icon: Building2 },
+            { title: "Regions", href: "/dashboard/regions", icon: Map },
+            { title: "Counties", href: "/dashboard/counties", icon: MapPinned },
+            {
+                title: "Floor Plans",
+                href: "/dashboard/floor-plans",
+                icon: LayoutTemplate,
+            },
+        ],
+    },
+    {
+        label: "Agents",
+        items: [
+            { title: "Agents", href: "/dashboard/agents", icon: Users },
+            { title: "New Agent", href: "/dashboard/agents/new", icon: Plus },
+        ],
+    },
+    {
+        label: "Platform",
+        items: [
+            { title: "Members", href: "/dashboard/members", icon: UserCog },
+        ],
     },
 ];
 
+const agentGroups: NavGroup[] = [
+    { items: [overviewItem] },
+    {
+        label: "Your site",
+        items: [
+            { title: "Branding", href: "/dashboard/branding", icon: Palette },
+            { title: "Domain", href: "/dashboard/domain", icon: Globe },
+            {
+                title: "Schedule Embed",
+                href: "/dashboard/schedule-embed",
+                icon: CalendarClock,
+            },
+            { title: "Settings", href: "/dashboard/settings", icon: Settings },
+        ],
+    },
+];
+
+/** Matches `/dashboard/agents/<id>...` (a specific agent), not the list. */
+const isAgentDetailPath = (pathname: string) =>
+    /^\/dashboard\/agents\/[^/]+/.test(pathname);
+
 export function DashboardSidebar() {
     const pathname = usePathname();
+    const { data: session } = useSession();
+    const isAdmin = isPlatformAdmin(session?.user);
+
+    // Admins managing a single agent get a contextual sidebar (back +
+    // agent switcher + per-agent sections) in place of the main nav.
+    if (isAdmin && isAgentDetailPath(pathname)) {
+        return <AgentDetailSidebar />;
+    }
+
+    const groups = isAdmin ? adminGroups : agentGroups;
 
     const isActive = (href: string) =>
         href === "/dashboard"
@@ -65,70 +130,56 @@ export function DashboardSidebar() {
                             National House Search
                         </span>
                         <span className="text-xs text-muted-foreground">
-                            Admin Dashboard
+                            {isAdmin ? "Admin Dashboard" : "Agent Dashboard"}
                         </span>
                     </div>
                 </div>
             </SidebarHeader>
 
             <SidebarContent>
-                <SidebarGroup>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            {overview.map((item) => (
-                                <SidebarMenuItem key={item.href}>
-                                    <SidebarMenuButton
-                                        asChild
-                                        isActive={isActive(item.href)}
-                                    >
-                                        <Link href={item.href}>
-                                            <item.icon />
-                                            <span>{item.title}</span>
-                                        </Link>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
-
-                <SidebarGroup>
-                    <SidebarGroupLabel>Content</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            {content.map((item) => (
-                                <SidebarMenuItem key={item.href}>
-                                    <SidebarMenuButton
-                                        asChild
-                                        isActive={isActive(item.href)}
-                                    >
-                                        <Link href={item.href}>
-                                            <item.icon />
-                                            <span>{item.title}</span>
-                                        </Link>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
+                {groups.map((group, i) => (
+                    <SidebarGroup key={group.label ?? `group-${i}`}>
+                        {group.label && (
+                            <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+                        )}
+                        <SidebarGroupContent>
+                            <SidebarMenu>
+                                {group.items.map((item) => (
+                                    <SidebarMenuItem key={item.href}>
+                                        <SidebarMenuButton
+                                            asChild
+                                            isActive={isActive(item.href)}
+                                        >
+                                            <Link href={item.href}>
+                                                <item.icon />
+                                                <span>{item.title}</span>
+                                            </Link>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ))}
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                ))}
             </SidebarContent>
 
-            <SidebarFooter>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton
-                            asChild
-                            isActive={isActive("/dashboard/communities/new")}
-                        >
-                            <Link href="/dashboard/communities/new">
-                                <Plus />
-                                <span>Add Community</span>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-            </SidebarFooter>
+            {isAdmin && (
+                <SidebarFooter>
+                    <SidebarMenu>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton
+                                asChild
+                                isActive={isActive("/dashboard/communities/new")}
+                            >
+                                <Link href="/dashboard/communities/new">
+                                    <Plus />
+                                    <span>Add Community</span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarFooter>
+            )}
 
             <SidebarRail />
         </Sidebar>

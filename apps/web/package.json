@@ -13,7 +13,9 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
+    "@tanstack/react-query": "^5.101.0",
     "@workspace/ui": "*",
+    "better-auth": "^1.6.16",
     "lucide-react": "^1.17.0",
     "mapbox-gl": "^3.24.0",
     "next": "16.2.6",

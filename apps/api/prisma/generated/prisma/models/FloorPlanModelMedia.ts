@@ -447,6 +447,10 @@ export type FloorPlanModelMediaUncheckedUpdateManyWithoutFloorPlanNestedInput = 
   deleteMany?: Prisma.FloorPlanModelMediaScalarWhereInput | Prisma.FloorPlanModelMediaScalarWhereInput[]
 }
 
+export type EnumMediaTypeFieldUpdateOperationsInput = {
+  set?: $Enums.MediaType
+}
+
 export type FloorPlanModelMediaCreateWithoutFloorPlanInput = {
   id?: string
   type: $Enums.MediaType

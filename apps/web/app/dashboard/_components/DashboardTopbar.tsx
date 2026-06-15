@@ -1,12 +1,15 @@
 "use client";
 
-import { LogOut, User, Settings } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { LogOut, Settings } from "lucide-react";
 import { toast } from "sonner";
 import {
     Avatar,
     AvatarFallback,
     AvatarImage,
 } from "@workspace/ui/components/avatar";
+import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import {
     DropdownMenu,
@@ -19,25 +22,27 @@ import {
 } from "@workspace/ui/components/dropdown-menu";
 import { Separator } from "@workspace/ui/components/separator";
 import { SidebarTrigger } from "@workspace/ui/components/sidebar";
+import { useSession, signOut, isPlatformAdmin } from "@/lib/auth-client";
 
 export function DashboardTopbar() {
-    // Placeholder user — wire to real auth (Better Auth) later.
-    const user = {
-        name: "Simon Karim",
-        email: "admin@nationalhousesearch.com",
-        avatar: "",
-    };
+    const router = useRouter();
+    const { data: session } = useSession();
+    const user = session?.user;
+    const isAdmin = isPlatformAdmin(user);
 
-    const initials = user.name
+    const name = user?.name ?? "";
+    const initials = name
         .split(" ")
         .map((part) => part[0])
         .join("")
         .slice(0, 2)
         .toUpperCase();
 
-    const handleLogout = () => {
-        // Placeholder — replace with real sign-out once auth is wired.
-        toast.success("Signed out (placeholder).");
+    const handleLogout = async () => {
+        await signOut();
+        toast.success("Signed out.");
+        router.push("/login");
+        router.refresh();
     };
 
     return (
@@ -47,6 +52,10 @@ export function DashboardTopbar() {
 
             <div className="flex-1" />
 
+            <Badge variant="secondary" className="hidden sm:inline-flex">
+                {isAdmin ? "Platform Admin" : "Agent"}
+            </Badge>
+
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button
@@ -55,36 +64,36 @@ export function DashboardTopbar() {
                         aria-label="Open user menu"
                     >
                         <Avatar className="size-7">
-                            <AvatarImage src={user.avatar} alt={user.name} />
-                            <AvatarFallback>{initials}</AvatarFallback>
+                            <AvatarImage src={user?.image ?? ""} alt={name} />
+                            <AvatarFallback>{initials || "?"}</AvatarFallback>
                         </Avatar>
                         <span className="hidden text-sm font-medium sm:inline">
-                            {user.name}
+                            {name}
                         </span>
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuLabel>
                         <div className="flex flex-col">
-                            <span className="text-sm font-medium">
-                                {user.name}
-                            </span>
+                            <span className="text-sm font-medium">{name}</span>
                             <span className="text-xs font-normal text-muted-foreground">
-                                {user.email}
+                                {user?.email}
                             </span>
                         </div>
                     </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                        <DropdownMenuItem>
-                            <User />
-                            Profile
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <Settings />
-                            Settings
-                        </DropdownMenuItem>
-                    </DropdownMenuGroup>
+                    {!isAdmin && (
+                        <>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuGroup>
+                                <DropdownMenuItem asChild>
+                                    <Link href="/dashboard/settings">
+                                        <Settings />
+                                        Settings
+                                    </Link>
+                                </DropdownMenuItem>
+                            </DropdownMenuGroup>
+                        </>
+                    )}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem variant="destructive" onClick={handleLogout}>
                         <LogOut />

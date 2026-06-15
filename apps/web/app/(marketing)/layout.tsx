@@ -1,36 +1,69 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
+import { headers } from "next/headers";
 import { Home } from "lucide-react";
-import regionsData from "@/data/regions.json";
+import { getCounties } from "@/api/county";
+import { getAgentByDomain } from "@/api/agent";
 import NavDropdown from "@/components/NavDropdown";
+import { BrandThemeProvider } from "@/components/BrandThemeProvider";
+import { PublicThemeToggle } from "@/components/PublicThemeToggle";
+import { SiteSuspended } from "@/components/SiteSuspended";
+import { resolveTheme } from "@/lib/theme";
+import type { Metadata } from "next";
 
-export default function MarketingLayout({
+/** Per-agent <title>/SEO, resolved from the request Host. */
+export async function generateMetadata(): Promise<Metadata> {
+    const host = (await headers()).get("host") ?? undefined;
+    try {
+        const agent = await getAgentByDomain(host);
+        return { title: agent.siteName ?? agent.name };
+    } catch {
+        return {};
+    }
+}
+
+export default async function MarketingLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    // Resolve the agent (white-label org) for this request by its Host header.
+    const host = (await headers()).get("host") ?? undefined;
+    const agent = await getAgentByDomain(host);
+
+    const siteName = agent.siteName ?? agent.name;
+
+    // Suspended agents serve a payment-required placeholder, not the site.
+    if (agent.serviceStatus === "suspended") {
+        return <SiteSuspended siteName={siteName} />;
+    }
+
+    const counties = await getCounties();
+    const logoSrc = agent.logo ?? "/images/logo.png";
+
     return (
-        <>
+        <BrandThemeProvider theme={resolveTheme(agent)}>
             <nav className="sticky top-0 z-50 h-21.25 bg-muted px-5 shadow-sm">
                 <div className="container flex items-center justify-between h-full mx-auto">
                     <Link href="/" className="flex items-center gap-3">
                         <Image
-                            src="/images/logo.png"
-                            alt="National House Search"
+                            src={logoSrc}
+                            alt={siteName}
                             width={110}
                             height={50}
                             priority
-                            className="md:w-36.25 md:h-16.25"
+                            className="md:w-36.25 md:h-16.25 object-contain"
                         />
                         <p className="hidden sm:flex flex-col border-l pl-3 ml-3">
                             <span className="text-foreground font-semibold text-sm md:text-base">
-                                New Construction
+                                {siteName}
                             </span>
                         </p>
                     </Link>
 
                     <div className="flex items-center gap-3">
+                        <PublicThemeToggle />
                         <a
                             href="https://nationalhousesearch.com"
                             target="_blank"
@@ -51,14 +84,7 @@ export default function MarketingLayout({
                                 </button>
                             }
                         >
-                            <NavDropdown
-                                counties={regionsData.regions.flatMap((r) =>
-                                    r.counties.map((c) => ({
-                                        id: c.id,
-                                        name: c.name,
-                                    })),
-                                )}
-                            />
+                            <NavDropdown counties={counties} />
                         </Suspense>
                     </div>
                 </div>
@@ -70,14 +96,14 @@ export default function MarketingLayout({
                 <div className="container mx-auto px-5 py-10 flex flex-col items-center gap-6 text-center">
                     <div className="flex flex-col items-center gap-1">
                         <Image
-                            src="/images/logo.png"
-                            alt="National House Search"
+                            src={logoSrc}
+                            alt={siteName}
                             width={145}
                             height={65}
-                            className="brightness-0 invert"
+                            className="brightness-0 invert object-contain"
                         />
                         <p className="text-sm font-semibold tracking-wide text-secondary-foreground/80">
-                            New Construction Agent Partnership Program
+                            {agent.footerText ?? ""}
                         </p>
                     </div>
 
@@ -89,13 +115,18 @@ export default function MarketingLayout({
                     <div className="w-16 border-t border-secondary-foreground/20" />
 
                     <p className="text-sm text-secondary-foreground/70">
-                        © 2026 Simon Karim &nbsp;·&nbsp;{" "}
-                        <a
-                            href="tel:5617040091"
-                            className="hover:text-primary transition-colors"
-                        >
-                            561-704-0091
-                        </a>
+                        © 2026 {siteName}
+                        {agent.contactPhone && (
+                            <>
+                                &nbsp;·&nbsp;{" "}
+                                <a
+                                    href={`tel:${agent.contactPhone.replace(/\D/g, "")}`}
+                                    className="hover:text-primary transition-colors"
+                                >
+                                    {agent.contactPhone}
+                                </a>
+                            </>
+                        )}
                     </p>
 
                     <p className="max-w-2xl text-xs text-secondary-foreground/50 leading-relaxed">
@@ -107,6 +138,6 @@ export default function MarketingLayout({
                     </p>
                 </div>
             </footer>
-        </>
+        </BrandThemeProvider>
     );
 }

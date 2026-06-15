@@ -1,28 +1,22 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ImagePlus, X } from "lucide-react";
+import { ImagePlus, Loader2, X } from "lucide-react";
 import { cn } from "@workspace/ui/lib/utils";
 import { Button } from "@workspace/ui/components/button";
+import { uploadFile } from "@/api/storage";
 
 type ImagePickerProps = {
-    /** Current stored value (image URL/path once a backend upload is wired). */
     value?: string;
     onChange: (value: string) => void;
     onBlur?: () => void;
     invalid?: boolean;
     id?: string;
     className?: string;
+    /** R2 folder path, e.g. "communities/blossom-trail/gallery". Defaults to "uploads". */
+    folder?: string;
 };
 
-/**
- * Image picker (UI only).
- *
- * Lets the user select an image from their device and shows a local preview.
- * No upload happens yet — when the cloud backend is ready, replace the
- * `onChange(file.name)` call below with the uploaded URL returned by the
- * provider (Cloudinary / Vercel Blob / UploadThing / etc).
- */
 export function ImagePicker({
     value,
     onChange,
@@ -30,23 +24,34 @@ export function ImagePicker({
     invalid,
     id,
     className,
+    folder = "uploads",
 }: ImagePickerProps) {
     const inputRef = useRef<HTMLInputElement>(null);
     const [preview, setPreview] = useState<string | null>(null);
+    const [uploading, setUploading] = useState(false);
 
-    // Revoke the object URL when it changes or the component unmounts.
     useEffect(() => {
         return () => {
             if (preview) URL.revokeObjectURL(preview);
         };
     }, [preview]);
 
-    const handleFile = (file: File | undefined) => {
+    const handleFile = async (file: File | undefined) => {
         if (!file) return;
         if (preview) URL.revokeObjectURL(preview);
-        setPreview(URL.createObjectURL(file));
-        // TODO: upload to cloud and call onChange(uploadedUrl) instead.
-        onChange(file.name);
+        const blobUrl = URL.createObjectURL(file);
+        setPreview(blobUrl);
+        setUploading(true);
+        try {
+            const { url } = await uploadFile(file, folder);
+            onChange(url);
+        } catch {
+            onChange("");
+            setPreview(null);
+            URL.revokeObjectURL(blobUrl);
+        } finally {
+            setUploading(false);
+        }
     };
 
     const clear = () => {
@@ -55,6 +60,8 @@ export function ImagePicker({
         onChange("");
         if (inputRef.current) inputRef.current.value = "";
     };
+
+    const imageSrc = preview ?? (value?.startsWith("http") ? value : null);
 
     return (
         <div className={cn("flex flex-col gap-2", className)}>
@@ -71,11 +78,10 @@ export function ImagePicker({
             {value ? (
                 <div className="overflow-hidden rounded-lg border">
                     <div className="relative flex h-36 w-full items-center justify-center bg-muted">
-                        {preview ? (
-                            // Local blob preview — next/image can't optimize blob: URLs.
+                        {imageSrc ? (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
-                                src={preview}
+                                src={imageSrc}
                                 alt="Selected preview"
                                 className="size-full object-cover"
                             />
@@ -83,6 +89,11 @@ export function ImagePicker({
                             <span className="px-3 text-center text-xs text-muted-foreground">
                                 {value}
                             </span>
+                        )}
+                        {uploading && (
+                            <div className="absolute inset-0 flex items-center justify-center bg-background/60">
+                                <Loader2 className="size-6 animate-spin text-foreground" />
+                            </div>
                         )}
                     </div>
                     <div className="flex items-center justify-between gap-2 border-t bg-background p-2">
@@ -94,6 +105,7 @@ export function ImagePicker({
                                 type="button"
                                 variant="outline"
                                 size="xs"
+                                disabled={uploading}
                                 onClick={() => inputRef.current?.click()}
                             >
                                 Replace
@@ -102,6 +114,7 @@ export function ImagePicker({
                                 type="button"
                                 variant="ghost"
                                 size="icon-xs"
+                                disabled={uploading}
                                 onClick={clear}
                                 aria-label="Remove image"
                             >
@@ -113,12 +126,15 @@ export function ImagePicker({
             ) : (
                 <button
                     type="button"
+                    disabled={uploading}
                     onClick={() => inputRef.current?.click()}
                     aria-invalid={invalid || undefined}
-                    className="flex h-36 w-full flex-col items-center justify-center gap-2 rounded-lg border border-dashed text-muted-foreground transition-colors hover:bg-muted aria-invalid:border-destructive [&_svg]:size-6"
+                    className="flex h-36 w-full flex-col items-center justify-center gap-2 rounded-lg border border-dashed text-muted-foreground transition-colors hover:bg-muted aria-invalid:border-destructive disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:size-6"
                 >
-                    <ImagePlus />
-                    <span className="text-sm">Click to select an image</span>
+                    {uploading ? <Loader2 className="animate-spin" /> : <ImagePlus />}
+                    <span className="text-sm">
+                        {uploading ? "Uploading…" : "Click to select an image"}
+                    </span>
                 </button>
             )}
         </div>

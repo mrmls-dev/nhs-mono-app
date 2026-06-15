@@ -35,6 +35,7 @@ export type FloorPlan = {
 
 export type Community = {
     id: string;
+    slug: string;
     name: string;
     brand?: string;
     propertyType?: string;
@@ -60,7 +61,7 @@ export default function CommunityCard({ community }: { community: Community }) {
     const isSelling = community.status.toLowerCase().includes("now");
 
     return (
-        <Link href={`/communities/${community.id}`} className="group block">
+        <Link href={`/communities/${community.slug}`} className="group block">
             <Card className="overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex flex-col sm:flex-row">
                     <div className="relative sm:w-2/5 aspect-4/3 sm:aspect-auto bg-muted overflow-hidden">
