@@ -17,7 +17,21 @@ export async function generateMetadata(): Promise<Metadata> {
     const host = (await headers()).get("host") ?? undefined;
     try {
         const agent = await getAgentByDomain(host);
-        return { title: agent.siteName ?? agent.name };
+        // Brand suffix applied to sub-page titles via the title template,
+        // e.g. "Blossom Trail | National House Search". `||` so blank SEO
+        // fields fall through to the site name rather than rendering empty.
+        const suffix = agent.titleSuffix || agent.siteName || agent.name;
+        const description = agent.metaDescription || undefined;
+        const ogTitle = agent.seoTitle || suffix;
+        return {
+            title: {
+                default: agent.seoTitle || agent.siteName || agent.name,
+                template: `%s | ${suffix}`,
+            },
+            description,
+            openGraph: { title: ogTitle, description },
+            twitter: { title: ogTitle, description },
+        };
     } catch {
         return {};
     }

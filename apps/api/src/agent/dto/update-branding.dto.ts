@@ -76,6 +76,21 @@ export class UpdateBrandingDto {
 
     @IsOptional()
     @IsString()
+    @MaxLength(70)
+    seoTitle?: string;
+
+    @IsOptional()
+    @IsString()
+    @MaxLength(70)
+    titleSuffix?: string;
+
+    @IsOptional()
+    @IsString()
+    @MaxLength(200)
+    metaDescription?: string;
+
+    @IsOptional()
+    @IsString()
     @MaxLength(40)
     contactPhone?: string;
 

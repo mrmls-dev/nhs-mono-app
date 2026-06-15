@@ -1,30 +1,10 @@
 import { ImageResponse } from "next/og";
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
 import { getCommunity } from "@/api/community";
 import { formatPrice } from "@/lib/format";
+import { fetchImageDataUrl, resolveOgBrand } from "@/lib/og";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-
-/**
- * Fetch a remote (R2/CDN) image and return it as a base64 data URL for Satori.
- * Returns undefined on any failure so the card still renders without the photo.
- * Only absolute http(s) URLs are fetched — plan images are stored as full R2
- * URLs, so nothing is read off the function's filesystem.
- */
-async function fetchImageDataUrl(url: string): Promise<string | undefined> {
-    if (!/^https?:\/\//.test(url)) return undefined;
-    try {
-        const res = await fetch(url);
-        if (!res.ok) return undefined;
-        const mime = res.headers.get("content-type") ?? "image/jpeg";
-        const b64 = Buffer.from(await res.arrayBuffer()).toString("base64");
-        return `data:${mime};base64,${b64}`;
-    } catch {
-        return undefined;
-    }
-}
 
 export default async function Image({
     params,
@@ -55,16 +35,10 @@ export default async function Image({
         );
     }
 
-    const [logoBuf, imgSrc] = await Promise.all([
-        readFile(join(process.cwd(), "public", "images", "logo.png")).catch(
-            () => null,
-        ),
+    const [{ logoSrc, palette }, imgSrc] = await Promise.all([
+        resolveOgBrand(),
         fetchImageDataUrl(plan.image),
     ]);
-
-    const logoSrc = logoBuf
-        ? `data:image/png;base64,${logoBuf.toString("base64")}`
-        : undefined;
 
     const specs = [
         `${plan.beds} Bd`,
@@ -84,7 +58,7 @@ export default async function Image({
                 height: "630px",
                 display: "flex",
                 flexDirection: "row",
-                background: "#0b1d3a",
+                background: palette.bg,
                 position: "relative",
             }}
         >
@@ -95,7 +69,7 @@ export default async function Image({
                     left: 0,
                     width: "6px",
                     height: "630px",
-                    background: "#c9a84c",
+                    background: palette.accent,
                     display: "flex",
                 }}
             />
@@ -106,7 +80,7 @@ export default async function Image({
                     left: 0,
                     width: "1200px",
                     height: "4px",
-                    background: "#c9a84c",
+                    background: palette.accent,
                     display: "flex",
                 }}
             />
@@ -130,7 +104,14 @@ export default async function Image({
                             alignSelf: "flex-start",
                         }}
                     >
-                        <img src={logoSrc} style={{ width: "303px", height: "138px" }} />
+                        <img
+                            src={logoSrc}
+                            style={{
+                                width: "303px",
+                                height: "138px",
+                                objectFit: "contain",
+                            }}
+                        />
                     </div>
                 )}
 
@@ -161,7 +142,7 @@ export default async function Image({
                         {plan.name}
                     </h1>
                     {plan.startingPrice ? (
-                        <span style={{ color: "#c9a84c", fontSize: "28px", fontWeight: 700 }}>
+                        <span style={{ color: palette.accent, fontSize: "28px", fontWeight: 700 }}>
                             {formatPrice(plan.startingPrice)}
                         </span>
                     ) : null}
@@ -169,7 +150,7 @@ export default async function Image({
                         style={{
                             width: "48px",
                             height: "3px",
-                            background: "#c9a84c",
+                            background: palette.accent,
                             display: "flex",
                             marginTop: "4px",
                         }}

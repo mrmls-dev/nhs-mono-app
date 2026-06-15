@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props) {
     const plan = community?.floorPlans.find((p) => p.slug === planId);
     if (!community || !plan) return { title: "Floor plan not found" };
     return {
-        title: `${plan.name} — ${community.name} — National House Search`,
+        title: `${plan.name} · ${community.name}`,
         description: `Explore the ${plan.name} floor plan at ${community.name}. Starting from ${formatPrice(plan.startingPrice)}.`,
     };
 }

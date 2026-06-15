@@ -13,6 +13,7 @@ import {
     UserCog,
     Palette,
     Globe,
+    Search,
     CalendarClock,
     Settings,
 } from "lucide-react";
@@ -85,6 +86,7 @@ const agentGroups: NavGroup[] = [
         label: "Your site",
         items: [
             { title: "Branding", href: "/dashboard/branding", icon: Palette },
+            { title: "SEO", href: "/dashboard/seo", icon: Search },
             { title: "Domain", href: "/dashboard/domain", icon: Globe },
             {
                 title: "Schedule Embed",

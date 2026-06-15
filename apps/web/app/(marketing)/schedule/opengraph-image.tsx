@@ -1,17 +1,12 @@
 import { ImageResponse } from "next/og";
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+import { resolveOgBrand } from "@/lib/og";
 
 export const alt = "Schedule a Visit — National House Search";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function Image() {
-    const logob64 = await readFile(
-        join(process.cwd(), "public/images/logo.png"),
-        "base64",
-    );
-    const logoSrc = `data:image/png;base64,${logob64}`;
+    const { logoSrc, palette } = await resolveOgBrand();
 
     return new ImageResponse(
         <div
@@ -19,7 +14,7 @@ export default async function Image() {
                 width: "100%",
                 height: "100%",
                 display: "flex",
-                background: "#0b1d3a",
+                background: palette.bg,
                 position: "relative",
             }}
         >
@@ -30,7 +25,7 @@ export default async function Image() {
                     left: 0,
                     width: "8px",
                     height: "630px",
-                    background: "#c9a84c",
+                    background: palette.accent,
                     display: "flex",
                 }}
             />
@@ -42,7 +37,7 @@ export default async function Image() {
                     width: "560px",
                     height: "560px",
                     borderRadius: "50%",
-                    border: "70px solid rgba(201,168,76,0.06)",
+                    border: "70px solid rgba(255,255,255,0.05)",
                     display: "flex",
                 }}
             />
@@ -57,17 +52,26 @@ export default async function Image() {
                     height: "100%",
                 }}
             >
-                <div
-                    style={{
-                        display: "flex",
-                        background: "white",
-                        borderRadius: "10px",
-                        padding: "10px 20px",
-                        alignSelf: "flex-start",
-                    }}
-                >
-                    <img src={logoSrc} style={{ width: "303px", height: "138px" }} />
-                </div>
+                {logoSrc && (
+                    <div
+                        style={{
+                            display: "flex",
+                            background: "white",
+                            borderRadius: "10px",
+                            padding: "10px 20px",
+                            alignSelf: "flex-start",
+                        }}
+                    >
+                        <img
+                            src={logoSrc}
+                            style={{
+                                width: "303px",
+                                height: "138px",
+                                objectFit: "contain",
+                            }}
+                        />
+                    </div>
+                )}
 
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                     <span
@@ -115,7 +119,7 @@ export default async function Image() {
                             style={{
                                 width: "72px",
                                 height: "4px",
-                                background: "#c9a84c",
+                                background: palette.accent,
                                 display: "flex",
                             }}
                         />

@@ -256,6 +256,9 @@ model Organization {
   brandColor       String? // primary theme color (hex) — legacy single-color fallback
   theme            String?      @db.Text // JSON-serialized ThemeConfig (colors + radius + fonts, light/dark)
   siteName         String? // site name + <title>/SEO
+  seoTitle         String? // home-page SEO <title> (falls back to siteName)
+  titleSuffix      String? // brand suffix for sub-pages: "{name} | {titleSuffix}"
+  metaDescription  String?      @db.Text // home meta description + og/twitter description
   contactPhone     String?
   footerText       String?
   ghlScheduleEmbed String?      @db.Text // per-agent /schedule embed

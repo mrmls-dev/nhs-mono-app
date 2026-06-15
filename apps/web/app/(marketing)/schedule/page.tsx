@@ -5,7 +5,7 @@ import ScheduleIframe from "@/components/ScheduleIframe";
 import { getAgentByDomain } from "@/api/agent";
 
 export const metadata: Metadata = {
-    title: "Schedule a Visit — National House Search",
+    title: "Schedule a Visit",
     description:
         "Book a visit to one of our new construction communities in Southeast Florida.",
 };

@@ -94,7 +94,7 @@ export function BrandingForm({ agent }: { agent: Agent }) {
         mutationFn: async (values: BrandingValues) => {
             let logo: string | undefined;
             if (logoFile) {
-                const uploaded = await uploadFile(logoFile, `agents/${agent.slug}`);
+                const uploaded = await uploadFile(logoFile, `agents/${agent.slug}/logo`);
                 logo = uploaded.url;
             }
             return updateBranding(agent.id, {

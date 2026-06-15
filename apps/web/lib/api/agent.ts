@@ -23,6 +23,9 @@ export type Agent = {
     brandColor: string | null;
     theme: ThemeConfig | null;
     siteName: string | null;
+    seoTitle: string | null;
+    titleSuffix: string | null;
+    metaDescription: string | null;
     contactPhone: string | null;
     footerText: string | null;
     ghlScheduleEmbed: string | null;
@@ -92,6 +95,9 @@ export type UpdateBrandingInput = {
     brandColor?: string;
     theme?: ThemeConfig;
     siteName?: string;
+    seoTitle?: string;
+    titleSuffix?: string;
+    metaDescription?: string;
     contactPhone?: string;
     footerText?: string;
     ghlScheduleEmbed?: string;

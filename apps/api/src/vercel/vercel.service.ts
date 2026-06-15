@@ -79,10 +79,17 @@ export class VercelDomainsService {
             }
         }
 
+        // `verified` only means ownership is settled (no TXT challenge needed);
+        // it does NOT mean DNS points at Vercel. A just-added domain whose CNAME
+        // isn't in place yet must read "pending", so confirm via the config
+        // endpoint — `misconfigured: false` is the real "live + cert issued" gate.
+        const active =
+            Boolean(res.verified) && !(await this.isMisconfigured(domain));
+
         return {
             id: domain,
             hostname: domain,
-            status: res.verified ? "active" : "pending",
+            status: active ? "active" : "pending",
             dnsInstructions,
         };
     }
@@ -125,14 +132,24 @@ export class VercelDomainsService {
         if (!verified) return "pending";
 
         // Verified — confirm the CNAME/A actually resolves to Vercel (cert needs it).
+        return (await this.isMisconfigured(domain)) ? "pending" : "active";
+    }
+
+    /**
+     * Whether Vercel sees the domain's DNS as not yet pointing at it. `true`
+     * means the agent hasn't added the CNAME (or it hasn't propagated), so the
+     * domain isn't serving and no certificate has been issued. Unknown/errors
+     * are treated as not-ready.
+     */
+    private async isMisconfigured(domain: string): Promise<boolean> {
         try {
             const config = await this.vercel<{ misconfigured?: boolean }>(
                 `/v6/domains/${domain}/config`,
                 "GET"
             );
-            return config.misconfigured ? "pending" : "active";
+            return Boolean(config.misconfigured);
         } catch {
-            return "pending";
+            return true;
         }
     }
 

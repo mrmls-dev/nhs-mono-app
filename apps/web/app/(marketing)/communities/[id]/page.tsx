@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props) {
     const community = await getCommunity(id);
     if (!community) return { title: "Community not found" };
     return {
-        title: `${community.name} — National House Search`,
+        title: community.name,
         description: `Explore homes, floor plans, and amenities at ${community.name} in ${community.location}.`,
     };
 }

@@ -36,6 +36,9 @@ export type OrganizationMinAggregateOutputType = {
   brandColor: string | null
   theme: string | null
   siteName: string | null
+  seoTitle: string | null
+  titleSuffix: string | null
+  metaDescription: string | null
   contactPhone: string | null
   footerText: string | null
   ghlScheduleEmbed: string | null
@@ -70,6 +73,9 @@ export type OrganizationMaxAggregateOutputType = {
   brandColor: string | null
   theme: string | null
   siteName: string | null
+  seoTitle: string | null
+  titleSuffix: string | null
+  metaDescription: string | null
   contactPhone: string | null
   footerText: string | null
   ghlScheduleEmbed: string | null
@@ -104,6 +110,9 @@ export type OrganizationCountAggregateOutputType = {
   brandColor: number
   theme: number
   siteName: number
+  seoTitle: number
+  titleSuffix: number
+  metaDescription: number
   contactPhone: number
   footerText: number
   ghlScheduleEmbed: number
@@ -140,6 +149,9 @@ export type OrganizationMinAggregateInputType = {
   brandColor?: true
   theme?: true
   siteName?: true
+  seoTitle?: true
+  titleSuffix?: true
+  metaDescription?: true
   contactPhone?: true
   footerText?: true
   ghlScheduleEmbed?: true
@@ -174,6 +186,9 @@ export type OrganizationMaxAggregateInputType = {
   brandColor?: true
   theme?: true
   siteName?: true
+  seoTitle?: true
+  titleSuffix?: true
+  metaDescription?: true
   contactPhone?: true
   footerText?: true
   ghlScheduleEmbed?: true
@@ -208,6 +223,9 @@ export type OrganizationCountAggregateInputType = {
   brandColor?: true
   theme?: true
   siteName?: true
+  seoTitle?: true
+  titleSuffix?: true
+  metaDescription?: true
   contactPhone?: true
   footerText?: true
   ghlScheduleEmbed?: true
@@ -315,6 +333,9 @@ export type OrganizationGroupByOutputType = {
   brandColor: string | null
   theme: string | null
   siteName: string | null
+  seoTitle: string | null
+  titleSuffix: string | null
+  metaDescription: string | null
   contactPhone: string | null
   footerText: string | null
   ghlScheduleEmbed: string | null
@@ -370,6 +391,9 @@ export type OrganizationWhereInput = {
   brandColor?: Prisma.StringNullableFilter<"Organization"> | string | null
   theme?: Prisma.StringNullableFilter<"Organization"> | string | null
   siteName?: Prisma.StringNullableFilter<"Organization"> | string | null
+  seoTitle?: Prisma.StringNullableFilter<"Organization"> | string | null
+  titleSuffix?: Prisma.StringNullableFilter<"Organization"> | string | null
+  metaDescription?: Prisma.StringNullableFilter<"Organization"> | string | null
   contactPhone?: Prisma.StringNullableFilter<"Organization"> | string | null
   footerText?: Prisma.StringNullableFilter<"Organization"> | string | null
   ghlScheduleEmbed?: Prisma.StringNullableFilter<"Organization"> | string | null
@@ -406,6 +430,9 @@ export type OrganizationOrderByWithRelationInput = {
   brandColor?: Prisma.SortOrderInput | Prisma.SortOrder
   theme?: Prisma.SortOrderInput | Prisma.SortOrder
   siteName?: Prisma.SortOrderInput | Prisma.SortOrder
+  seoTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  titleSuffix?: Prisma.SortOrderInput | Prisma.SortOrder
+  metaDescription?: Prisma.SortOrderInput | Prisma.SortOrder
   contactPhone?: Prisma.SortOrderInput | Prisma.SortOrder
   footerText?: Prisma.SortOrderInput | Prisma.SortOrder
   ghlScheduleEmbed?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -446,6 +473,9 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   brandColor?: Prisma.StringNullableFilter<"Organization"> | string | null
   theme?: Prisma.StringNullableFilter<"Organization"> | string | null
   siteName?: Prisma.StringNullableFilter<"Organization"> | string | null
+  seoTitle?: Prisma.StringNullableFilter<"Organization"> | string | null
+  titleSuffix?: Prisma.StringNullableFilter<"Organization"> | string | null
+  metaDescription?: Prisma.StringNullableFilter<"Organization"> | string | null
   contactPhone?: Prisma.StringNullableFilter<"Organization"> | string | null
   footerText?: Prisma.StringNullableFilter<"Organization"> | string | null
   ghlScheduleEmbed?: Prisma.StringNullableFilter<"Organization"> | string | null
@@ -481,6 +511,9 @@ export type OrganizationOrderByWithAggregationInput = {
   brandColor?: Prisma.SortOrderInput | Prisma.SortOrder
   theme?: Prisma.SortOrderInput | Prisma.SortOrder
   siteName?: Prisma.SortOrderInput | Prisma.SortOrder
+  seoTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  titleSuffix?: Prisma.SortOrderInput | Prisma.SortOrder
+  metaDescription?: Prisma.SortOrderInput | Prisma.SortOrder
   contactPhone?: Prisma.SortOrderInput | Prisma.SortOrder
   footerText?: Prisma.SortOrderInput | Prisma.SortOrder
   ghlScheduleEmbed?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -521,6 +554,9 @@ export type OrganizationScalarWhereWithAggregatesInput = {
   brandColor?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   theme?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   siteName?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
+  seoTitle?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
+  titleSuffix?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
+  metaDescription?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   contactPhone?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   footerText?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   ghlScheduleEmbed?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
@@ -555,6 +591,9 @@ export type OrganizationCreateInput = {
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
+  seoTitle?: string | null
+  titleSuffix?: string | null
+  metaDescription?: string | null
   contactPhone?: string | null
   footerText?: string | null
   ghlScheduleEmbed?: string | null
@@ -591,6 +630,9 @@ export type OrganizationUncheckedCreateInput = {
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
+  seoTitle?: string | null
+  titleSuffix?: string | null
+  metaDescription?: string | null
   contactPhone?: string | null
   footerText?: string | null
   ghlScheduleEmbed?: string | null
@@ -627,6 +669,9 @@ export type OrganizationUpdateInput = {
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  titleSuffix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   footerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ghlScheduleEmbed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -663,6 +708,9 @@ export type OrganizationUncheckedUpdateInput = {
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  titleSuffix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   footerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ghlScheduleEmbed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -699,6 +747,9 @@ export type OrganizationCreateManyInput = {
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
+  seoTitle?: string | null
+  titleSuffix?: string | null
+  metaDescription?: string | null
   contactPhone?: string | null
   footerText?: string | null
   ghlScheduleEmbed?: string | null
@@ -733,6 +784,9 @@ export type OrganizationUpdateManyMutationInput = {
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  titleSuffix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   footerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ghlScheduleEmbed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -767,6 +821,9 @@ export type OrganizationUncheckedUpdateManyInput = {
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  titleSuffix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   footerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ghlScheduleEmbed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -801,6 +858,9 @@ export type OrganizationCountOrderByAggregateInput = {
   brandColor?: Prisma.SortOrder
   theme?: Prisma.SortOrder
   siteName?: Prisma.SortOrder
+  seoTitle?: Prisma.SortOrder
+  titleSuffix?: Prisma.SortOrder
+  metaDescription?: Prisma.SortOrder
   contactPhone?: Prisma.SortOrder
   footerText?: Prisma.SortOrder
   ghlScheduleEmbed?: Prisma.SortOrder
@@ -835,6 +895,9 @@ export type OrganizationMaxOrderByAggregateInput = {
   brandColor?: Prisma.SortOrder
   theme?: Prisma.SortOrder
   siteName?: Prisma.SortOrder
+  seoTitle?: Prisma.SortOrder
+  titleSuffix?: Prisma.SortOrder
+  metaDescription?: Prisma.SortOrder
   contactPhone?: Prisma.SortOrder
   footerText?: Prisma.SortOrder
   ghlScheduleEmbed?: Prisma.SortOrder
@@ -869,6 +932,9 @@ export type OrganizationMinOrderByAggregateInput = {
   brandColor?: Prisma.SortOrder
   theme?: Prisma.SortOrder
   siteName?: Prisma.SortOrder
+  seoTitle?: Prisma.SortOrder
+  titleSuffix?: Prisma.SortOrder
+  metaDescription?: Prisma.SortOrder
   contactPhone?: Prisma.SortOrder
   footerText?: Prisma.SortOrder
   ghlScheduleEmbed?: Prisma.SortOrder
@@ -936,6 +1002,9 @@ export type OrganizationCreateWithoutMembersInput = {
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
+  seoTitle?: string | null
+  titleSuffix?: string | null
+  metaDescription?: string | null
   contactPhone?: string | null
   footerText?: string | null
   ghlScheduleEmbed?: string | null
@@ -971,6 +1040,9 @@ export type OrganizationUncheckedCreateWithoutMembersInput = {
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
+  seoTitle?: string | null
+  titleSuffix?: string | null
+  metaDescription?: string | null
   contactPhone?: string | null
   footerText?: string | null
   ghlScheduleEmbed?: string | null
@@ -1022,6 +1094,9 @@ export type OrganizationUpdateWithoutMembersInput = {
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  titleSuffix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   footerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ghlScheduleEmbed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1057,6 +1132,9 @@ export type OrganizationUncheckedUpdateWithoutMembersInput = {
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  titleSuffix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   footerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ghlScheduleEmbed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1092,6 +1170,9 @@ export type OrganizationCreateWithoutInvitationsInput = {
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
+  seoTitle?: string | null
+  titleSuffix?: string | null
+  metaDescription?: string | null
   contactPhone?: string | null
   footerText?: string | null
   ghlScheduleEmbed?: string | null
@@ -1127,6 +1208,9 @@ export type OrganizationUncheckedCreateWithoutInvitationsInput = {
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
+  seoTitle?: string | null
+  titleSuffix?: string | null
+  metaDescription?: string | null
   contactPhone?: string | null
   footerText?: string | null
   ghlScheduleEmbed?: string | null
@@ -1178,6 +1262,9 @@ export type OrganizationUpdateWithoutInvitationsInput = {
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  titleSuffix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   footerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ghlScheduleEmbed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1213,6 +1300,9 @@ export type OrganizationUncheckedUpdateWithoutInvitationsInput = {
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  titleSuffix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   footerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ghlScheduleEmbed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1288,6 +1378,9 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   brandColor?: boolean
   theme?: boolean
   siteName?: boolean
+  seoTitle?: boolean
+  titleSuffix?: boolean
+  metaDescription?: boolean
   contactPhone?: boolean
   footerText?: boolean
   ghlScheduleEmbed?: boolean
@@ -1325,6 +1418,9 @@ export type OrganizationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   brandColor?: boolean
   theme?: boolean
   siteName?: boolean
+  seoTitle?: boolean
+  titleSuffix?: boolean
+  metaDescription?: boolean
   contactPhone?: boolean
   footerText?: boolean
   ghlScheduleEmbed?: boolean
@@ -1359,6 +1455,9 @@ export type OrganizationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   brandColor?: boolean
   theme?: boolean
   siteName?: boolean
+  seoTitle?: boolean
+  titleSuffix?: boolean
+  metaDescription?: boolean
   contactPhone?: boolean
   footerText?: boolean
   ghlScheduleEmbed?: boolean
@@ -1393,6 +1492,9 @@ export type OrganizationSelectScalar = {
   brandColor?: boolean
   theme?: boolean
   siteName?: boolean
+  seoTitle?: boolean
+  titleSuffix?: boolean
+  metaDescription?: boolean
   contactPhone?: boolean
   footerText?: boolean
   ghlScheduleEmbed?: boolean
@@ -1415,7 +1517,7 @@ export type OrganizationSelectScalar = {
   createdAt?: boolean
 }
 
-export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "logo" | "metadata" | "serviceStatus" | "customDomain" | "domainStatus" | "brandColor" | "theme" | "siteName" | "contactPhone" | "footerText" | "ghlScheduleEmbed" | "ownerFirstName" | "ownerLastName" | "businessEmail" | "website" | "address" | "city" | "state" | "postalCode" | "country" | "timezone" | "businessType" | "ghlLocationId" | "ghlAllowDuplicateContact" | "ghlAllowDuplicateOpportunity" | "ghlAllowFacebookNameMerge" | "ghlDisableContactTimezone" | "createdAt", ExtArgs["result"]["organization"]>
+export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "logo" | "metadata" | "serviceStatus" | "customDomain" | "domainStatus" | "brandColor" | "theme" | "siteName" | "seoTitle" | "titleSuffix" | "metaDescription" | "contactPhone" | "footerText" | "ghlScheduleEmbed" | "ownerFirstName" | "ownerLastName" | "businessEmail" | "website" | "address" | "city" | "state" | "postalCode" | "country" | "timezone" | "businessType" | "ghlLocationId" | "ghlAllowDuplicateContact" | "ghlAllowDuplicateOpportunity" | "ghlAllowFacebookNameMerge" | "ghlDisableContactTimezone" | "createdAt", ExtArgs["result"]["organization"]>
 export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | Prisma.Organization$membersArgs<ExtArgs>
   invitations?: boolean | Prisma.Organization$invitationsArgs<ExtArgs>
@@ -1442,6 +1544,9 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     brandColor: string | null
     theme: string | null
     siteName: string | null
+    seoTitle: string | null
+    titleSuffix: string | null
+    metaDescription: string | null
     contactPhone: string | null
     footerText: string | null
     ghlScheduleEmbed: string | null
@@ -1898,6 +2003,9 @@ export interface OrganizationFieldRefs {
   readonly brandColor: Prisma.FieldRef<"Organization", 'String'>
   readonly theme: Prisma.FieldRef<"Organization", 'String'>
   readonly siteName: Prisma.FieldRef<"Organization", 'String'>
+  readonly seoTitle: Prisma.FieldRef<"Organization", 'String'>
+  readonly titleSuffix: Prisma.FieldRef<"Organization", 'String'>
+  readonly metaDescription: Prisma.FieldRef<"Organization", 'String'>
   readonly contactPhone: Prisma.FieldRef<"Organization", 'String'>
   readonly footerText: Prisma.FieldRef<"Organization", 'String'>
   readonly ghlScheduleEmbed: Prisma.FieldRef<"Organization", 'String'>
