@@ -43,6 +43,7 @@ model County {
   regionId    String
   region      Region      @relation(fields: [regionId], references: [id])
   communities Community[]
+  agentCounties AgentCounty[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 }
@@ -83,6 +84,7 @@ model Community {
   amenities    CommunityAmenity[]
   schools      School[]
   floorPlans   FloorPlanModel[]
+  hiddenByAgents AgentHiddenCommunity[]
   createdAt    DateTime           @default(now())
   updatedAt    DateTime           @updatedAt
 
@@ -276,9 +278,41 @@ model Organization {
   ghlDisableContactTimezone     Boolean  @default(false)
   members          Member[]
   invitations      Invitation[]
+  assignedCounties AgentCounty[]
+  hiddenCommunities AgentHiddenCommunity[]
   createdAt        DateTime     @default(now())
 
   @@map("organization")
+}
+
+// ─── Agent coverage (per-tenant county + community scoping) ────────────────────
+// Platform staff assign an agent a set of counties (AgentCounty); only
+// communities in those counties are available to that agent's site. Within the
+// assigned counties communities are visible by default — the agent disables
+// specific ones, persisted as AgentHiddenCommunity rows (absence = visible).
+
+model AgentCounty {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  countyId       String
+  county         County       @relation(fields: [countyId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+
+  @@unique([organizationId, countyId])
+  @@index([organizationId])
+}
+
+model AgentHiddenCommunity {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  communityId    String
+  community      Community    @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+
+  @@unique([organizationId, communityId])
+  @@index([organizationId])
 }
 
 model Member {

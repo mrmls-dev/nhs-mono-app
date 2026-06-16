@@ -11,8 +11,34 @@ import { UpdateCommunityDto } from "./dto/update-community.dto";
 export class CommunityService {
     constructor(private readonly prisma: PrismaService) {}
 
-    async findAll() {
+    async findAll(agentId?: string) {
+        // Per-agent scoping: only communities in the agent's assigned counties,
+        // minus the ones the agent has hidden. No counties assigned → empty.
+        let where:
+            | { countyId: { in: string[] }; id?: { notIn: string[] } }
+            | undefined;
+        if (agentId) {
+            const [counties, hidden] = await Promise.all([
+                this.prisma.agentCounty.findMany({
+                    where: { organizationId: agentId },
+                    select: { countyId: true },
+                }),
+                this.prisma.agentHiddenCommunity.findMany({
+                    where: { organizationId: agentId },
+                    select: { communityId: true },
+                }),
+            ]);
+            if (counties.length === 0) return [];
+            where = {
+                countyId: { in: counties.map((c) => c.countyId) },
+                ...(hidden.length > 0
+                    ? { id: { notIn: hidden.map((h) => h.communityId) } }
+                    : {}),
+            };
+        }
+
         return this.prisma.community.findMany({
+            where,
             select: {
                 id: true,
                 slug: true,

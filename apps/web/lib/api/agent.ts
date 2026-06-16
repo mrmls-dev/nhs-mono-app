@@ -281,3 +281,79 @@ export async function removeDomain(id: string): Promise<void> {
     });
     if (!res.ok) await parseError(res, "Failed to remove domain");
 }
+
+// ── Coverage: assigned counties + community visibility ───────────────────────
+
+/** A county assigned to an agent (region included for grouping). */
+export type AssignedCounty = {
+    id: string;
+    name: string;
+    slug: string;
+    region: { id: string; name: string };
+};
+
+/** A community available to an agent, with its on/off (hidden) state. */
+export type ManagedCommunity = {
+    id: string;
+    name: string;
+    slug: string;
+    status: "NOW_SELLING" | "COMING_SOON" | "SOLD_OUT";
+    image: string;
+    countyId: string;
+    county: { id: string; name: string };
+    hidden: boolean;
+};
+
+/** Platform staff: the counties assigned to an agent. */
+export async function getAssignedCounties(
+    agentId: string,
+): Promise<AssignedCounty[]> {
+    const res = await fetch(`${API_BASE}/agents/${agentId}/counties`, {
+        ...authed,
+        cache: "no-store",
+    });
+    if (!res.ok) await parseError(res, "Failed to load assigned counties");
+    return res.json();
+}
+
+/** Platform staff: replace the agent's assigned counties. */
+export async function setAssignedCounties(
+    agentId: string,
+    countyIds: string[],
+): Promise<AssignedCounty[]> {
+    const res = await fetch(`${API_BASE}/agents/${agentId}/counties`, {
+        ...authed,
+        method: "PUT",
+        headers: jsonHeaders,
+        body: JSON.stringify({ countyIds }),
+    });
+    if (!res.ok) await parseError(res, "Failed to save assigned counties");
+    return res.json();
+}
+
+/** Staff or agent owner: communities in assigned counties + their hidden flag. */
+export async function getManagedCommunities(
+    agentId: string,
+): Promise<ManagedCommunity[]> {
+    const res = await fetch(`${API_BASE}/agents/${agentId}/communities`, {
+        ...authed,
+        cache: "no-store",
+    });
+    if (!res.ok) await parseError(res, "Failed to load communities");
+    return res.json();
+}
+
+/** Staff or agent owner: replace the hidden (disabled) community set. */
+export async function setHiddenCommunities(
+    agentId: string,
+    communityIds: string[],
+): Promise<ManagedCommunity[]> {
+    const res = await fetch(`${API_BASE}/agents/${agentId}/communities/hidden`, {
+        ...authed,
+        method: "PUT",
+        headers: jsonHeaders,
+        body: JSON.stringify({ communityIds }),
+    });
+    if (!res.ok) await parseError(res, "Failed to save community visibility");
+    return res.json();
+}

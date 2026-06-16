@@ -22,7 +22,7 @@ async function bootstrap() {
         origin: (process.env.CORS_ORIGIN ?? "http://localhost:3000")
             .split(",")
             .map((o) => o.trim()),
-        methods: ["GET", "POST", "PATCH", "DELETE"],
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
         credentials: true,
     });
 

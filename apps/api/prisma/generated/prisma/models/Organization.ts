@@ -416,6 +416,8 @@ export type OrganizationWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
   members?: Prisma.MemberListRelationFilter
   invitations?: Prisma.InvitationListRelationFilter
+  assignedCounties?: Prisma.AgentCountyListRelationFilter
+  hiddenCommunities?: Prisma.AgentHiddenCommunityListRelationFilter
 }
 
 export type OrganizationOrderByWithRelationInput = {
@@ -455,6 +457,8 @@ export type OrganizationOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   members?: Prisma.MemberOrderByRelationAggregateInput
   invitations?: Prisma.InvitationOrderByRelationAggregateInput
+  assignedCounties?: Prisma.AgentCountyOrderByRelationAggregateInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityOrderByRelationAggregateInput
 }
 
 export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -497,6 +501,8 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
   members?: Prisma.MemberListRelationFilter
   invitations?: Prisma.InvitationListRelationFilter
+  assignedCounties?: Prisma.AgentCountyListRelationFilter
+  hiddenCommunities?: Prisma.AgentHiddenCommunityListRelationFilter
 }, "id" | "slug" | "customDomain" | "ghlLocationId">
 
 export type OrganizationOrderByWithAggregationInput = {
@@ -616,6 +622,8 @@ export type OrganizationCreateInput = {
   createdAt?: Date | string
   members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
+  assignedCounties?: Prisma.AgentCountyCreateNestedManyWithoutOrganizationInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateInput = {
@@ -655,6 +663,8 @@ export type OrganizationUncheckedCreateInput = {
   createdAt?: Date | string
   members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  assignedCounties?: Prisma.AgentCountyUncheckedCreateNestedManyWithoutOrganizationInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUpdateInput = {
@@ -694,6 +704,8 @@ export type OrganizationUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
+  assignedCounties?: Prisma.AgentCountyUpdateManyWithoutOrganizationNestedInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateInput = {
@@ -733,6 +745,8 @@ export type OrganizationUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  assignedCounties?: Prisma.AgentCountyUncheckedUpdateManyWithoutOrganizationNestedInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyInput = {
@@ -962,6 +976,34 @@ export type OrganizationScalarRelationFilter = {
   isNot?: Prisma.OrganizationWhereInput
 }
 
+export type OrganizationCreateNestedOneWithoutAssignedCountiesInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutAssignedCountiesInput, Prisma.OrganizationUncheckedCreateWithoutAssignedCountiesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutAssignedCountiesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutAssignedCountiesNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutAssignedCountiesInput, Prisma.OrganizationUncheckedCreateWithoutAssignedCountiesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutAssignedCountiesInput
+  upsert?: Prisma.OrganizationUpsertWithoutAssignedCountiesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutAssignedCountiesInput, Prisma.OrganizationUpdateWithoutAssignedCountiesInput>, Prisma.OrganizationUncheckedUpdateWithoutAssignedCountiesInput>
+}
+
+export type OrganizationCreateNestedOneWithoutHiddenCommunitiesInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutHiddenCommunitiesInput, Prisma.OrganizationUncheckedCreateWithoutHiddenCommunitiesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutHiddenCommunitiesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutHiddenCommunitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutHiddenCommunitiesInput, Prisma.OrganizationUncheckedCreateWithoutHiddenCommunitiesInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutHiddenCommunitiesInput
+  upsert?: Prisma.OrganizationUpsertWithoutHiddenCommunitiesInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutHiddenCommunitiesInput, Prisma.OrganizationUpdateWithoutHiddenCommunitiesInput>, Prisma.OrganizationUncheckedUpdateWithoutHiddenCommunitiesInput>
+}
+
 export type OrganizationCreateNestedOneWithoutMembersInput = {
   create?: Prisma.XOR<Prisma.OrganizationCreateWithoutMembersInput, Prisma.OrganizationUncheckedCreateWithoutMembersInput>
   connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutMembersInput
@@ -988,6 +1030,358 @@ export type OrganizationUpdateOneRequiredWithoutInvitationsNestedInput = {
   upsert?: Prisma.OrganizationUpsertWithoutInvitationsInput
   connect?: Prisma.OrganizationWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutInvitationsInput, Prisma.OrganizationUpdateWithoutInvitationsInput>, Prisma.OrganizationUncheckedUpdateWithoutInvitationsInput>
+}
+
+export type OrganizationCreateWithoutAssignedCountiesInput = {
+  id?: string
+  name: string
+  slug: string
+  logo?: string | null
+  metadata?: string | null
+  serviceStatus?: string
+  customDomain?: string | null
+  domainStatus?: string | null
+  brandColor?: string | null
+  theme?: string | null
+  siteName?: string | null
+  seoTitle?: string | null
+  titleSuffix?: string | null
+  metaDescription?: string | null
+  contactPhone?: string | null
+  footerText?: string | null
+  ghlScheduleEmbed?: string | null
+  ownerFirstName?: string | null
+  ownerLastName?: string | null
+  businessEmail?: string | null
+  website?: string | null
+  address?: string | null
+  city?: string | null
+  state?: string | null
+  postalCode?: string | null
+  country?: string | null
+  timezone?: string | null
+  businessType?: string | null
+  ghlLocationId?: string | null
+  ghlAllowDuplicateContact?: boolean
+  ghlAllowDuplicateOpportunity?: boolean
+  ghlAllowFacebookNameMerge?: boolean
+  ghlDisableContactTimezone?: boolean
+  createdAt?: Date | string
+  members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutAssignedCountiesInput = {
+  id?: string
+  name: string
+  slug: string
+  logo?: string | null
+  metadata?: string | null
+  serviceStatus?: string
+  customDomain?: string | null
+  domainStatus?: string | null
+  brandColor?: string | null
+  theme?: string | null
+  siteName?: string | null
+  seoTitle?: string | null
+  titleSuffix?: string | null
+  metaDescription?: string | null
+  contactPhone?: string | null
+  footerText?: string | null
+  ghlScheduleEmbed?: string | null
+  ownerFirstName?: string | null
+  ownerLastName?: string | null
+  businessEmail?: string | null
+  website?: string | null
+  address?: string | null
+  city?: string | null
+  state?: string | null
+  postalCode?: string | null
+  country?: string | null
+  timezone?: string | null
+  businessType?: string | null
+  ghlLocationId?: string | null
+  ghlAllowDuplicateContact?: boolean
+  ghlAllowDuplicateOpportunity?: boolean
+  ghlAllowFacebookNameMerge?: boolean
+  ghlDisableContactTimezone?: boolean
+  createdAt?: Date | string
+  members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutAssignedCountiesInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutAssignedCountiesInput, Prisma.OrganizationUncheckedCreateWithoutAssignedCountiesInput>
+}
+
+export type OrganizationUpsertWithoutAssignedCountiesInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutAssignedCountiesInput, Prisma.OrganizationUncheckedUpdateWithoutAssignedCountiesInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutAssignedCountiesInput, Prisma.OrganizationUncheckedCreateWithoutAssignedCountiesInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutAssignedCountiesInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutAssignedCountiesInput, Prisma.OrganizationUncheckedUpdateWithoutAssignedCountiesInput>
+}
+
+export type OrganizationUpdateWithoutAssignedCountiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  titleSuffix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  footerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ghlScheduleEmbed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerFirstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerLastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ghlLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ghlAllowDuplicateContact?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ghlAllowDuplicateOpportunity?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ghlAllowFacebookNameMerge?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ghlDisableContactTimezone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutAssignedCountiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  titleSuffix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  footerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ghlScheduleEmbed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerFirstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerLastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ghlLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ghlAllowDuplicateContact?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ghlAllowDuplicateOpportunity?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ghlAllowFacebookNameMerge?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ghlDisableContactTimezone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutHiddenCommunitiesInput = {
+  id?: string
+  name: string
+  slug: string
+  logo?: string | null
+  metadata?: string | null
+  serviceStatus?: string
+  customDomain?: string | null
+  domainStatus?: string | null
+  brandColor?: string | null
+  theme?: string | null
+  siteName?: string | null
+  seoTitle?: string | null
+  titleSuffix?: string | null
+  metaDescription?: string | null
+  contactPhone?: string | null
+  footerText?: string | null
+  ghlScheduleEmbed?: string | null
+  ownerFirstName?: string | null
+  ownerLastName?: string | null
+  businessEmail?: string | null
+  website?: string | null
+  address?: string | null
+  city?: string | null
+  state?: string | null
+  postalCode?: string | null
+  country?: string | null
+  timezone?: string | null
+  businessType?: string | null
+  ghlLocationId?: string | null
+  ghlAllowDuplicateContact?: boolean
+  ghlAllowDuplicateOpportunity?: boolean
+  ghlAllowFacebookNameMerge?: boolean
+  ghlDisableContactTimezone?: boolean
+  createdAt?: Date | string
+  members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
+  assignedCounties?: Prisma.AgentCountyCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutHiddenCommunitiesInput = {
+  id?: string
+  name: string
+  slug: string
+  logo?: string | null
+  metadata?: string | null
+  serviceStatus?: string
+  customDomain?: string | null
+  domainStatus?: string | null
+  brandColor?: string | null
+  theme?: string | null
+  siteName?: string | null
+  seoTitle?: string | null
+  titleSuffix?: string | null
+  metaDescription?: string | null
+  contactPhone?: string | null
+  footerText?: string | null
+  ghlScheduleEmbed?: string | null
+  ownerFirstName?: string | null
+  ownerLastName?: string | null
+  businessEmail?: string | null
+  website?: string | null
+  address?: string | null
+  city?: string | null
+  state?: string | null
+  postalCode?: string | null
+  country?: string | null
+  timezone?: string | null
+  businessType?: string | null
+  ghlLocationId?: string | null
+  ghlAllowDuplicateContact?: boolean
+  ghlAllowDuplicateOpportunity?: boolean
+  ghlAllowFacebookNameMerge?: boolean
+  ghlDisableContactTimezone?: boolean
+  createdAt?: Date | string
+  members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  assignedCounties?: Prisma.AgentCountyUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutHiddenCommunitiesInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutHiddenCommunitiesInput, Prisma.OrganizationUncheckedCreateWithoutHiddenCommunitiesInput>
+}
+
+export type OrganizationUpsertWithoutHiddenCommunitiesInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutHiddenCommunitiesInput, Prisma.OrganizationUncheckedUpdateWithoutHiddenCommunitiesInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutHiddenCommunitiesInput, Prisma.OrganizationUncheckedCreateWithoutHiddenCommunitiesInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutHiddenCommunitiesInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutHiddenCommunitiesInput, Prisma.OrganizationUncheckedUpdateWithoutHiddenCommunitiesInput>
+}
+
+export type OrganizationUpdateWithoutHiddenCommunitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  titleSuffix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  footerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ghlScheduleEmbed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerFirstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerLastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ghlLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ghlAllowDuplicateContact?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ghlAllowDuplicateOpportunity?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ghlAllowFacebookNameMerge?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ghlDisableContactTimezone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
+  assignedCounties?: Prisma.AgentCountyUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutHiddenCommunitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  titleSuffix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  footerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ghlScheduleEmbed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerFirstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerLastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ghlLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ghlAllowDuplicateContact?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ghlAllowDuplicateOpportunity?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ghlAllowFacebookNameMerge?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ghlDisableContactTimezone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  assignedCounties?: Prisma.AgentCountyUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutMembersInput = {
@@ -1026,6 +1420,8 @@ export type OrganizationCreateWithoutMembersInput = {
   ghlDisableContactTimezone?: boolean
   createdAt?: Date | string
   invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
+  assignedCounties?: Prisma.AgentCountyCreateNestedManyWithoutOrganizationInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutMembersInput = {
@@ -1064,6 +1460,8 @@ export type OrganizationUncheckedCreateWithoutMembersInput = {
   ghlDisableContactTimezone?: boolean
   createdAt?: Date | string
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  assignedCounties?: Prisma.AgentCountyUncheckedCreateNestedManyWithoutOrganizationInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutMembersInput = {
@@ -1118,6 +1516,8 @@ export type OrganizationUpdateWithoutMembersInput = {
   ghlDisableContactTimezone?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
+  assignedCounties?: Prisma.AgentCountyUpdateManyWithoutOrganizationNestedInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutMembersInput = {
@@ -1156,6 +1556,8 @@ export type OrganizationUncheckedUpdateWithoutMembersInput = {
   ghlDisableContactTimezone?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  assignedCounties?: Prisma.AgentCountyUncheckedUpdateManyWithoutOrganizationNestedInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutInvitationsInput = {
@@ -1194,6 +1596,8 @@ export type OrganizationCreateWithoutInvitationsInput = {
   ghlDisableContactTimezone?: boolean
   createdAt?: Date | string
   members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
+  assignedCounties?: Prisma.AgentCountyCreateNestedManyWithoutOrganizationInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutInvitationsInput = {
@@ -1232,6 +1636,8 @@ export type OrganizationUncheckedCreateWithoutInvitationsInput = {
   ghlDisableContactTimezone?: boolean
   createdAt?: Date | string
   members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
+  assignedCounties?: Prisma.AgentCountyUncheckedCreateNestedManyWithoutOrganizationInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutInvitationsInput = {
@@ -1286,6 +1692,8 @@ export type OrganizationUpdateWithoutInvitationsInput = {
   ghlDisableContactTimezone?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
+  assignedCounties?: Prisma.AgentCountyUpdateManyWithoutOrganizationNestedInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutInvitationsInput = {
@@ -1324,6 +1732,8 @@ export type OrganizationUncheckedUpdateWithoutInvitationsInput = {
   ghlDisableContactTimezone?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
+  assignedCounties?: Prisma.AgentCountyUncheckedUpdateManyWithoutOrganizationNestedInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 
@@ -1334,11 +1744,15 @@ export type OrganizationUncheckedUpdateWithoutInvitationsInput = {
 export type OrganizationCountOutputType = {
   members: number
   invitations: number
+  assignedCounties: number
+  hiddenCommunities: number
 }
 
 export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | OrganizationCountOutputTypeCountMembersArgs
   invitations?: boolean | OrganizationCountOutputTypeCountInvitationsArgs
+  assignedCounties?: boolean | OrganizationCountOutputTypeCountAssignedCountiesArgs
+  hiddenCommunities?: boolean | OrganizationCountOutputTypeCountHiddenCommunitiesArgs
 }
 
 /**
@@ -1363,6 +1777,20 @@ export type OrganizationCountOutputTypeCountMembersArgs<ExtArgs extends runtime.
  */
 export type OrganizationCountOutputTypeCountInvitationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.InvitationWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountAssignedCountiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AgentCountyWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountHiddenCommunitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AgentHiddenCommunityWhereInput
 }
 
 
@@ -1403,6 +1831,8 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   createdAt?: boolean
   members?: boolean | Prisma.Organization$membersArgs<ExtArgs>
   invitations?: boolean | Prisma.Organization$invitationsArgs<ExtArgs>
+  assignedCounties?: boolean | Prisma.Organization$assignedCountiesArgs<ExtArgs>
+  hiddenCommunities?: boolean | Prisma.Organization$hiddenCommunitiesArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
@@ -1521,6 +1951,8 @@ export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | Prisma.Organization$membersArgs<ExtArgs>
   invitations?: boolean | Prisma.Organization$invitationsArgs<ExtArgs>
+  assignedCounties?: boolean | Prisma.Organization$assignedCountiesArgs<ExtArgs>
+  hiddenCommunities?: boolean | Prisma.Organization$hiddenCommunitiesArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1531,6 +1963,8 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
   objects: {
     members: Prisma.$MemberPayload<ExtArgs>[]
     invitations: Prisma.$InvitationPayload<ExtArgs>[]
+    assignedCounties: Prisma.$AgentCountyPayload<ExtArgs>[]
+    hiddenCommunities: Prisma.$AgentHiddenCommunityPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1963,6 +2397,8 @@ export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends run
   readonly [Symbol.toStringTag]: "PrismaPromise"
   members<T extends Prisma.Organization$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   invitations<T extends Prisma.Organization$invitationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$invitationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assignedCounties<T extends Prisma.Organization$assignedCountiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$assignedCountiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AgentCountyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hiddenCommunities<T extends Prisma.Organization$hiddenCommunitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$hiddenCommunitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AgentHiddenCommunityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2464,6 +2900,54 @@ export type Organization$invitationsArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.InvitationScalarFieldEnum | Prisma.InvitationScalarFieldEnum[]
+}
+
+/**
+ * Organization.assignedCounties
+ */
+export type Organization$assignedCountiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AgentCounty
+   */
+  select?: Prisma.AgentCountySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AgentCounty
+   */
+  omit?: Prisma.AgentCountyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AgentCountyInclude<ExtArgs> | null
+  where?: Prisma.AgentCountyWhereInput
+  orderBy?: Prisma.AgentCountyOrderByWithRelationInput | Prisma.AgentCountyOrderByWithRelationInput[]
+  cursor?: Prisma.AgentCountyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AgentCountyScalarFieldEnum | Prisma.AgentCountyScalarFieldEnum[]
+}
+
+/**
+ * Organization.hiddenCommunities
+ */
+export type Organization$hiddenCommunitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AgentHiddenCommunity
+   */
+  select?: Prisma.AgentHiddenCommunitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AgentHiddenCommunity
+   */
+  omit?: Prisma.AgentHiddenCommunityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AgentHiddenCommunityInclude<ExtArgs> | null
+  where?: Prisma.AgentHiddenCommunityWhereInput
+  orderBy?: Prisma.AgentHiddenCommunityOrderByWithRelationInput | Prisma.AgentHiddenCommunityOrderByWithRelationInput[]
+  cursor?: Prisma.AgentHiddenCommunityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AgentHiddenCommunityScalarFieldEnum | Prisma.AgentHiddenCommunityScalarFieldEnum[]
 }
 
 /**

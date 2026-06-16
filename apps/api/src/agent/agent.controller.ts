@@ -9,6 +9,7 @@ import {
     Param,
     Patch,
     Post,
+    Put,
     Query,
     Req,
     UseGuards,
@@ -28,6 +29,7 @@ import { UpdateAgentDto } from "./dto/update-agent.dto";
 import { UpdateBrandingDto } from "./dto/update-branding.dto";
 import { ServiceStatusDto } from "./dto/service-status.dto";
 import { SetDomainDto } from "./dto/domain.dto";
+import { SetCountiesDto, SetHiddenCommunitiesDto } from "./dto/coverage.dto";
 
 @Controller("agents")
 @UseGuards(SessionGuard, RolesGuard)
@@ -126,6 +128,43 @@ export class AgentController {
     async removeDomain(@Param("id") id: string, @CurrentUser() user: AuthUser) {
         await this.assertManager(user, id);
         return this.agentService.removeDomain(id);
+    }
+
+    // ── Coverage: counties (platform staff) + community visibility (staff/owner) ──
+
+    /** Platform staff: the counties assigned to an agent. */
+    @Get(":id/counties")
+    @Roles("admin")
+    getCounties(@Param("id") id: string) {
+        return this.agentService.getAssignedCounties(id);
+    }
+
+    /** Platform staff: replace an agent's assigned counties. */
+    @Put(":id/counties")
+    @Roles("admin")
+    setCounties(@Param("id") id: string, @Body() dto: SetCountiesDto) {
+        return this.agentService.setAssignedCounties(id, dto.countyIds);
+    }
+
+    /** Staff or the agent owner: communities in assigned counties + hidden flags. */
+    @Get(":id/communities")
+    async getCommunities(
+        @Param("id") id: string,
+        @CurrentUser() user: AuthUser
+    ) {
+        await this.assertManager(user, id);
+        return this.agentService.getManagedCommunities(id);
+    }
+
+    /** Staff or the agent owner: replace the hidden (disabled) community set. */
+    @Put(":id/communities/hidden")
+    async setHiddenCommunities(
+        @Param("id") id: string,
+        @Body() dto: SetHiddenCommunitiesDto,
+        @CurrentUser() user: AuthUser
+    ) {
+        await this.assertManager(user, id);
+        return this.agentService.setHiddenCommunities(id, dto.communityIds);
     }
 
     /** Allow platform staff (owner/admin), or owners/admins of the target org. */

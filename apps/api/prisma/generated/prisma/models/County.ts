@@ -270,6 +270,7 @@ export type CountyWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"County"> | Date | string
   region?: Prisma.XOR<Prisma.RegionScalarRelationFilter, Prisma.RegionWhereInput>
   communities?: Prisma.CommunityListRelationFilter
+  agentCounties?: Prisma.AgentCountyListRelationFilter
 }
 
 export type CountyOrderByWithRelationInput = {
@@ -285,6 +286,7 @@ export type CountyOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   region?: Prisma.RegionOrderByWithRelationInput
   communities?: Prisma.CommunityOrderByRelationAggregateInput
+  agentCounties?: Prisma.AgentCountyOrderByRelationAggregateInput
 }
 
 export type CountyWhereUniqueInput = Prisma.AtLeast<{
@@ -303,6 +305,7 @@ export type CountyWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"County"> | Date | string
   region?: Prisma.XOR<Prisma.RegionScalarRelationFilter, Prisma.RegionWhereInput>
   communities?: Prisma.CommunityListRelationFilter
+  agentCounties?: Prisma.AgentCountyListRelationFilter
 }, "id" | "slug">
 
 export type CountyOrderByWithAggregationInput = {
@@ -351,6 +354,7 @@ export type CountyCreateInput = {
   updatedAt?: Date | string
   region: Prisma.RegionCreateNestedOneWithoutCountiesInput
   communities?: Prisma.CommunityCreateNestedManyWithoutCountyInput
+  agentCounties?: Prisma.AgentCountyCreateNestedManyWithoutCountyInput
 }
 
 export type CountyUncheckedCreateInput = {
@@ -365,6 +369,7 @@ export type CountyUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   communities?: Prisma.CommunityUncheckedCreateNestedManyWithoutCountyInput
+  agentCounties?: Prisma.AgentCountyUncheckedCreateNestedManyWithoutCountyInput
 }
 
 export type CountyUpdateInput = {
@@ -379,6 +384,7 @@ export type CountyUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   region?: Prisma.RegionUpdateOneRequiredWithoutCountiesNestedInput
   communities?: Prisma.CommunityUpdateManyWithoutCountyNestedInput
+  agentCounties?: Prisma.AgentCountyUpdateManyWithoutCountyNestedInput
 }
 
 export type CountyUncheckedUpdateInput = {
@@ -393,6 +399,7 @@ export type CountyUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   communities?: Prisma.CommunityUncheckedUpdateManyWithoutCountyNestedInput
+  agentCounties?: Prisma.AgentCountyUncheckedUpdateManyWithoutCountyNestedInput
 }
 
 export type CountyCreateManyInput = {
@@ -565,6 +572,20 @@ export type CountyUpdateOneRequiredWithoutCommunitiesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CountyUpdateToOneWithWhereWithoutCommunitiesInput, Prisma.CountyUpdateWithoutCommunitiesInput>, Prisma.CountyUncheckedUpdateWithoutCommunitiesInput>
 }
 
+export type CountyCreateNestedOneWithoutAgentCountiesInput = {
+  create?: Prisma.XOR<Prisma.CountyCreateWithoutAgentCountiesInput, Prisma.CountyUncheckedCreateWithoutAgentCountiesInput>
+  connectOrCreate?: Prisma.CountyCreateOrConnectWithoutAgentCountiesInput
+  connect?: Prisma.CountyWhereUniqueInput
+}
+
+export type CountyUpdateOneRequiredWithoutAgentCountiesNestedInput = {
+  create?: Prisma.XOR<Prisma.CountyCreateWithoutAgentCountiesInput, Prisma.CountyUncheckedCreateWithoutAgentCountiesInput>
+  connectOrCreate?: Prisma.CountyCreateOrConnectWithoutAgentCountiesInput
+  upsert?: Prisma.CountyUpsertWithoutAgentCountiesInput
+  connect?: Prisma.CountyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CountyUpdateToOneWithWhereWithoutAgentCountiesInput, Prisma.CountyUpdateWithoutAgentCountiesInput>, Prisma.CountyUncheckedUpdateWithoutAgentCountiesInput>
+}
+
 export type CountyCreateWithoutRegionInput = {
   id?: string
   slug: string
@@ -576,6 +597,7 @@ export type CountyCreateWithoutRegionInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   communities?: Prisma.CommunityCreateNestedManyWithoutCountyInput
+  agentCounties?: Prisma.AgentCountyCreateNestedManyWithoutCountyInput
 }
 
 export type CountyUncheckedCreateWithoutRegionInput = {
@@ -589,6 +611,7 @@ export type CountyUncheckedCreateWithoutRegionInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   communities?: Prisma.CommunityUncheckedCreateNestedManyWithoutCountyInput
+  agentCounties?: Prisma.AgentCountyUncheckedCreateNestedManyWithoutCountyInput
 }
 
 export type CountyCreateOrConnectWithoutRegionInput = {
@@ -644,6 +667,7 @@ export type CountyCreateWithoutCommunitiesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   region: Prisma.RegionCreateNestedOneWithoutCountiesInput
+  agentCounties?: Prisma.AgentCountyCreateNestedManyWithoutCountyInput
 }
 
 export type CountyUncheckedCreateWithoutCommunitiesInput = {
@@ -657,6 +681,7 @@ export type CountyUncheckedCreateWithoutCommunitiesInput = {
   regionId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  agentCounties?: Prisma.AgentCountyUncheckedCreateNestedManyWithoutCountyInput
 }
 
 export type CountyCreateOrConnectWithoutCommunitiesInput = {
@@ -686,6 +711,7 @@ export type CountyUpdateWithoutCommunitiesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   region?: Prisma.RegionUpdateOneRequiredWithoutCountiesNestedInput
+  agentCounties?: Prisma.AgentCountyUpdateManyWithoutCountyNestedInput
 }
 
 export type CountyUncheckedUpdateWithoutCommunitiesInput = {
@@ -699,6 +725,79 @@ export type CountyUncheckedUpdateWithoutCommunitiesInput = {
   regionId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  agentCounties?: Prisma.AgentCountyUncheckedUpdateManyWithoutCountyNestedInput
+}
+
+export type CountyCreateWithoutAgentCountiesInput = {
+  id?: string
+  slug: string
+  name: string
+  boundsNorth: number
+  boundsSouth: number
+  boundsEast: number
+  boundsWest: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  region: Prisma.RegionCreateNestedOneWithoutCountiesInput
+  communities?: Prisma.CommunityCreateNestedManyWithoutCountyInput
+}
+
+export type CountyUncheckedCreateWithoutAgentCountiesInput = {
+  id?: string
+  slug: string
+  name: string
+  boundsNorth: number
+  boundsSouth: number
+  boundsEast: number
+  boundsWest: number
+  regionId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  communities?: Prisma.CommunityUncheckedCreateNestedManyWithoutCountyInput
+}
+
+export type CountyCreateOrConnectWithoutAgentCountiesInput = {
+  where: Prisma.CountyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CountyCreateWithoutAgentCountiesInput, Prisma.CountyUncheckedCreateWithoutAgentCountiesInput>
+}
+
+export type CountyUpsertWithoutAgentCountiesInput = {
+  update: Prisma.XOR<Prisma.CountyUpdateWithoutAgentCountiesInput, Prisma.CountyUncheckedUpdateWithoutAgentCountiesInput>
+  create: Prisma.XOR<Prisma.CountyCreateWithoutAgentCountiesInput, Prisma.CountyUncheckedCreateWithoutAgentCountiesInput>
+  where?: Prisma.CountyWhereInput
+}
+
+export type CountyUpdateToOneWithWhereWithoutAgentCountiesInput = {
+  where?: Prisma.CountyWhereInput
+  data: Prisma.XOR<Prisma.CountyUpdateWithoutAgentCountiesInput, Prisma.CountyUncheckedUpdateWithoutAgentCountiesInput>
+}
+
+export type CountyUpdateWithoutAgentCountiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  boundsNorth?: Prisma.FloatFieldUpdateOperationsInput | number
+  boundsSouth?: Prisma.FloatFieldUpdateOperationsInput | number
+  boundsEast?: Prisma.FloatFieldUpdateOperationsInput | number
+  boundsWest?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  region?: Prisma.RegionUpdateOneRequiredWithoutCountiesNestedInput
+  communities?: Prisma.CommunityUpdateManyWithoutCountyNestedInput
+}
+
+export type CountyUncheckedUpdateWithoutAgentCountiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  boundsNorth?: Prisma.FloatFieldUpdateOperationsInput | number
+  boundsSouth?: Prisma.FloatFieldUpdateOperationsInput | number
+  boundsEast?: Prisma.FloatFieldUpdateOperationsInput | number
+  boundsWest?: Prisma.FloatFieldUpdateOperationsInput | number
+  regionId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  communities?: Prisma.CommunityUncheckedUpdateManyWithoutCountyNestedInput
 }
 
 export type CountyCreateManyRegionInput = {
@@ -724,6 +823,7 @@ export type CountyUpdateWithoutRegionInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   communities?: Prisma.CommunityUpdateManyWithoutCountyNestedInput
+  agentCounties?: Prisma.AgentCountyUpdateManyWithoutCountyNestedInput
 }
 
 export type CountyUncheckedUpdateWithoutRegionInput = {
@@ -737,6 +837,7 @@ export type CountyUncheckedUpdateWithoutRegionInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   communities?: Prisma.CommunityUncheckedUpdateManyWithoutCountyNestedInput
+  agentCounties?: Prisma.AgentCountyUncheckedUpdateManyWithoutCountyNestedInput
 }
 
 export type CountyUncheckedUpdateManyWithoutRegionInput = {
@@ -758,10 +859,12 @@ export type CountyUncheckedUpdateManyWithoutRegionInput = {
 
 export type CountyCountOutputType = {
   communities: number
+  agentCounties: number
 }
 
 export type CountyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   communities?: boolean | CountyCountOutputTypeCountCommunitiesArgs
+  agentCounties?: boolean | CountyCountOutputTypeCountAgentCountiesArgs
 }
 
 /**
@@ -781,6 +884,13 @@ export type CountyCountOutputTypeCountCommunitiesArgs<ExtArgs extends runtime.Ty
   where?: Prisma.CommunityWhereInput
 }
 
+/**
+ * CountyCountOutputType without action
+ */
+export type CountyCountOutputTypeCountAgentCountiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AgentCountyWhereInput
+}
+
 
 export type CountySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -795,6 +905,7 @@ export type CountySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   updatedAt?: boolean
   region?: boolean | Prisma.RegionDefaultArgs<ExtArgs>
   communities?: boolean | Prisma.County$communitiesArgs<ExtArgs>
+  agentCounties?: boolean | Prisma.County$agentCountiesArgs<ExtArgs>
   _count?: boolean | Prisma.CountyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["county"]>
 
@@ -843,6 +954,7 @@ export type CountyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type CountyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   region?: boolean | Prisma.RegionDefaultArgs<ExtArgs>
   communities?: boolean | Prisma.County$communitiesArgs<ExtArgs>
+  agentCounties?: boolean | Prisma.County$agentCountiesArgs<ExtArgs>
   _count?: boolean | Prisma.CountyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CountyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -857,6 +969,7 @@ export type $CountyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     region: Prisma.$RegionPayload<ExtArgs>
     communities: Prisma.$CommunityPayload<ExtArgs>[]
+    agentCounties: Prisma.$AgentCountyPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1265,6 +1378,7 @@ export interface Prisma__CountyClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   region<T extends Prisma.RegionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RegionDefaultArgs<ExtArgs>>): Prisma.Prisma__RegionClient<runtime.Types.Result.GetResult<Prisma.$RegionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   communities<T extends Prisma.County$communitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.County$communitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  agentCounties<T extends Prisma.County$agentCountiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.County$agentCountiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AgentCountyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1726,6 +1840,30 @@ export type County$communitiesArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.CommunityScalarFieldEnum | Prisma.CommunityScalarFieldEnum[]
+}
+
+/**
+ * County.agentCounties
+ */
+export type County$agentCountiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AgentCounty
+   */
+  select?: Prisma.AgentCountySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AgentCounty
+   */
+  omit?: Prisma.AgentCountyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AgentCountyInclude<ExtArgs> | null
+  where?: Prisma.AgentCountyWhereInput
+  orderBy?: Prisma.AgentCountyOrderByWithRelationInput | Prisma.AgentCountyOrderByWithRelationInput[]
+  cursor?: Prisma.AgentCountyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AgentCountyScalarFieldEnum | Prisma.AgentCountyScalarFieldEnum[]
 }
 
 /**

@@ -68,7 +68,10 @@ export async function updateRegion(
 }
 
 export async function deleteRegion(id: string): Promise<void> {
-    const res = await fetch(`${API_BASE}/regions/${id}`, { method: "DELETE" });
+    const res = await fetch(`${API_BASE}/regions/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+    });
     if (!res.ok) {
         const body = await res.json().catch(() => null);
         const msg = body?.message;
@@ -82,6 +85,7 @@ export async function createRegion(input: CreateRegionInput): Promise<Region> {
     const res = await fetch(`${API_BASE}/regions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(input),
     });
     if (!res.ok) {

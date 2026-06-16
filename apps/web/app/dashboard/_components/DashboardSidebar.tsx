@@ -79,6 +79,7 @@ const agentGroups: NavGroup[] = [
     {
         label: "Your site",
         items: [
+            { title: "Communities", href: "/dashboard/listings", icon: Building2 },
             { title: "Branding", href: "/dashboard/branding", icon: Palette },
             { title: "SEO", href: "/dashboard/seo", icon: Search },
             { title: "Domain", href: "/dashboard/domain", icon: Globe },

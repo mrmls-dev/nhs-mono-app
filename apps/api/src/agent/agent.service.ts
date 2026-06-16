@@ -533,6 +533,149 @@ export class AgentService {
         return org;
     }
 
+    // ── Coverage: assigned counties + community visibility ──────────────────────
+
+    /** The counties currently assigned to an agent (region included for grouping). */
+    async getAssignedCounties(id: string) {
+        await this.assertExists(id);
+        const rows = await this.prisma.agentCounty.findMany({
+            where: { organizationId: id },
+            select: {
+                county: {
+                    select: {
+                        id: true,
+                        name: true,
+                        slug: true,
+                        region: { select: { id: true, name: true } },
+                    },
+                },
+            },
+            orderBy: [
+                { county: { region: { name: "asc" } } },
+                { county: { name: "asc" } },
+            ],
+        });
+        return rows.map((r) => r.county);
+    }
+
+    /** Platform staff: replace the agent's assigned-county set. */
+    async setAssignedCounties(id: string, countyIds: string[]) {
+        await this.assertExists(id);
+        const ids = [...new Set(countyIds)];
+
+        if (ids.length > 0) {
+            const found = await this.prisma.county.count({
+                where: { id: { in: ids } },
+            });
+            if (found !== ids.length) {
+                throw new BadRequestException(
+                    "One or more counties do not exist"
+                );
+            }
+        }
+
+        await this.prisma.$transaction(async (tx) => {
+            await tx.agentCounty.deleteMany({ where: { organizationId: id } });
+            if (ids.length > 0) {
+                await tx.agentCounty.createMany({
+                    data: ids.map((countyId) => ({
+                        organizationId: id,
+                        countyId,
+                    })),
+                });
+            }
+            // Drop hidden-community rows that no longer fall under an assigned
+            // county so they don't silently resurface if the county is re-added.
+            await tx.agentHiddenCommunity.deleteMany({
+                where: {
+                    organizationId: id,
+                    community: { countyId: { notIn: ids } },
+                },
+            });
+        });
+
+        return this.getAssignedCounties(id);
+    }
+
+    /**
+     * Communities available to an agent (those in its assigned counties), each
+     * flagged with whether the agent has hidden it. Empty when no counties.
+     */
+    async getManagedCommunities(id: string) {
+        await this.assertExists(id);
+        const counties = await this.prisma.agentCounty.findMany({
+            where: { organizationId: id },
+            select: { countyId: true },
+        });
+        if (counties.length === 0) return [];
+
+        const [communities, hidden] = await Promise.all([
+            this.prisma.community.findMany({
+                where: { countyId: { in: counties.map((c) => c.countyId) } },
+                select: {
+                    id: true,
+                    name: true,
+                    slug: true,
+                    status: true,
+                    image: true,
+                    countyId: true,
+                    county: { select: { id: true, name: true } },
+                },
+                orderBy: [{ county: { name: "asc" } }, { name: "asc" }],
+            }),
+            this.prisma.agentHiddenCommunity.findMany({
+                where: { organizationId: id },
+                select: { communityId: true },
+            }),
+        ]);
+        const hiddenSet = new Set(hidden.map((h) => h.communityId));
+        return communities.map((c) => ({
+            ...c,
+            hidden: hiddenSet.has(c.id),
+        }));
+    }
+
+    /** Replace the agent's hidden-community set (only ids in assigned counties). */
+    async setHiddenCommunities(id: string, communityIds: string[]) {
+        await this.assertExists(id);
+        const ids = [...new Set(communityIds)];
+        const counties = await this.prisma.agentCounty.findMany({
+            where: { organizationId: id },
+            select: { countyId: true },
+        });
+        const countyIds = counties.map((c) => c.countyId);
+
+        // Only accept communities that live in the agent's assigned counties.
+        const valid =
+            ids.length === 0
+                ? []
+                : (
+                      await this.prisma.community.findMany({
+                          where: {
+                              id: { in: ids },
+                              countyId: { in: countyIds },
+                          },
+                          select: { id: true },
+                      })
+                  ).map((c) => c.id);
+
+        await this.prisma.$transaction(async (tx) => {
+            await tx.agentHiddenCommunity.deleteMany({
+                where: { organizationId: id },
+            });
+            if (valid.length > 0) {
+                await tx.agentHiddenCommunity.createMany({
+                    data: valid.map((communityId) => ({
+                        organizationId: id,
+                        communityId,
+                    })),
+                });
+            }
+        });
+
+        return this.getManagedCommunities(id);
+    }
+
     // ── Mappers ────────────────────────────────────────────────────────────────
 
     private toAdminAgent(org: OrgWithOwner) {

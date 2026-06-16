@@ -64,6 +64,8 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   Organization: 'Organization',
+  AgentCounty: 'AgentCounty',
+  AgentHiddenCommunity: 'AgentHiddenCommunity',
   Member: 'Member',
   Invitation: 'Invitation'
 } as const
@@ -307,6 +309,26 @@ export const OrganizationScalarFieldEnum = {
 } as const
 
 export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
+
+
+export const AgentCountyScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  countyId: 'countyId',
+  createdAt: 'createdAt'
+} as const
+
+export type AgentCountyScalarFieldEnum = (typeof AgentCountyScalarFieldEnum)[keyof typeof AgentCountyScalarFieldEnum]
+
+
+export const AgentHiddenCommunityScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  communityId: 'communityId',
+  createdAt: 'createdAt'
+} as const
+
+export type AgentHiddenCommunityScalarFieldEnum = (typeof AgentHiddenCommunityScalarFieldEnum)[keyof typeof AgentHiddenCommunityScalarFieldEnum]
 
 
 export const MemberScalarFieldEnum = {

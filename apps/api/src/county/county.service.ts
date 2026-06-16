@@ -94,8 +94,20 @@ export class CountyService {
         }
     }
 
-    async findAll() {
+    async findAll(agentId?: string) {
+        // Per-agent scoping: only the agent's assigned counties (empty when none).
+        let where: { id: { in: string[] } } | undefined;
+        if (agentId) {
+            const assigned = await this.prisma.agentCounty.findMany({
+                where: { organizationId: agentId },
+                select: { countyId: true },
+            });
+            if (assigned.length === 0) return [];
+            where = { id: { in: assigned.map((a) => a.countyId) } };
+        }
+
         return this.prisma.county.findMany({
+            where,
             select: {
                 id: true,
                 name: true,

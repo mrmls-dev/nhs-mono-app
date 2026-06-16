@@ -420,6 +420,7 @@ export type CommunityWhereInput = {
   amenities?: Prisma.CommunityAmenityListRelationFilter
   schools?: Prisma.SchoolListRelationFilter
   floorPlans?: Prisma.FloorPlanModelListRelationFilter
+  hiddenByAgents?: Prisma.AgentHiddenCommunityListRelationFilter
 }
 
 export type CommunityOrderByWithRelationInput = {
@@ -451,6 +452,7 @@ export type CommunityOrderByWithRelationInput = {
   amenities?: Prisma.CommunityAmenityOrderByRelationAggregateInput
   schools?: Prisma.SchoolOrderByRelationAggregateInput
   floorPlans?: Prisma.FloorPlanModelOrderByRelationAggregateInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityOrderByRelationAggregateInput
 }
 
 export type CommunityWhereUniqueInput = Prisma.AtLeast<{
@@ -485,6 +487,7 @@ export type CommunityWhereUniqueInput = Prisma.AtLeast<{
   amenities?: Prisma.CommunityAmenityListRelationFilter
   schools?: Prisma.SchoolListRelationFilter
   floorPlans?: Prisma.FloorPlanModelListRelationFilter
+  hiddenByAgents?: Prisma.AgentHiddenCommunityListRelationFilter
 }, "id" | "slug">
 
 export type CommunityOrderByWithAggregationInput = {
@@ -577,6 +580,7 @@ export type CommunityCreateInput = {
   amenities?: Prisma.CommunityAmenityCreateNestedManyWithoutCommunityInput
   schools?: Prisma.SchoolCreateNestedManyWithoutCommunityInput
   floorPlans?: Prisma.FloorPlanModelCreateNestedManyWithoutCommunityInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityCreateNestedManyWithoutCommunityInput
 }
 
 export type CommunityUncheckedCreateInput = {
@@ -607,6 +611,7 @@ export type CommunityUncheckedCreateInput = {
   amenities?: Prisma.CommunityAmenityUncheckedCreateNestedManyWithoutCommunityInput
   schools?: Prisma.SchoolUncheckedCreateNestedManyWithoutCommunityInput
   floorPlans?: Prisma.FloorPlanModelUncheckedCreateNestedManyWithoutCommunityInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityUncheckedCreateNestedManyWithoutCommunityInput
 }
 
 export type CommunityUpdateInput = {
@@ -637,6 +642,7 @@ export type CommunityUpdateInput = {
   amenities?: Prisma.CommunityAmenityUpdateManyWithoutCommunityNestedInput
   schools?: Prisma.SchoolUpdateManyWithoutCommunityNestedInput
   floorPlans?: Prisma.FloorPlanModelUpdateManyWithoutCommunityNestedInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityUpdateManyWithoutCommunityNestedInput
 }
 
 export type CommunityUncheckedUpdateInput = {
@@ -667,6 +673,7 @@ export type CommunityUncheckedUpdateInput = {
   amenities?: Prisma.CommunityAmenityUncheckedUpdateManyWithoutCommunityNestedInput
   schools?: Prisma.SchoolUncheckedUpdateManyWithoutCommunityNestedInput
   floorPlans?: Prisma.FloorPlanModelUncheckedUpdateManyWithoutCommunityNestedInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityUncheckedUpdateManyWithoutCommunityNestedInput
 }
 
 export type CommunityCreateManyInput = {
@@ -985,6 +992,20 @@ export type CommunityUpdateOneRequiredWithoutFloorPlansNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CommunityUpdateToOneWithWhereWithoutFloorPlansInput, Prisma.CommunityUpdateWithoutFloorPlansInput>, Prisma.CommunityUncheckedUpdateWithoutFloorPlansInput>
 }
 
+export type CommunityCreateNestedOneWithoutHiddenByAgentsInput = {
+  create?: Prisma.XOR<Prisma.CommunityCreateWithoutHiddenByAgentsInput, Prisma.CommunityUncheckedCreateWithoutHiddenByAgentsInput>
+  connectOrCreate?: Prisma.CommunityCreateOrConnectWithoutHiddenByAgentsInput
+  connect?: Prisma.CommunityWhereUniqueInput
+}
+
+export type CommunityUpdateOneRequiredWithoutHiddenByAgentsNestedInput = {
+  create?: Prisma.XOR<Prisma.CommunityCreateWithoutHiddenByAgentsInput, Prisma.CommunityUncheckedCreateWithoutHiddenByAgentsInput>
+  connectOrCreate?: Prisma.CommunityCreateOrConnectWithoutHiddenByAgentsInput
+  upsert?: Prisma.CommunityUpsertWithoutHiddenByAgentsInput
+  connect?: Prisma.CommunityWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CommunityUpdateToOneWithWhereWithoutHiddenByAgentsInput, Prisma.CommunityUpdateWithoutHiddenByAgentsInput>, Prisma.CommunityUncheckedUpdateWithoutHiddenByAgentsInput>
+}
+
 export type CommunityCreateWithoutCountyInput = {
   id?: string
   slug: string
@@ -1012,6 +1033,7 @@ export type CommunityCreateWithoutCountyInput = {
   amenities?: Prisma.CommunityAmenityCreateNestedManyWithoutCommunityInput
   schools?: Prisma.SchoolCreateNestedManyWithoutCommunityInput
   floorPlans?: Prisma.FloorPlanModelCreateNestedManyWithoutCommunityInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityCreateNestedManyWithoutCommunityInput
 }
 
 export type CommunityUncheckedCreateWithoutCountyInput = {
@@ -1041,6 +1063,7 @@ export type CommunityUncheckedCreateWithoutCountyInput = {
   amenities?: Prisma.CommunityAmenityUncheckedCreateNestedManyWithoutCommunityInput
   schools?: Prisma.SchoolUncheckedCreateNestedManyWithoutCommunityInput
   floorPlans?: Prisma.FloorPlanModelUncheckedCreateNestedManyWithoutCommunityInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityUncheckedCreateNestedManyWithoutCommunityInput
 }
 
 export type CommunityCreateOrConnectWithoutCountyInput = {
@@ -1126,6 +1149,7 @@ export type CommunityCreateWithoutAmenitiesInput = {
   county: Prisma.CountyCreateNestedOneWithoutCommunitiesInput
   schools?: Prisma.SchoolCreateNestedManyWithoutCommunityInput
   floorPlans?: Prisma.FloorPlanModelCreateNestedManyWithoutCommunityInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityCreateNestedManyWithoutCommunityInput
 }
 
 export type CommunityUncheckedCreateWithoutAmenitiesInput = {
@@ -1155,6 +1179,7 @@ export type CommunityUncheckedCreateWithoutAmenitiesInput = {
   updatedAt?: Date | string
   schools?: Prisma.SchoolUncheckedCreateNestedManyWithoutCommunityInput
   floorPlans?: Prisma.FloorPlanModelUncheckedCreateNestedManyWithoutCommunityInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityUncheckedCreateNestedManyWithoutCommunityInput
 }
 
 export type CommunityCreateOrConnectWithoutAmenitiesInput = {
@@ -1200,6 +1225,7 @@ export type CommunityUpdateWithoutAmenitiesInput = {
   county?: Prisma.CountyUpdateOneRequiredWithoutCommunitiesNestedInput
   schools?: Prisma.SchoolUpdateManyWithoutCommunityNestedInput
   floorPlans?: Prisma.FloorPlanModelUpdateManyWithoutCommunityNestedInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityUpdateManyWithoutCommunityNestedInput
 }
 
 export type CommunityUncheckedUpdateWithoutAmenitiesInput = {
@@ -1229,6 +1255,7 @@ export type CommunityUncheckedUpdateWithoutAmenitiesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   schools?: Prisma.SchoolUncheckedUpdateManyWithoutCommunityNestedInput
   floorPlans?: Prisma.FloorPlanModelUncheckedUpdateManyWithoutCommunityNestedInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityUncheckedUpdateManyWithoutCommunityNestedInput
 }
 
 export type CommunityCreateWithoutSchoolsInput = {
@@ -1258,6 +1285,7 @@ export type CommunityCreateWithoutSchoolsInput = {
   county: Prisma.CountyCreateNestedOneWithoutCommunitiesInput
   amenities?: Prisma.CommunityAmenityCreateNestedManyWithoutCommunityInput
   floorPlans?: Prisma.FloorPlanModelCreateNestedManyWithoutCommunityInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityCreateNestedManyWithoutCommunityInput
 }
 
 export type CommunityUncheckedCreateWithoutSchoolsInput = {
@@ -1287,6 +1315,7 @@ export type CommunityUncheckedCreateWithoutSchoolsInput = {
   updatedAt?: Date | string
   amenities?: Prisma.CommunityAmenityUncheckedCreateNestedManyWithoutCommunityInput
   floorPlans?: Prisma.FloorPlanModelUncheckedCreateNestedManyWithoutCommunityInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityUncheckedCreateNestedManyWithoutCommunityInput
 }
 
 export type CommunityCreateOrConnectWithoutSchoolsInput = {
@@ -1332,6 +1361,7 @@ export type CommunityUpdateWithoutSchoolsInput = {
   county?: Prisma.CountyUpdateOneRequiredWithoutCommunitiesNestedInput
   amenities?: Prisma.CommunityAmenityUpdateManyWithoutCommunityNestedInput
   floorPlans?: Prisma.FloorPlanModelUpdateManyWithoutCommunityNestedInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityUpdateManyWithoutCommunityNestedInput
 }
 
 export type CommunityUncheckedUpdateWithoutSchoolsInput = {
@@ -1361,6 +1391,7 @@ export type CommunityUncheckedUpdateWithoutSchoolsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   amenities?: Prisma.CommunityAmenityUncheckedUpdateManyWithoutCommunityNestedInput
   floorPlans?: Prisma.FloorPlanModelUncheckedUpdateManyWithoutCommunityNestedInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityUncheckedUpdateManyWithoutCommunityNestedInput
 }
 
 export type CommunityCreateWithoutFloorPlansInput = {
@@ -1390,6 +1421,7 @@ export type CommunityCreateWithoutFloorPlansInput = {
   county: Prisma.CountyCreateNestedOneWithoutCommunitiesInput
   amenities?: Prisma.CommunityAmenityCreateNestedManyWithoutCommunityInput
   schools?: Prisma.SchoolCreateNestedManyWithoutCommunityInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityCreateNestedManyWithoutCommunityInput
 }
 
 export type CommunityUncheckedCreateWithoutFloorPlansInput = {
@@ -1419,6 +1451,7 @@ export type CommunityUncheckedCreateWithoutFloorPlansInput = {
   updatedAt?: Date | string
   amenities?: Prisma.CommunityAmenityUncheckedCreateNestedManyWithoutCommunityInput
   schools?: Prisma.SchoolUncheckedCreateNestedManyWithoutCommunityInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityUncheckedCreateNestedManyWithoutCommunityInput
 }
 
 export type CommunityCreateOrConnectWithoutFloorPlansInput = {
@@ -1464,6 +1497,7 @@ export type CommunityUpdateWithoutFloorPlansInput = {
   county?: Prisma.CountyUpdateOneRequiredWithoutCommunitiesNestedInput
   amenities?: Prisma.CommunityAmenityUpdateManyWithoutCommunityNestedInput
   schools?: Prisma.SchoolUpdateManyWithoutCommunityNestedInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityUpdateManyWithoutCommunityNestedInput
 }
 
 export type CommunityUncheckedUpdateWithoutFloorPlansInput = {
@@ -1493,6 +1527,143 @@ export type CommunityUncheckedUpdateWithoutFloorPlansInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   amenities?: Prisma.CommunityAmenityUncheckedUpdateManyWithoutCommunityNestedInput
   schools?: Prisma.SchoolUncheckedUpdateManyWithoutCommunityNestedInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityUncheckedUpdateManyWithoutCommunityNestedInput
+}
+
+export type CommunityCreateWithoutHiddenByAgentsInput = {
+  id?: string
+  slug: string
+  name: string
+  brand?: string | null
+  location: string
+  image: string
+  status: $Enums.CommunityStatus
+  homesForSale?: number
+  bedsMin: number
+  bedsMax: number
+  bathsMin: runtime.Decimal | runtime.DecimalJsLike | number | string
+  bathsMax: runtime.Decimal | runtime.DecimalJsLike | number | string
+  garageMin: number
+  garageMax: number
+  storiesMin: number
+  storiesMax: number
+  sqftFrom: number
+  priceFrom: number
+  lat: number
+  lng: number
+  about: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  county: Prisma.CountyCreateNestedOneWithoutCommunitiesInput
+  amenities?: Prisma.CommunityAmenityCreateNestedManyWithoutCommunityInput
+  schools?: Prisma.SchoolCreateNestedManyWithoutCommunityInput
+  floorPlans?: Prisma.FloorPlanModelCreateNestedManyWithoutCommunityInput
+}
+
+export type CommunityUncheckedCreateWithoutHiddenByAgentsInput = {
+  id?: string
+  slug: string
+  name: string
+  brand?: string | null
+  location: string
+  image: string
+  status: $Enums.CommunityStatus
+  homesForSale?: number
+  bedsMin: number
+  bedsMax: number
+  bathsMin: runtime.Decimal | runtime.DecimalJsLike | number | string
+  bathsMax: runtime.Decimal | runtime.DecimalJsLike | number | string
+  garageMin: number
+  garageMax: number
+  storiesMin: number
+  storiesMax: number
+  sqftFrom: number
+  priceFrom: number
+  lat: number
+  lng: number
+  about: string
+  countyId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  amenities?: Prisma.CommunityAmenityUncheckedCreateNestedManyWithoutCommunityInput
+  schools?: Prisma.SchoolUncheckedCreateNestedManyWithoutCommunityInput
+  floorPlans?: Prisma.FloorPlanModelUncheckedCreateNestedManyWithoutCommunityInput
+}
+
+export type CommunityCreateOrConnectWithoutHiddenByAgentsInput = {
+  where: Prisma.CommunityWhereUniqueInput
+  create: Prisma.XOR<Prisma.CommunityCreateWithoutHiddenByAgentsInput, Prisma.CommunityUncheckedCreateWithoutHiddenByAgentsInput>
+}
+
+export type CommunityUpsertWithoutHiddenByAgentsInput = {
+  update: Prisma.XOR<Prisma.CommunityUpdateWithoutHiddenByAgentsInput, Prisma.CommunityUncheckedUpdateWithoutHiddenByAgentsInput>
+  create: Prisma.XOR<Prisma.CommunityCreateWithoutHiddenByAgentsInput, Prisma.CommunityUncheckedCreateWithoutHiddenByAgentsInput>
+  where?: Prisma.CommunityWhereInput
+}
+
+export type CommunityUpdateToOneWithWhereWithoutHiddenByAgentsInput = {
+  where?: Prisma.CommunityWhereInput
+  data: Prisma.XOR<Prisma.CommunityUpdateWithoutHiddenByAgentsInput, Prisma.CommunityUncheckedUpdateWithoutHiddenByAgentsInput>
+}
+
+export type CommunityUpdateWithoutHiddenByAgentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  image?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCommunityStatusFieldUpdateOperationsInput | $Enums.CommunityStatus
+  homesForSale?: Prisma.IntFieldUpdateOperationsInput | number
+  bedsMin?: Prisma.IntFieldUpdateOperationsInput | number
+  bedsMax?: Prisma.IntFieldUpdateOperationsInput | number
+  bathsMin?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  bathsMax?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  garageMin?: Prisma.IntFieldUpdateOperationsInput | number
+  garageMax?: Prisma.IntFieldUpdateOperationsInput | number
+  storiesMin?: Prisma.IntFieldUpdateOperationsInput | number
+  storiesMax?: Prisma.IntFieldUpdateOperationsInput | number
+  sqftFrom?: Prisma.IntFieldUpdateOperationsInput | number
+  priceFrom?: Prisma.IntFieldUpdateOperationsInput | number
+  lat?: Prisma.FloatFieldUpdateOperationsInput | number
+  lng?: Prisma.FloatFieldUpdateOperationsInput | number
+  about?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  county?: Prisma.CountyUpdateOneRequiredWithoutCommunitiesNestedInput
+  amenities?: Prisma.CommunityAmenityUpdateManyWithoutCommunityNestedInput
+  schools?: Prisma.SchoolUpdateManyWithoutCommunityNestedInput
+  floorPlans?: Prisma.FloorPlanModelUpdateManyWithoutCommunityNestedInput
+}
+
+export type CommunityUncheckedUpdateWithoutHiddenByAgentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  image?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCommunityStatusFieldUpdateOperationsInput | $Enums.CommunityStatus
+  homesForSale?: Prisma.IntFieldUpdateOperationsInput | number
+  bedsMin?: Prisma.IntFieldUpdateOperationsInput | number
+  bedsMax?: Prisma.IntFieldUpdateOperationsInput | number
+  bathsMin?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  bathsMax?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  garageMin?: Prisma.IntFieldUpdateOperationsInput | number
+  garageMax?: Prisma.IntFieldUpdateOperationsInput | number
+  storiesMin?: Prisma.IntFieldUpdateOperationsInput | number
+  storiesMax?: Prisma.IntFieldUpdateOperationsInput | number
+  sqftFrom?: Prisma.IntFieldUpdateOperationsInput | number
+  priceFrom?: Prisma.IntFieldUpdateOperationsInput | number
+  lat?: Prisma.FloatFieldUpdateOperationsInput | number
+  lng?: Prisma.FloatFieldUpdateOperationsInput | number
+  about?: Prisma.StringFieldUpdateOperationsInput | string
+  countyId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  amenities?: Prisma.CommunityAmenityUncheckedUpdateManyWithoutCommunityNestedInput
+  schools?: Prisma.SchoolUncheckedUpdateManyWithoutCommunityNestedInput
+  floorPlans?: Prisma.FloorPlanModelUncheckedUpdateManyWithoutCommunityNestedInput
 }
 
 export type CommunityCreateManyCountyInput = {
@@ -1548,6 +1719,7 @@ export type CommunityUpdateWithoutCountyInput = {
   amenities?: Prisma.CommunityAmenityUpdateManyWithoutCommunityNestedInput
   schools?: Prisma.SchoolUpdateManyWithoutCommunityNestedInput
   floorPlans?: Prisma.FloorPlanModelUpdateManyWithoutCommunityNestedInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityUpdateManyWithoutCommunityNestedInput
 }
 
 export type CommunityUncheckedUpdateWithoutCountyInput = {
@@ -1577,6 +1749,7 @@ export type CommunityUncheckedUpdateWithoutCountyInput = {
   amenities?: Prisma.CommunityAmenityUncheckedUpdateManyWithoutCommunityNestedInput
   schools?: Prisma.SchoolUncheckedUpdateManyWithoutCommunityNestedInput
   floorPlans?: Prisma.FloorPlanModelUncheckedUpdateManyWithoutCommunityNestedInput
+  hiddenByAgents?: Prisma.AgentHiddenCommunityUncheckedUpdateManyWithoutCommunityNestedInput
 }
 
 export type CommunityUncheckedUpdateManyWithoutCountyInput = {
@@ -1614,12 +1787,14 @@ export type CommunityCountOutputType = {
   amenities: number
   schools: number
   floorPlans: number
+  hiddenByAgents: number
 }
 
 export type CommunityCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   amenities?: boolean | CommunityCountOutputTypeCountAmenitiesArgs
   schools?: boolean | CommunityCountOutputTypeCountSchoolsArgs
   floorPlans?: boolean | CommunityCountOutputTypeCountFloorPlansArgs
+  hiddenByAgents?: boolean | CommunityCountOutputTypeCountHiddenByAgentsArgs
 }
 
 /**
@@ -1653,6 +1828,13 @@ export type CommunityCountOutputTypeCountFloorPlansArgs<ExtArgs extends runtime.
   where?: Prisma.FloorPlanModelWhereInput
 }
 
+/**
+ * CommunityCountOutputType without action
+ */
+export type CommunityCountOutputTypeCountHiddenByAgentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AgentHiddenCommunityWhereInput
+}
+
 
 export type CommunitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1683,6 +1865,7 @@ export type CommunitySelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   amenities?: boolean | Prisma.Community$amenitiesArgs<ExtArgs>
   schools?: boolean | Prisma.Community$schoolsArgs<ExtArgs>
   floorPlans?: boolean | Prisma.Community$floorPlansArgs<ExtArgs>
+  hiddenByAgents?: boolean | Prisma.Community$hiddenByAgentsArgs<ExtArgs>
   _count?: boolean | Prisma.CommunityCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["community"]>
 
@@ -1775,6 +1958,7 @@ export type CommunityInclude<ExtArgs extends runtime.Types.Extensions.InternalAr
   amenities?: boolean | Prisma.Community$amenitiesArgs<ExtArgs>
   schools?: boolean | Prisma.Community$schoolsArgs<ExtArgs>
   floorPlans?: boolean | Prisma.Community$floorPlansArgs<ExtArgs>
+  hiddenByAgents?: boolean | Prisma.Community$hiddenByAgentsArgs<ExtArgs>
   _count?: boolean | Prisma.CommunityCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CommunityIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1791,6 +1975,7 @@ export type $CommunityPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     amenities: Prisma.$CommunityAmenityPayload<ExtArgs>[]
     schools: Prisma.$SchoolPayload<ExtArgs>[]
     floorPlans: Prisma.$FloorPlanModelPayload<ExtArgs>[]
+    hiddenByAgents: Prisma.$AgentHiddenCommunityPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2215,6 +2400,7 @@ export interface Prisma__CommunityClient<T, Null = never, ExtArgs extends runtim
   amenities<T extends Prisma.Community$amenitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Community$amenitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommunityAmenityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   schools<T extends Prisma.Community$schoolsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Community$schoolsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SchoolPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   floorPlans<T extends Prisma.Community$floorPlansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Community$floorPlansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FloorPlanModelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hiddenByAgents<T extends Prisma.Community$hiddenByAgentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Community$hiddenByAgentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AgentHiddenCommunityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2738,6 +2924,30 @@ export type Community$floorPlansArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.FloorPlanModelScalarFieldEnum | Prisma.FloorPlanModelScalarFieldEnum[]
+}
+
+/**
+ * Community.hiddenByAgents
+ */
+export type Community$hiddenByAgentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AgentHiddenCommunity
+   */
+  select?: Prisma.AgentHiddenCommunitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AgentHiddenCommunity
+   */
+  omit?: Prisma.AgentHiddenCommunityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AgentHiddenCommunityInclude<ExtArgs> | null
+  where?: Prisma.AgentHiddenCommunityWhereInput
+  orderBy?: Prisma.AgentHiddenCommunityOrderByWithRelationInput | Prisma.AgentHiddenCommunityOrderByWithRelationInput[]
+  cursor?: Prisma.AgentHiddenCommunityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AgentHiddenCommunityScalarFieldEnum | Prisma.AgentHiddenCommunityScalarFieldEnum[]
 }
 
 /**

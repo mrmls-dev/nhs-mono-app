@@ -1,4 +1,4 @@
-import { getCommunities, type CommunityListItem } from "@/api/community";
+import { getPublicCommunities, type CommunityListItem } from "@/api/community";
 import {
     formatRange,
     formatStories,
@@ -34,15 +34,17 @@ function toCard(c: CommunityListItem): Community {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default async function CommunitiesSection({
+    agentId,
     countyId,
     countyBounds,
     countyName,
 }: {
+    agentId: string;
     countyId?: string;
     countyBounds?: CountyBounds;
     countyName?: string;
 }) {
-    const all = await getCommunities();
+    const all = await getPublicCommunities(agentId);
 
     const filtered = countyId ? all.filter((c) => c.countyId === countyId) : all;
     const data = filtered.map(toCard);

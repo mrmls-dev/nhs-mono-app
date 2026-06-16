@@ -8,6 +8,7 @@ import {
     Param,
     Patch,
     Post,
+    Query,
     UseGuards,
 } from "@nestjs/common";
 import { CountyService } from "./county.service";
@@ -21,9 +22,10 @@ import { Roles } from "../auth/auth.decorators";
 export class CountyController {
     constructor(private readonly countyService: CountyService) {}
 
+    // `agentId` (optional) scopes to a single agent's assigned counties.
     @Get()
-    findAll() {
-        return this.countyService.findAll();
+    findAll(@Query("agentId") agentId?: string) {
+        return this.countyService.findAll(agentId);
     }
 
     @Get(":slug")

@@ -105,6 +105,16 @@ export type Verification = Prisma.VerificationModel
  */
 export type Organization = Prisma.OrganizationModel
 /**
+ * Model AgentCounty
+ * 
+ */
+export type AgentCounty = Prisma.AgentCountyModel
+/**
+ * Model AgentHiddenCommunity
+ * 
+ */
+export type AgentHiddenCommunity = Prisma.AgentHiddenCommunityModel
+/**
  * Model Member
  * 
  */

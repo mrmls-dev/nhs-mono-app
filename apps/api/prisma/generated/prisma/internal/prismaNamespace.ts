@@ -397,6 +397,8 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   Organization: 'Organization',
+  AgentCounty: 'AgentCounty',
+  AgentHiddenCommunity: 'AgentHiddenCommunity',
   Member: 'Member',
   Invitation: 'Invitation'
 } as const
@@ -414,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "region" | "county" | "community" | "amenity" | "communityAmenity" | "school" | "floorPlanModel" | "floorPlanModelMedia" | "user" | "session" | "account" | "verification" | "organization" | "member" | "invitation"
+    modelProps: "region" | "county" | "community" | "amenity" | "communityAmenity" | "school" | "floorPlanModel" | "floorPlanModelMedia" | "user" | "session" | "account" | "verification" | "organization" | "agentCounty" | "agentHiddenCommunity" | "member" | "invitation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1380,6 +1382,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AgentCounty: {
+      payload: Prisma.$AgentCountyPayload<ExtArgs>
+      fields: Prisma.AgentCountyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AgentCountyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentCountyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AgentCountyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentCountyPayload>
+        }
+        findFirst: {
+          args: Prisma.AgentCountyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentCountyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AgentCountyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentCountyPayload>
+        }
+        findMany: {
+          args: Prisma.AgentCountyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentCountyPayload>[]
+        }
+        create: {
+          args: Prisma.AgentCountyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentCountyPayload>
+        }
+        createMany: {
+          args: Prisma.AgentCountyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AgentCountyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentCountyPayload>[]
+        }
+        delete: {
+          args: Prisma.AgentCountyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentCountyPayload>
+        }
+        update: {
+          args: Prisma.AgentCountyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentCountyPayload>
+        }
+        deleteMany: {
+          args: Prisma.AgentCountyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AgentCountyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AgentCountyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentCountyPayload>[]
+        }
+        upsert: {
+          args: Prisma.AgentCountyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentCountyPayload>
+        }
+        aggregate: {
+          args: Prisma.AgentCountyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAgentCounty>
+        }
+        groupBy: {
+          args: Prisma.AgentCountyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AgentCountyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AgentCountyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AgentCountyCountAggregateOutputType> | number
+        }
+      }
+    }
+    AgentHiddenCommunity: {
+      payload: Prisma.$AgentHiddenCommunityPayload<ExtArgs>
+      fields: Prisma.AgentHiddenCommunityFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AgentHiddenCommunityFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentHiddenCommunityPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AgentHiddenCommunityFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentHiddenCommunityPayload>
+        }
+        findFirst: {
+          args: Prisma.AgentHiddenCommunityFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentHiddenCommunityPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AgentHiddenCommunityFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentHiddenCommunityPayload>
+        }
+        findMany: {
+          args: Prisma.AgentHiddenCommunityFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentHiddenCommunityPayload>[]
+        }
+        create: {
+          args: Prisma.AgentHiddenCommunityCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentHiddenCommunityPayload>
+        }
+        createMany: {
+          args: Prisma.AgentHiddenCommunityCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AgentHiddenCommunityCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentHiddenCommunityPayload>[]
+        }
+        delete: {
+          args: Prisma.AgentHiddenCommunityDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentHiddenCommunityPayload>
+        }
+        update: {
+          args: Prisma.AgentHiddenCommunityUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentHiddenCommunityPayload>
+        }
+        deleteMany: {
+          args: Prisma.AgentHiddenCommunityDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AgentHiddenCommunityUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AgentHiddenCommunityUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentHiddenCommunityPayload>[]
+        }
+        upsert: {
+          args: Prisma.AgentHiddenCommunityUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentHiddenCommunityPayload>
+        }
+        aggregate: {
+          args: Prisma.AgentHiddenCommunityAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAgentHiddenCommunity>
+        }
+        groupBy: {
+          args: Prisma.AgentHiddenCommunityGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AgentHiddenCommunityGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AgentHiddenCommunityCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AgentHiddenCommunityCountAggregateOutputType> | number
+        }
+      }
+    }
     Member: {
       payload: Prisma.$MemberPayload<ExtArgs>
       fields: Prisma.MemberFieldRefs
@@ -1792,6 +1942,26 @@ export const OrganizationScalarFieldEnum = {
 export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
 
 
+export const AgentCountyScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  countyId: 'countyId',
+  createdAt: 'createdAt'
+} as const
+
+export type AgentCountyScalarFieldEnum = (typeof AgentCountyScalarFieldEnum)[keyof typeof AgentCountyScalarFieldEnum]
+
+
+export const AgentHiddenCommunityScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  communityId: 'communityId',
+  createdAt: 'createdAt'
+} as const
+
+export type AgentHiddenCommunityScalarFieldEnum = (typeof AgentHiddenCommunityScalarFieldEnum)[keyof typeof AgentHiddenCommunityScalarFieldEnum]
+
+
 export const MemberScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
@@ -2059,6 +2229,8 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
   organization?: Prisma.OrganizationOmit
+  agentCounty?: Prisma.AgentCountyOmit
+  agentHiddenCommunity?: Prisma.AgentHiddenCommunityOmit
   member?: Prisma.MemberOmit
   invitation?: Prisma.InvitationOmit
 }

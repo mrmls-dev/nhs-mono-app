@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-import { ArrowLeft, IdCard, Palette, Search, Globe } from "lucide-react";
+import { ArrowLeft, IdCard, Palette, Search, Globe, MapPinned } from "lucide-react";
 import {
     Sidebar,
     SidebarContent,
@@ -20,6 +20,7 @@ import { AgentSwitcher } from "./AgentSwitcher";
 
 const sections = [
     { slug: "details", title: "Agent details", icon: IdCard },
+    { slug: "coverage", title: "Coverage", icon: MapPinned },
     { slug: "branding", title: "Branding", icon: Palette },
     { slug: "seo", title: "SEO", icon: Search },
     { slug: "domain", title: "Domain", icon: Globe },

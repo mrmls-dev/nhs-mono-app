@@ -8,6 +8,7 @@ import {
     Param,
     Patch,
     Post,
+    Query,
     UseGuards,
 } from "@nestjs/common";
 import { CommunityService } from "./community.service";
@@ -21,9 +22,11 @@ import { Roles } from "../auth/auth.decorators";
 export class CommunityController {
     constructor(private readonly communityService: CommunityService) {}
 
+    // `agentId` (optional) scopes the catalog to a single agent's assigned
+    // counties and visible communities; omitted = full platform catalog.
     @Get()
-    findAll() {
-        return this.communityService.findAll();
+    findAll(@Query("agentId") agentId?: string) {
+        return this.communityService.findAll(agentId);
     }
 
     // Must be declared before ":slug" so it isn't matched as a slug.

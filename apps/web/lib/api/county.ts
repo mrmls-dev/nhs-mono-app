@@ -52,6 +52,16 @@ export async function getCounties(): Promise<County[]> {
     return res.json();
 }
 
+/** Public, agent-scoped: only the agent's assigned counties (empty when none). */
+export async function getPublicCounties(agentId: string): Promise<County[]> {
+    const res = await fetch(
+        `${API_BASE}/counties?agentId=${encodeURIComponent(agentId)}`,
+        { cache: "no-store" },
+    );
+    if (!res.ok) throw new Error("Failed to fetch counties");
+    return res.json();
+}
+
 export async function getCounty(slug: string): Promise<CountyDetail | null> {
     const res = await fetch(`${API_BASE}/counties/${slug}`, {
         cache: "no-store",
@@ -82,7 +92,10 @@ export async function updateCounty(
 }
 
 export async function deleteCounty(id: string): Promise<void> {
-    const res = await fetch(`${API_BASE}/counties/${id}`, { method: "DELETE" });
+    const res = await fetch(`${API_BASE}/counties/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+    });
     if (!res.ok) {
         const body = await res.json().catch(() => null);
         const msg = body?.message;
@@ -96,6 +109,7 @@ export async function createCounty(input: CreateCountyInput): Promise<County> {
     const res = await fetch(`${API_BASE}/counties`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(input),
     });
     if (!res.ok) {

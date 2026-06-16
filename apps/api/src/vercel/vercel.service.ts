@@ -155,7 +155,10 @@ export class VercelDomainsService {
             id: domain,
             hostname: domain,
             status,
-            dnsInstructions: this.buildDnsInstructions(routing, res.verification),
+            dnsInstructions: this.buildDnsInstructions(
+                routing,
+                res.verification
+            ),
         };
     }
 

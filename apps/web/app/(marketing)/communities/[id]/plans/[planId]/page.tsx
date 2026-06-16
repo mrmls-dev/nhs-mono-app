@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 import { ArrowLeft, Phone } from "lucide-react";
 import { Badge } from "@workspace/ui/components/badge";
-import { getCommunity } from "@/api/community";
+import { getCommunity, getPublicCommunities } from "@/api/community";
+import { getAgentByDomain } from "@/api/agent";
 import { formatPrice, formatStat } from "@/lib/format";
 import CommunityGallery from "@/components/CommunityGallery";
 import ExpandableText from "@/components/ExpandableText";
@@ -27,6 +29,13 @@ export default async function FloorPlanPage({ params }: Props) {
     const plan = community?.floorPlans.find((p) => p.slug === planId);
 
     if (!community || !plan) notFound();
+
+    // Scope to the agent for this Host — a hidden/off-catalog community's plans
+    // must not be reachable on its domain.
+    const host = (await headers()).get("host") ?? undefined;
+    const agent = await getAgentByDomain(host);
+    const visible = await getPublicCommunities(agent.id);
+    if (!visible.some((c) => c.slug === community.slug)) notFound();
 
     const galleryItems = plan.gallery.map((m) => ({
         type: "image" as const,

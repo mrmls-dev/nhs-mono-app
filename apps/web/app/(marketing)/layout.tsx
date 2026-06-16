@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { headers } from "next/headers";
 import { Home } from "lucide-react";
-import { getCounties } from "@/api/county";
+import { getPublicCounties } from "@/api/county";
 import { getAgentByDomain } from "@/api/agent";
 import NavDropdown from "@/components/NavDropdown";
 import { BrandThemeProvider } from "@/components/BrandThemeProvider";
@@ -53,9 +53,8 @@ export default async function MarketingLayout({
         return <SiteSuspended siteName={siteName} />;
     }
 
-    const counties = await getCounties();
+    const counties = await getPublicCounties(agent.id);
     const logoSrc = agent.logo ?? "/images/logo.png";
-    console.log("Resolved agent for host", { host, agent });
 
     return (
         <BrandThemeProvider theme={resolveTheme(agent)}>

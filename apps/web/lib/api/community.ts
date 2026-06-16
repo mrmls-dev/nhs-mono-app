@@ -85,6 +85,21 @@ export async function getCommunities(): Promise<CommunityListItem[]> {
     return res.json();
 }
 
+/**
+ * Public, agent-scoped catalog: only communities in the agent's assigned
+ * counties, minus the ones the agent has hidden. Empty when no counties.
+ */
+export async function getPublicCommunities(
+    agentId: string,
+): Promise<CommunityListItem[]> {
+    const res = await fetch(
+        `${API_BASE}/communities?agentId=${encodeURIComponent(agentId)}`,
+        { cache: "no-store" },
+    );
+    if (!res.ok) throw new Error("Failed to fetch communities");
+    return res.json();
+}
+
 export async function getAmenities(): Promise<string[]> {
     const res = await fetch(`${API_BASE}/communities/amenities`, {
         cache: "no-store",
@@ -105,6 +120,7 @@ export async function getCommunity(slug: string): Promise<FullCommunity | null> 
 export async function deleteCommunity(id: string): Promise<void> {
     const res = await fetch(`${API_BASE}/communities/${id}`, {
         method: "DELETE",
+        credentials: "include",
     });
     if (!res.ok) {
         const body = await res.json().catch(() => null);
