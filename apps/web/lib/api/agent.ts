@@ -237,6 +237,27 @@ export async function setDomain(
     return res.json();
 }
 
+export type DomainSetup = {
+    domain: string;
+    status: DomainStatus;
+    dnsInstructions: { type: string; name: string; value: string }[];
+};
+
+/**
+ * Live DNS setup for the agent's custom domain, with Vercel as the source of
+ * truth: the routing record (A for apex, CNAME for subdomain) plus any unique
+ * TXT ownership challenge Vercel currently requires. Fetch when the domain
+ * panel opens; the TXT disappears once Vercel marks the domain verified.
+ */
+export async function getDomainSetup(id: string): Promise<DomainSetup> {
+    const res = await fetch(`${API_BASE}/agents/${id}/domain`, {
+        ...authed,
+        cache: "no-store",
+    });
+    if (!res.ok) await parseError(res, "Failed to load domain setup");
+    return res.json();
+}
+
 export async function refreshDomainStatus(
     id: string,
 ): Promise<{ domain: string; domainStatus: DomainStatus }> {

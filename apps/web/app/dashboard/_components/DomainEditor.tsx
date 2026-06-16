@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Loader2, Copy, Globe, Trash2, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
     Card,
     CardContent,
@@ -25,14 +25,10 @@ import {
     setDomain as setDomainApi,
     refreshDomainStatus,
     removeDomain as removeDomainApi,
+    getDomainSetup,
     type Agent,
 } from "@/api/agent";
 import { DomainStatusBadge } from "./StatusChips";
-
-// What agents CNAME their custom domain at — Vercel issues + serves the cert.
-// Mirrors the API's VERCEL_CNAME_TARGET; override per-environment.
-const CNAME_TARGET =
-    process.env.NEXT_PUBLIC_AGENT_CNAME_TARGET ?? "cname.vercel-dns.com";
 
 const domainSchema = z.object({
     domain: z
@@ -46,14 +42,27 @@ const domainSchema = z.object({
 
 type DomainValues = z.infer<typeof domainSchema>;
 
-function dnsRecords(domain: string) {
-    return [{ type: "CNAME", name: domain, value: CNAME_TARGET }];
-}
-
 export function DomainEditor({ agent }: { agent: Agent }) {
     const queryClient = useQueryClient();
     const domain = agent.customDomain;
-    const status = agent.domainStatus;
+
+    // Vercel is the source of truth: fetch the live DNS records (routing record
+    // + any TXT ownership challenge) whenever a domain is configured. The TXT
+    // appears only while Vercel requires it and disappears once verified.
+    const { data: setup, isLoading: setupLoading } = useQuery({
+        queryKey: ["agent-domain", agent.id],
+        queryFn: () => getDomainSetup(agent.id),
+        enabled: Boolean(domain),
+    });
+
+    // Prefer the freshly-fetched status; fall back to the persisted one.
+    const status = setup?.status ?? agent.domainStatus;
+    const routingRecord = setup?.dnsInstructions.find(
+        (r) => r.type === "A" || r.type === "CNAME",
+    );
+    const hasTxtChallenge = Boolean(
+        setup?.dnsInstructions.some((r) => r.type === "TXT"),
+    );
 
     const {
         register,
@@ -68,6 +77,7 @@ export function DomainEditor({ agent }: { agent: Agent }) {
     const invalidate = () => {
         queryClient.invalidateQueries({ queryKey: ["agents"] });
         queryClient.invalidateQueries({ queryKey: ["my-agent"] });
+        queryClient.invalidateQueries({ queryKey: ["agent-domain", agent.id] });
     };
 
     const addMutation = useMutation({
@@ -166,9 +176,11 @@ export function DomainEditor({ agent }: { agent: Agent }) {
                                 <Globe className="size-5 text-muted-foreground" />
                                 <div className="flex flex-col">
                                     <span className="font-medium">{domain}</span>
-                                    <span className="text-xs text-muted-foreground">
-                                        Points to {CNAME_TARGET}
-                                    </span>
+                                    {routingRecord && (
+                                        <span className="text-xs text-muted-foreground">
+                                            Points to {routingRecord.value}
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                             <div className="flex items-center gap-2">
@@ -255,56 +267,76 @@ export function DomainEditor({ agent }: { agent: Agent }) {
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="flex flex-col gap-4">
-                        <div className="overflow-hidden rounded-lg border">
-                            <table className="w-full text-sm">
-                                <thead>
-                                    <tr className="border-b bg-muted/50 text-left text-muted-foreground">
-                                        <th className="px-4 py-2.5 font-medium">
-                                            Type
-                                        </th>
-                                        <th className="px-4 py-2.5 font-medium">
-                                            Name
-                                        </th>
-                                        <th className="px-4 py-2.5 font-medium">
-                                            Value
-                                        </th>
-                                        <th className="px-4 py-2.5" />
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {dnsRecords(domain).map((r, i, arr) => (
-                                        <tr
-                                            key={r.name}
-                                            className={
-                                                i < arr.length - 1
-                                                    ? "border-b"
-                                                    : ""
-                                            }
-                                        >
-                                            <td className="px-4 py-2.5 font-mono text-xs">
-                                                {r.type}
-                                            </td>
-                                            <td className="px-4 py-2.5 font-mono text-xs break-all">
-                                                {r.name}
-                                            </td>
-                                            <td className="px-4 py-2.5 font-mono text-xs break-all">
-                                                {r.value}
-                                            </td>
-                                            <td className="px-4 py-2.5">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon-xs"
-                                                    aria-label={`Copy ${r.type} value`}
-                                                    onClick={() => copy(r.value)}
-                                                >
-                                                    <Copy className="size-4 text-muted-foreground" />
-                                                </Button>
-                                            </td>
+                        {setupLoading ? (
+                            <div className="flex items-center justify-center rounded-lg border border-dashed py-10 text-sm text-muted-foreground">
+                                <Loader2 className="mr-2 size-4 animate-spin" />
+                                Loading DNS records…
+                            </div>
+                        ) : (
+                            <div className="overflow-hidden rounded-lg border">
+                                <table className="w-full text-sm">
+                                    <thead>
+                                        <tr className="border-b bg-muted/50 text-left text-muted-foreground">
+                                            <th className="px-4 py-2.5 font-medium">
+                                                Type
+                                            </th>
+                                            <th className="px-4 py-2.5 font-medium">
+                                                Name
+                                            </th>
+                                            <th className="px-4 py-2.5 font-medium">
+                                                Value
+                                            </th>
+                                            <th className="px-4 py-2.5" />
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                        {(setup?.dnsInstructions ?? []).map(
+                                            (r, i, arr) => (
+                                                <tr
+                                                    key={`${r.type}:${r.name}`}
+                                                    className={
+                                                        i < arr.length - 1
+                                                            ? "border-b"
+                                                            : ""
+                                                    }
+                                                >
+                                                    <td className="px-4 py-2.5 font-mono text-xs">
+                                                        {r.type}
+                                                    </td>
+                                                    <td className="px-4 py-2.5 font-mono text-xs break-all">
+                                                        {r.name}
+                                                    </td>
+                                                    <td className="px-4 py-2.5 font-mono text-xs break-all">
+                                                        {r.value}
+                                                    </td>
+                                                    <td className="px-4 py-2.5">
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon-xs"
+                                                            aria-label={`Copy ${r.type} value`}
+                                                            onClick={() =>
+                                                                copy(r.value)
+                                                            }
+                                                        >
+                                                            <Copy className="size-4 text-muted-foreground" />
+                                                        </Button>
+                                                    </td>
+                                                </tr>
+                                            ),
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+
+                        {hasTxtChallenge && (
+                            <p className="text-xs text-muted-foreground">
+                                The TXT record proves you own this domain (it's
+                                required because the domain is already in use on
+                                Vercel). It can be removed once the domain shows
+                                as verified.
+                            </p>
+                        )}
 
                         {status === "pending" && (
                             <div className="flex justify-end">

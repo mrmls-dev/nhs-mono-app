@@ -108,6 +108,13 @@ export class AgentController {
         return this.agentService.setDomain(id, dto.domain.toLowerCase());
     }
 
+    /** Live DNS setup (routing record + any TXT challenge) from Vercel. */
+    @Get(":id/domain")
+    async domainSetup(@Param("id") id: string, @CurrentUser() user: AuthUser) {
+        await this.assertManager(user, id);
+        return this.agentService.getDomainSetup(id);
+    }
+
     @Get(":id/domain/status")
     async domainStatus(@Param("id") id: string, @CurrentUser() user: AuthUser) {
         await this.assertManager(user, id);

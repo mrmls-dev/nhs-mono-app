@@ -30,17 +30,46 @@ export class VercelDomainsService {
     private readonly apiToken = process.env.VERCEL_API_TOKEN;
     private readonly projectId = process.env.VERCEL_PROJECT_ID;
     private readonly teamId = process.env.VERCEL_TEAM_ID;
-    /** What agents CNAME their domain at; Vercel serves the cert for it. */
+    /** What agents CNAME their *subdomain* at; Vercel serves the cert for it. */
     private readonly cnameTarget =
         process.env.VERCEL_CNAME_TARGET ?? "cname.vercel-dns.com";
+    /** A record an *apex* domain points at (Vercel's anycast IP). */
+    private readonly apexTarget = process.env.VERCEL_A_RECORD ?? "76.76.21.21";
 
     /** Whether real Vercel API calls are configured. */
     get isLive(): boolean {
         return Boolean(this.apiToken && this.projectId);
     }
 
-    private cnameInstruction(domain: string): DnsRecord {
-        return { type: "CNAME", name: domain, value: this.cnameTarget };
+    /**
+     * The routing record the agent must add so traffic reaches Vercel: an apex
+     * domain (one label + TLD) needs an A record; a subdomain needs a CNAME.
+     * Multi-part public suffixes (example.co.uk) aren't special-cased — fine for
+     * current tenants, who use standard single-part TLDs.
+     */
+    private routingInstruction(domain: string): DnsRecord {
+        return domain.split(".").length === 2
+            ? { type: "A", name: domain, value: this.apexTarget }
+            : { type: "CNAME", name: domain, value: this.cnameTarget };
+    }
+
+    /**
+     * Routing record + any unique TXT ownership challenge Vercel currently
+     * requires (the `verification` array — present only while ownership is
+     * unsettled, e.g. the domain is also attached elsewhere on Vercel, and gone
+     * again once verified).
+     */
+    private buildDnsInstructions(
+        domain: string,
+        verification?: VercelProjectDomain["verification"]
+    ): DnsRecord[] {
+        const records: DnsRecord[] = [this.routingInstruction(domain)];
+        for (const v of verification ?? []) {
+            if (v.type && v.domain && v.value) {
+                records.push({ type: v.type, name: v.domain, value: v.value });
+            }
+        }
+        return records;
     }
 
     /**
@@ -58,7 +87,7 @@ export class VercelDomainsService {
                 id: domain,
                 hostname: domain,
                 status: "pending",
-                dnsInstructions: [this.cnameInstruction(domain)],
+                dnsInstructions: this.buildDnsInstructions(domain),
             };
         }
 
@@ -68,16 +97,10 @@ export class VercelDomainsService {
             { name: domain }
         );
 
-        const dnsInstructions: DnsRecord[] = [this.cnameInstruction(domain)];
-        for (const v of res.verification ?? []) {
-            if (v.type && v.domain && v.value) {
-                dnsInstructions.push({
-                    type: v.type,
-                    name: v.domain,
-                    value: v.value,
-                });
-            }
-        }
+        const dnsInstructions = this.buildDnsInstructions(
+            domain,
+            res.verification
+        );
 
         // `verified` only means ownership is settled (no TXT challenge needed);
         // it does NOT mean DNS points at Vercel. A just-added domain whose CNAME
@@ -133,6 +156,57 @@ export class VercelDomainsService {
 
         // Verified — confirm the CNAME/A actually resolves to Vercel (cert needs it).
         return (await this.isMisconfigured(domain)) ? "pending" : "active";
+    }
+
+    /**
+     * Read-only snapshot of what a domain needs *right now*, with Vercel as the
+     * source of truth. Returns the live routing record plus any TXT ownership
+     * challenge Vercel currently requires, and the current status. Unlike
+     * `getDomainStatus` this does not POST a verification attempt — it just
+     * reports state, so it's safe to call every time the domain panel opens.
+     */
+    async getDomainSetup(domain: string): Promise<DomainSetupResult> {
+        if (!this.isLive) {
+            this.logger.warn(
+                `[mock] Vercel not configured — returning static setup for "${domain}"`
+            );
+            return {
+                id: domain,
+                hostname: domain,
+                status: "pending",
+                dnsInstructions: this.buildDnsInstructions(domain),
+            };
+        }
+
+        let info: VercelProjectDomain;
+        try {
+            info = await this.vercel<VercelProjectDomain>(
+                `/v9/projects/${this.projectId}/domains/${domain}`,
+                "GET"
+            );
+        } catch {
+            // Not attached yet / transient — still show the routing record so
+            // the agent can set up DNS; nothing is verified.
+            return {
+                id: domain,
+                hostname: domain,
+                status: "pending",
+                dnsInstructions: [this.routingInstruction(domain)],
+            };
+        }
+
+        const active =
+            Boolean(info.verified) && !(await this.isMisconfigured(domain));
+
+        return {
+            id: domain,
+            hostname: domain,
+            status: active ? "active" : "pending",
+            dnsInstructions: this.buildDnsInstructions(
+                domain,
+                info.verification
+            ),
+        };
     }
 
     /**

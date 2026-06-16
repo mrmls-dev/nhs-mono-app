@@ -429,6 +429,31 @@ export class AgentService {
         return result;
     }
 
+    /**
+     * Live DNS setup for the agent's custom domain, with Vercel as the source of
+     * truth (read-only). Returns the records to add right now — routing record
+     * plus any unique TXT ownership challenge Vercel currently requires — and
+     * keeps the persisted status in sync. Called whenever the domain panel opens.
+     */
+    async getDomainSetup(id: string) {
+        const org = await this.assertExists(id);
+        if (!org.customDomain) {
+            throw new BadRequestException("Agent has no custom domain");
+        }
+        const result = await this.vercel.getDomainSetup(org.customDomain);
+        if (result.status !== org.domainStatus) {
+            await this.prisma.organization.update({
+                where: { id },
+                data: { domainStatus: result.status },
+            });
+        }
+        return {
+            domain: org.customDomain,
+            status: result.status,
+            dnsInstructions: result.dnsInstructions,
+        };
+    }
+
     async refreshDomainStatus(id: string) {
         const org = await this.assertExists(id);
         if (!org.customDomain) {
