@@ -36,6 +36,7 @@ import {
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import { getCounty, updateCounty, deleteCounty } from "@/api/county";
 import { deleteCommunity } from "@/api/community";
+import { SPEC_PLACEHOLDER } from "@/lib/format";
 import { DeleteDialog } from "@/components/DeleteDialog";
 import { ErrorDialog } from "@/components/ErrorDialog";
 
@@ -292,7 +293,9 @@ export function CountyDetailClient({ slug }: { slug: string }) {
                                             </Badge>
                                         </td>
                                         <td className="px-4 py-3 text-right text-muted-foreground hidden sm:table-cell">
-                                            {fmt.format(c.priceFrom)}
+                                            {c._count.floorPlans > 0
+                                                ? fmt.format(c.priceFrom)
+                                                : SPEC_PLACEHOLDER}
                                         </td>
                                         <td className="px-4 py-3 text-right text-muted-foreground hidden md:table-cell">
                                             {c._count.floorPlans}

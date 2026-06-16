@@ -1,3 +1,7 @@
+// Shown for a community's derived specs (beds/baths/garage/stories/sqft/price)
+// before any floor plan exists — at which point every aggregate is 0.
+export const SPEC_PLACEHOLDER = "—";
+
 export function formatRange(min: number, max: number, unit: string): string {
     const lo = min === max ? `${min}` : `${min}-${max}`;
     return `${lo} ${unit}${max !== 1 ? "s" : ""}`;

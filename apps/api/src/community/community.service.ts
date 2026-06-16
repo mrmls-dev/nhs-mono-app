@@ -7,9 +7,67 @@ import { PrismaService } from "../prisma/prisma.service";
 import { CreateCommunityDto } from "./dto/create-community.dto";
 import { UpdateCommunityDto } from "./dto/update-community.dto";
 
+// Spec aggregates for a community with no floor plans. A community is created
+// before any plans exist, so it starts here; recalcAggregates fills these in as
+// plans are added. The UI renders a 0 (the "specs pending" sentinel) as "—".
+const EMPTY_AGGREGATES = {
+    bedsMin: 0,
+    bedsMax: 0,
+    bathsMin: 0,
+    bathsMax: 0,
+    garageMin: 0,
+    garageMax: 0,
+    storiesMin: 0,
+    storiesMax: 0,
+    sqftFrom: 0,
+    priceFrom: 0,
+} as const;
+
 @Injectable()
 export class CommunityService {
     constructor(private readonly prisma: PrismaService) {}
+
+    /**
+     * Recompute a community's spec aggregates from its floor plans and persist
+     * them. Called by FloorPlanService after any plan create/update/delete.
+     * Ranges come from min/max across plans; sqftFrom and priceFrom are the
+     * smallest sqft and lowest starting price. With no plans every value is 0.
+     */
+    async recalcAggregates(communityId: string) {
+        const agg = await this.prisma.floorPlanModel.aggregate({
+            where: { communityId },
+            _min: {
+                beds: true,
+                baths: true,
+                garage: true,
+                stories: true,
+                sqft: true,
+                startingPrice: true,
+            },
+            _max: {
+                beds: true,
+                baths: true,
+                garage: true,
+                stories: true,
+            },
+        });
+
+        await this.prisma.community.update({
+            where: { id: communityId },
+            data: {
+                bedsMin: agg._min.beds ?? 0,
+                bedsMax: agg._max.beds ?? 0,
+                bathsMin: agg._min.baths ?? 0,
+                bathsMax: agg._max.baths ?? 0,
+                garageMin: agg._min.garage ?? 0,
+                garageMax: agg._max.garage ?? 0,
+                storiesMin: agg._min.stories ?? 0,
+                storiesMax: agg._max.stories ?? 0,
+                sqftFrom: agg._min.sqft ?? 0,
+                priceFrom: agg._min.startingPrice ?? 0,
+            },
+        });
+    }
 
     async findAll(agentId?: string) {
         // Per-agent scoping: only PUBLISHED communities in the agent's assigned
@@ -112,6 +170,7 @@ export class CommunityService {
             return await this.prisma.community.create({
                 data: {
                     ...core,
+                    ...EMPTY_AGGREGATES,
                     county: { connect: { id: countyId } },
                     schools: { create: schools },
                     amenities: {

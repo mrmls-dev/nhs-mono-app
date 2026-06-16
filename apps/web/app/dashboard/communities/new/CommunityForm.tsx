@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useForm, FormProvider, Controller, useWatch } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -41,6 +42,13 @@ import { createCommunity, updateCommunity } from "@/api/community";
 
 type County = { id: string; name: string; region: string };
 
+const toSlug = (v: string) =>
+    v
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9-]/g, "");
+
 const STATUS_LABELS: Record<string, string> = {
     NOW_SELLING: "Now Selling",
     COMING_SOON: "Coming Soon",
@@ -55,16 +63,6 @@ const defaultValues: CommunityFormValues = {
     image: "",
     status: "NOW_SELLING",
     homesForSale: "0",
-    bedsMin: "",
-    bedsMax: "",
-    bathsMin: "",
-    bathsMax: "",
-    garageMin: "",
-    garageMax: "",
-    storiesMin: "",
-    storiesMax: "",
-    sqftFrom: "",
-    priceFrom: "",
     lat: "",
     lng: "",
     about: "",
@@ -104,10 +102,21 @@ export function CommunityForm({
         control,
         handleSubmit,
         reset,
+        setValue,
         formState: { errors, isSubmitting },
     } = form;
 
     const slug = useWatch({ control, name: "slug" });
+    const name = useWatch({ control, name: "name" });
+
+    // Auto-fill the slug from the name while creating, until the user edits the
+    // slug themselves. In edit mode the slug already exists, so leave it alone.
+    const [slugDirty, setSlugDirty] = useState(Boolean(communityId));
+    useEffect(() => {
+        if (!slugDirty) {
+            setValue("slug", toSlug(name ?? ""), { shouldValidate: false });
+        }
+    }, [name, slugDirty, setValue]);
 
     const onSubmit = async (values: CommunityFormOutput) => {
         try {
@@ -163,7 +172,9 @@ export function CommunityForm({
                                     <Input
                                         placeholder="blossom-trail"
                                         aria-invalid={errors.slug ? true : undefined}
-                                        {...register("slug")}
+                                        {...register("slug", {
+                                            onChange: () => setSlugDirty(true),
+                                        })}
                                     />
                                     {errors.slug && (
                                         <FieldError
@@ -324,75 +335,19 @@ export function CommunityForm({
                     </CardContent>
                 </Card>
 
-                {/* Specs */}
+                {/* Map location */}
                 <Card>
                     <CardHeader>
-                        <CardTitle>Specifications</CardTitle>
+                        <CardTitle>Map location</CardTitle>
                         <CardDescription>
-                            Ranges across all floor plans. Set min and max to the
-                            same value for a single figure.
+                            Coordinates for the map pin. Bed, bath, garage and
+                            story ranges, smallest sq. ft. and starting price are
+                            derived automatically from this community&apos;s floor
+                            plans.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <FieldGroup className="gap-4">
-                            <div className="grid gap-4 sm:grid-cols-4">
-                                <RangeField
-                                    label="Beds min"
-                                    error={errors.bedsMin?.message}
-                                    {...register("bedsMin")}
-                                />
-                                <RangeField
-                                    label="Beds max"
-                                    error={errors.bedsMax?.message}
-                                    {...register("bedsMax")}
-                                />
-                                <RangeField
-                                    label="Baths min"
-                                    decimal
-                                    error={errors.bathsMin?.message}
-                                    {...register("bathsMin")}
-                                />
-                                <RangeField
-                                    label="Baths max"
-                                    decimal
-                                    error={errors.bathsMax?.message}
-                                    {...register("bathsMax")}
-                                />
-                            </div>
-                            <div className="grid gap-4 sm:grid-cols-4">
-                                <RangeField
-                                    label="Garage min"
-                                    error={errors.garageMin?.message}
-                                    {...register("garageMin")}
-                                />
-                                <RangeField
-                                    label="Garage max"
-                                    error={errors.garageMax?.message}
-                                    {...register("garageMax")}
-                                />
-                                <RangeField
-                                    label="Stories min"
-                                    error={errors.storiesMin?.message}
-                                    {...register("storiesMin")}
-                                />
-                                <RangeField
-                                    label="Stories max"
-                                    error={errors.storiesMax?.message}
-                                    {...register("storiesMax")}
-                                />
-                            </div>
-                            <div className="grid gap-4 sm:grid-cols-2">
-                                <RangeField
-                                    label="Smallest sq. ft."
-                                    error={errors.sqftFrom?.message}
-                                    {...register("sqftFrom")}
-                                />
-                                <RangeField
-                                    label="Starting price ($)"
-                                    error={errors.priceFrom?.message}
-                                    {...register("priceFrom")}
-                                />
-                            </div>
                             <div className="grid gap-4 sm:grid-cols-2">
                                 <RangeField
                                     label="Latitude"

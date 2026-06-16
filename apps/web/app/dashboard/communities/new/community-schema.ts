@@ -3,10 +3,13 @@ import { z } from "zod";
 // Mirrors the Prisma `Community` model + its School relation and amenity tags.
 // Floor plans are managed separately (see the floor-plan form), not here.
 //
+// The bed/bath/garage/story ranges, smallest sqft and lowest price are NOT
+// collected here — they are derived from the community's floor plans on the API
+// and recomputed whenever a plan changes.
+//
 // Numeric fields are modelled as `string -> number` transforms so the form's
 // INPUT type is `string` (ideal for text inputs and default values) while the
-// validated OUTPUT type is `number`. Numeric ranges are split into min/max,
-// matching the schema (single values just set min = max).
+// validated OUTPUT type is `number`.
 
 const COMMUNITY_STATUSES = ["NOW_SELLING", "COMING_SOON", "SOLD_OUT"] as const;
 
@@ -16,13 +19,6 @@ const intField = (msg = "Required") =>
         .string()
         .min(1, msg)
         .regex(/^\d+$/, "Must be a whole number")
-        .transform(Number);
-
-const decimalField = (msg = "Required") =>
-    z
-        .string()
-        .min(1, msg)
-        .regex(/^\d+(\.\d+)?$/, "Must be a number")
         .transform(Number);
 
 const signedDecimalField = (msg = "Required") =>
@@ -56,20 +52,6 @@ export const communitySchema = z
         status: z.enum(COMMUNITY_STATUSES),
         homesForSale: intField("Homes for sale is required"),
 
-        // Ranges
-        bedsMin: intField("Min beds is required"),
-        bedsMax: intField("Max beds is required"),
-        bathsMin: decimalField("Min baths is required"),
-        bathsMax: decimalField("Max baths is required"),
-        garageMin: intField("Min garage is required"),
-        garageMax: intField("Max garage is required"),
-        storiesMin: intField("Min stories is required"),
-        storiesMax: intField("Max stories is required"),
-
-        // Pricing / size
-        sqftFrom: intField("Square footage is required"),
-        priceFrom: intField("Starting price is required"),
-
         // Map
         lat: signedDecimalField("Latitude is required"),
         lng: signedDecimalField("Longitude is required"),
@@ -80,23 +62,6 @@ export const communitySchema = z
         countyId: z.string().min(1, "Select a county"),
         amenities: z.array(z.string().min(1)),
         schools: z.array(schoolSchema),
-    })
-    .superRefine((val, ctx) => {
-        const ranges: [number, number, string][] = [
-            [val.bedsMin, val.bedsMax, "bedsMax"],
-            [val.bathsMin, val.bathsMax, "bathsMax"],
-            [val.garageMin, val.garageMax, "garageMax"],
-            [val.storiesMin, val.storiesMax, "storiesMax"],
-        ];
-        for (const [min, max, path] of ranges) {
-            if (max < min) {
-                ctx.addIssue({
-                    code: "custom",
-                    message: "Max cannot be less than min",
-                    path: [path],
-                });
-            }
-        }
     });
 
 export type CommunityFormValues = z.input<typeof communitySchema>;

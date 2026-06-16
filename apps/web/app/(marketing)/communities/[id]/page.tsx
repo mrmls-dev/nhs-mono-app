@@ -12,6 +12,7 @@ import {
     formatGarage,
     formatPrice,
     formatStat,
+    SPEC_PLACEHOLDER,
     STATUS_LABELS,
 } from "@/lib/format";
 import CommunityGallery from "@/components/CommunityGallery";
@@ -108,23 +109,35 @@ export default async function CommunityPage({ params }: Props) {
                         {community.floorPlans.length === 1 ? "Plan" : "Plans"} Available
                     </p>
                     <p className="text-foreground">
-                        {formatRange(community.bedsMin, community.bedsMax, "Bed")}
+                        {community.floorPlans.length > 0
+                            ? formatRange(community.bedsMin, community.bedsMax, "Bed")
+                            : SPEC_PLACEHOLDER}
                         <span className="mx-2 text-secondary/50">|</span>
-                        {formatRange(Number(community.bathsMin), Number(community.bathsMax), "Bath")}
+                        {community.floorPlans.length > 0
+                            ? formatRange(Number(community.bathsMin), Number(community.bathsMax), "Bath")
+                            : SPEC_PLACEHOLDER}
                         <span className="mx-2 text-secondary/50">|</span>
-                        {formatGarage(community.garageMin, community.garageMax)}
+                        {community.floorPlans.length > 0
+                            ? formatGarage(community.garageMin, community.garageMax)
+                            : SPEC_PLACEHOLDER}
                     </p>
                     <p className="text-foreground">
-                        {formatStories(community.storiesMin, community.storiesMax)}
+                        {community.floorPlans.length > 0
+                            ? formatStories(community.storiesMin, community.storiesMax)
+                            : SPEC_PLACEHOLDER}
                         <span className="mx-2 text-secondary/50">|</span>
-                        From {Number(community.sqftFrom).toLocaleString()} Sq. Ft.
+                        {community.floorPlans.length > 0
+                            ? `From ${Number(community.sqftFrom).toLocaleString()} Sq. Ft.`
+                            : SPEC_PLACEHOLDER}
                     </p>
                     <div className="pt-3 border-t border-border">
                         <p className="text-xs uppercase tracking-wide text-muted-foreground">
                             Pricing starting from
                         </p>
                         <p className="text-2xl md:text-3xl font-bold text-foreground">
-                            From {formatPrice(community.priceFrom)}
+                            {community.floorPlans.length > 0
+                                ? `From ${formatPrice(community.priceFrom)}`
+                                : SPEC_PLACEHOLDER}
                         </p>
                     </div>
                 </div>

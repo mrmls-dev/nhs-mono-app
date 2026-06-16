@@ -63,45 +63,10 @@ export class CreateCommunityDto {
     @Min(0)
     homesForSale: number;
 
-    @IsInt()
-    @Min(0)
-    bedsMin: number;
-
-    @IsInt()
-    @Min(0)
-    bedsMax: number;
-
-    @IsNumber()
-    @Min(0)
-    bathsMin: number;
-
-    @IsNumber()
-    @Min(0)
-    bathsMax: number;
-
-    @IsInt()
-    @Min(0)
-    garageMin: number;
-
-    @IsInt()
-    @Min(0)
-    garageMax: number;
-
-    @IsInt()
-    @Min(1)
-    storiesMin: number;
-
-    @IsInt()
-    @Min(1)
-    storiesMax: number;
-
-    @IsInt()
-    @Min(0)
-    sqftFrom: number;
-
-    @IsInt()
-    @Min(0)
-    priceFrom: number;
+    // NOTE: bed/bath/garage/story ranges, sqftFrom and priceFrom are NOT accepted
+    // here. They are derived from the community's floor plans and recomputed by
+    // CommunityService.recalcAggregates whenever a floor plan changes. A new
+    // community starts with all of them at 0 until its first plan is added.
 
     @IsNumber()
     lat: number;

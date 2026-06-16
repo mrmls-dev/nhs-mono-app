@@ -4,6 +4,7 @@ import {
     formatStories,
     formatGarage,
     formatPrice,
+    SPEC_PLACEHOLDER,
     STATUS_LABELS,
 } from "@/lib/format";
 import CommunityCard, { type Community } from "./CommunityCard";
@@ -12,6 +13,8 @@ import MobileTabBar from "./MobileTabBar";
 import ScheduleVisitButton from "./ScheduleVisitButton";
 
 function toCard(c: CommunityListItem): Community {
+    // Specs are derived from floor plans; with none they're all 0 → show "—".
+    const hasPlans = c._count.floorPlans > 0;
     return {
         id: c.id,
         slug: c.slug,
@@ -20,12 +23,22 @@ function toCard(c: CommunityListItem): Community {
         location: c.location,
         image: c.image,
         homesForSale: c.homesForSale,
-        beds: formatRange(c.bedsMin, c.bedsMax, "Bed"),
-        baths: formatRange(Number(c.bathsMin), Number(c.bathsMax), "Bath"),
-        garage: formatGarage(c.garageMin, c.garageMax),
-        stories: formatStories(c.storiesMin, c.storiesMax),
-        sqftFrom: Number(c.sqftFrom).toLocaleString(),
-        priceFrom: formatPrice(c.priceFrom),
+        beds: hasPlans
+            ? formatRange(c.bedsMin, c.bedsMax, "Bed")
+            : SPEC_PLACEHOLDER,
+        baths: hasPlans
+            ? formatRange(Number(c.bathsMin), Number(c.bathsMax), "Bath")
+            : SPEC_PLACEHOLDER,
+        garage: hasPlans
+            ? formatGarage(c.garageMin, c.garageMax)
+            : SPEC_PLACEHOLDER,
+        stories: hasPlans
+            ? formatStories(c.storiesMin, c.storiesMax)
+            : SPEC_PLACEHOLDER,
+        sqftFrom: hasPlans
+            ? Number(c.sqftFrom).toLocaleString()
+            : SPEC_PLACEHOLDER,
+        priceFrom: hasPlans ? formatPrice(c.priceFrom) : SPEC_PLACEHOLDER,
         coords: { lat: c.lat, lng: c.lng },
         floorPlans: Array(c._count.floorPlans).fill({}),
     };
@@ -56,7 +69,7 @@ export default async function CommunitiesSection({
             name: c.name,
             location: c.location,
             status: c.status,
-            priceFrom: formatPrice(c.priceFrom),
+            priceFrom: c._count.floorPlans > 0 ? formatPrice(c.priceFrom) : "",
             image: c.image,
             coords: { lat: c.lat, lng: c.lng },
         }));

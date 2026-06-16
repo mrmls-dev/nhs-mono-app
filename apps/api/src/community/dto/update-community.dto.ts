@@ -52,55 +52,7 @@ export class UpdateCommunityDto {
     @IsOptional()
     homesForSale?: number;
 
-    @IsInt()
-    @Min(0)
-    @IsOptional()
-    bedsMin?: number;
-
-    @IsInt()
-    @Min(0)
-    @IsOptional()
-    bedsMax?: number;
-
-    @IsNumber()
-    @Min(0)
-    @IsOptional()
-    bathsMin?: number;
-
-    @IsNumber()
-    @Min(0)
-    @IsOptional()
-    bathsMax?: number;
-
-    @IsInt()
-    @Min(0)
-    @IsOptional()
-    garageMin?: number;
-
-    @IsInt()
-    @Min(0)
-    @IsOptional()
-    garageMax?: number;
-
-    @IsInt()
-    @Min(1)
-    @IsOptional()
-    storiesMin?: number;
-
-    @IsInt()
-    @Min(1)
-    @IsOptional()
-    storiesMax?: number;
-
-    @IsInt()
-    @Min(0)
-    @IsOptional()
-    sqftFrom?: number;
-
-    @IsInt()
-    @Min(0)
-    @IsOptional()
-    priceFrom?: number;
+    // Derived from floor plans — see CreateCommunityDto. Not editable here.
 
     @IsNumber()
     @IsOptional()

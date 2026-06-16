@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Button } from "@workspace/ui/components/button";
 import { Badge } from "@workspace/ui/components/badge";
 import { Skeleton } from "@workspace/ui/components/skeleton";
+import { SPEC_PLACEHOLDER } from "@/lib/format";
 import {
     Empty,
     EmptyContent,
@@ -153,7 +154,9 @@ export function CommunitiesClient() {
                                         </div>
                                     </td>
                                     <td className="px-4 py-3 text-right text-muted-foreground hidden sm:table-cell">
-                                        {fmt.format(c.priceFrom)}
+                                        {c._count.floorPlans > 0
+                                            ? fmt.format(c.priceFrom)
+                                            : SPEC_PLACEHOLDER}
                                     </td>
                                     <td className="px-4 py-3 text-right text-muted-foreground hidden lg:table-cell">
                                         {c.homesForSale}

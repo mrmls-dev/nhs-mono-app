@@ -31,6 +31,7 @@ import {
     publishCommunity,
 } from "@/api/community";
 import { deleteFloorPlan } from "@/api/floor-plan";
+import { SPEC_PLACEHOLDER } from "@/lib/format";
 import { DeleteDialog } from "@/components/DeleteDialog";
 import { ErrorDialog } from "@/components/ErrorDialog";
 
@@ -206,20 +207,39 @@ export function CommunityDetailClient({ slug }: { slug: string }) {
                 </div>
             </div>
 
-            {/* Summary */}
+            {/* Summary — specs are derived from floor plans; "—" until any exist. */}
             <div className="grid gap-4 rounded-lg border p-4 text-sm sm:grid-cols-2 lg:grid-cols-4">
-                <Stat label="Price from" value={fmt.format(community.priceFrom)} />
+                <Stat
+                    label="Price from"
+                    value={
+                        community.floorPlans.length > 0
+                            ? fmt.format(community.priceFrom)
+                            : SPEC_PLACEHOLDER
+                    }
+                />
                 <Stat
                     label="Beds"
-                    value={`${community.bedsMin}–${community.bedsMax}`}
+                    value={
+                        community.floorPlans.length > 0
+                            ? `${community.bedsMin}–${community.bedsMax}`
+                            : SPEC_PLACEHOLDER
+                    }
                 />
                 <Stat
                     label="Baths"
-                    value={`${community.bathsMin}–${community.bathsMax}`}
+                    value={
+                        community.floorPlans.length > 0
+                            ? `${community.bathsMin}–${community.bathsMax}`
+                            : SPEC_PLACEHOLDER
+                    }
                 />
                 <Stat
                     label="Sq. ft. from"
-                    value={community.sqftFrom.toLocaleString()}
+                    value={
+                        community.floorPlans.length > 0
+                            ? community.sqftFrom.toLocaleString()
+                            : SPEC_PLACEHOLDER
+                    }
                 />
             </div>
 

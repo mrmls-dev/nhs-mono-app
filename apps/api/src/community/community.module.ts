@@ -7,5 +7,6 @@ import { CommunityController } from "./community.controller";
     imports: [PrismaModule],
     providers: [CommunityService],
     controllers: [CommunityController],
+    exports: [CommunityService],
 })
 export class CommunityModule {}

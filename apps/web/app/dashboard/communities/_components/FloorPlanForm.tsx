@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
     useForm,
     FormProvider,
@@ -28,6 +29,13 @@ import {
 } from "./floor-plan-schema";
 import { MediaFieldArray } from "./MediaFieldArray";
 import { ImageSelector } from "./ImageSelector";
+
+const toSlug = (v: string) =>
+    v
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9-]/g, "");
 
 const emptyValues: FloorPlanFormValues = {
     slug: "",
@@ -67,11 +75,22 @@ export function FloorPlanForm({
         register,
         control,
         handleSubmit,
+        setValue,
         formState: { errors, isSubmitting },
     } = form;
 
     const planSlug = useWatch({ control, name: "slug" });
+    const planName = useWatch({ control, name: "name" });
     const baseFolder = `communities/${communitySlug}/${planSlug || "new"}`;
+
+    // Auto-fill the slug from the name while creating, until the user edits the
+    // slug themselves. In edit mode the slug already exists, so leave it alone.
+    const [slugDirty, setSlugDirty] = useState(Boolean(defaultValues?.slug));
+    useEffect(() => {
+        if (!slugDirty) {
+            setValue("slug", toSlug(planName ?? ""), { shouldValidate: false });
+        }
+    }, [planName, slugDirty, setValue]);
 
     const gallery = useWatch({ control, name: "gallery" });
     const galleryImages = (gallery ?? [])
@@ -117,7 +136,9 @@ export function FloorPlanForm({
                             <Input
                                 placeholder="bella"
                                 aria-invalid={errors.slug ? true : undefined}
-                                {...register("slug")}
+                                {...register("slug", {
+                                    onChange: () => setSlugDirty(true),
+                                })}
                             />
                             {errors.slug && (
                                 <FieldError
