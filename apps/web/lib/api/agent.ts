@@ -357,3 +357,50 @@ export async function setHiddenCommunities(
     if (!res.ok) await parseError(res, "Failed to save community visibility");
     return res.json();
 }
+
+/** A floor plan the agent can give a custom video, with its default + override. */
+export type AgentFloorPlanVideo = {
+    floorPlanId: string;
+    floorPlanName: string;
+    communityId: string;
+    communityName: string;
+    /** The platform default video (admin-set on the floor plan). */
+    defaultVideo: string | null;
+    /** The agent's override (null = falls back to the default). */
+    videoUrl: string | null;
+};
+
+/** Staff or agent owner: floor plans across the agent's communities + videos. */
+export async function getFloorPlanVideos(
+    agentId: string,
+): Promise<AgentFloorPlanVideo[]> {
+    const res = await fetch(`${API_BASE}/agents/${agentId}/floor-plan-videos`, {
+        ...authed,
+        cache: "no-store",
+    });
+    if (!res.ok) await parseError(res, "Failed to load model videos");
+    return res.json();
+}
+
+/**
+ * Staff or agent owner: set the agent's custom video for a floor plan, or pass
+ * an empty string to clear it (revert to the floor plan's default video).
+ */
+export async function setFloorPlanVideo(
+    agentId: string,
+    floorPlanId: string,
+    videoUrl: string,
+): Promise<{ floorPlanId: string; videoUrl: string | null }> {
+    const res = await fetch(
+        `${API_BASE}/agents/${agentId}/floor-plan-videos/${floorPlanId}`,
+        {
+            ...authed,
+            method: "PUT",
+            headers: jsonHeaders,
+            // Omit videoUrl entirely when clearing so it passes @IsOptional.
+            body: JSON.stringify(videoUrl ? { videoUrl } : {}),
+        },
+    );
+    if (!res.ok) await parseError(res, "Failed to save model video");
+    return res.json();
+}

@@ -93,6 +93,11 @@ export type AgentCounty = Prisma.AgentCountyModel
  */
 export type AgentHiddenCommunity = Prisma.AgentHiddenCommunityModel
 /**
+ * Model AgentFloorPlanVideo
+ * 
+ */
+export type AgentFloorPlanVideo = Prisma.AgentFloorPlanVideoModel
+/**
  * Model Member
  * 
  */

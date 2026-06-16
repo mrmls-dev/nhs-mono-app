@@ -33,14 +33,9 @@ import {
     SelectValue,
 } from "@workspace/ui/components/select";
 import { createAgent } from "@/api/agent";
+import { TimezoneCombobox } from "@/components/TimezoneCombobox";
 import { z } from "zod";
-import {
-    newAgentSchema,
-    US_STATES,
-    GHL_TIMEZONES,
-    BUSINESS_TYPES,
-    toSlug,
-} from "../new-agent-schema";
+import { newAgentSchema, BUSINESS_TYPES, toSlug } from "../new-agent-schema";
 
 type NewAgentInput = z.input<typeof newAgentSchema>;
 type NewAgentOutput = z.output<typeof newAgentSchema>;
@@ -493,36 +488,31 @@ export function NewAgentForm() {
 
                         <Field data-invalid={errors.state ? true : undefined}>
                             <FieldLabel htmlFor="state">State</FieldLabel>
-                            <Controller
-                                control={control}
-                                name="state"
-                                render={({ field }) => (
-                                    <Select
-                                        value={field.value}
-                                        onValueChange={field.onChange}
-                                    >
-                                        <SelectTrigger id="state">
-                                            <SelectValue placeholder="Select state…" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                {US_STATES.map(([code, label]) => (
-                                                    <SelectItem
-                                                        key={code}
-                                                        value={code}
-                                                    >
-                                                        {label}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
-                                )}
+                            <Input
+                                id="state"
+                                placeholder="Florida"
+                                {...register("state")}
                             />
                             {errors.state && (
                                 <FieldError
                                     errors={[
                                         { message: errors.state.message },
+                                    ]}
+                                />
+                            )}
+                        </Field>
+
+                        <Field data-invalid={errors.country ? true : undefined}>
+                            <FieldLabel htmlFor="country">Country</FieldLabel>
+                            <Input
+                                id="country"
+                                placeholder="US"
+                                {...register("country")}
+                            />
+                            {errors.country && (
+                                <FieldError
+                                    errors={[
+                                        { message: errors.country.message },
                                     ]}
                                 />
                             )}
@@ -556,26 +546,11 @@ export function NewAgentForm() {
                                 control={control}
                                 name="timezone"
                                 render={({ field }) => (
-                                    <Select
-                                        value={field.value}
-                                        onValueChange={field.onChange}
-                                    >
-                                        <SelectTrigger id="timezone">
-                                            <SelectValue placeholder="Select timezone…" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                {GHL_TIMEZONES.map((tz) => (
-                                                    <SelectItem
-                                                        key={tz.value}
-                                                        value={tz.value}
-                                                    >
-                                                        {tz.label}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
+                                    <TimezoneCombobox
+                                        id="timezone"
+                                        value={field.value ?? ""}
+                                        onChange={field.onChange}
+                                    />
                                 )}
                             />
                         </Field>

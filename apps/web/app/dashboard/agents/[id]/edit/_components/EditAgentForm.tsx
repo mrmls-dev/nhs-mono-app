@@ -37,7 +37,7 @@ import {
     US_STATES,
     GHL_TIMEZONES,
     BUSINESS_TYPES,
-} from "../../../new/new-agent-schema";
+} from "../../../../new-agent/new-agent-schema";
 import { editAgentSchema } from "../edit-agent-schema";
 
 type EditAgentInput = z.input<typeof editAgentSchema>;

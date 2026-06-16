@@ -58,6 +58,9 @@ model Community {
   location     String
   image        String
   status       CommunityStatus
+  // Publication gate: new communities start as drafts (hidden from every public
+  // site) until an admin publishes them. Separate from the sales `status`.
+  published    Boolean            @default(false)
   homesForSale Int                @default(0)
   // Bedroom range — single value sets min = max
   bedsMin      Int
@@ -90,6 +93,7 @@ model Community {
 
   @@index([countyId])
   @@index([status])
+  @@index([published])
   @@index([priceFrom])
   @@index([lat, lng])
 }
@@ -145,6 +149,7 @@ model FloorPlanModel {
   communityId   String
   community     Community       @relation(fields: [communityId], references: [id], onDelete: Cascade)
   gallery       FloorPlanModelMedia[]
+  agentVideos   AgentFloorPlanVideo[]
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
 
@@ -280,6 +285,7 @@ model Organization {
   invitations      Invitation[]
   assignedCounties AgentCounty[]
   hiddenCommunities AgentHiddenCommunity[]
+  floorPlanVideos  AgentFloorPlanVideo[]
   createdAt        DateTime     @default(now())
 
   @@map("organization")
@@ -312,6 +318,22 @@ model AgentHiddenCommunity {
   createdAt      DateTime     @default(now())
 
   @@unique([organizationId, communityId])
+  @@index([organizationId])
+}
+
+// Per-agent override of a floor plan's model video. Absence = use the floor
+// plan's default `modelVideo`; a row replaces it on that agent's site only.
+model AgentFloorPlanVideo {
+  id             String         @id @default(cuid())
+  organizationId String
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  floorPlanId    String
+  floorPlan      FloorPlanModel @relation(fields: [floorPlanId], references: [id], onDelete: Cascade)
+  videoUrl       String
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@unique([organizationId, floorPlanId])
   @@index([organizationId])
 }
 

@@ -136,11 +136,21 @@ export function CommunitiesClient() {
                                         {c.county.name}
                                     </td>
                                     <td className="px-4 py-3">
-                                        <Badge
-                                            variant={STATUS_VARIANT[c.status]}
-                                        >
-                                            {STATUS_LABEL[c.status]}
-                                        </Badge>
+                                        <div className="flex flex-wrap items-center gap-1.5">
+                                            {!c.published && (
+                                                <Badge
+                                                    variant="outline"
+                                                    className="border-amber-500/50 text-amber-600 dark:text-amber-400"
+                                                >
+                                                    Draft
+                                                </Badge>
+                                            )}
+                                            <Badge
+                                                variant={STATUS_VARIANT[c.status]}
+                                            >
+                                                {STATUS_LABEL[c.status]}
+                                            </Badge>
+                                        </div>
                                     </td>
                                     <td className="px-4 py-3 text-right text-muted-foreground hidden sm:table-cell">
                                         {fmt.format(c.priceFrom)}

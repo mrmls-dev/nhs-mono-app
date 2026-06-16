@@ -29,7 +29,11 @@ import { UpdateAgentDto } from "./dto/update-agent.dto";
 import { UpdateBrandingDto } from "./dto/update-branding.dto";
 import { ServiceStatusDto } from "./dto/service-status.dto";
 import { SetDomainDto } from "./dto/domain.dto";
-import { SetCountiesDto, SetHiddenCommunitiesDto } from "./dto/coverage.dto";
+import {
+    SetCountiesDto,
+    SetHiddenCommunitiesDto,
+    SetFloorPlanVideoDto,
+} from "./dto/coverage.dto";
 
 @Controller("agents")
 @UseGuards(SessionGuard, RolesGuard)
@@ -165,6 +169,32 @@ export class AgentController {
     ) {
         await this.assertManager(user, id);
         return this.agentService.setHiddenCommunities(id, dto.communityIds);
+    }
+
+    /** Staff or the agent owner: floor plans + the agent's custom video per plan. */
+    @Get(":id/floor-plan-videos")
+    async getFloorPlanVideos(
+        @Param("id") id: string,
+        @CurrentUser() user: AuthUser
+    ) {
+        await this.assertManager(user, id);
+        return this.agentService.getFloorPlanVideos(id);
+    }
+
+    /** Staff or the agent owner: set/clear the agent's video for one floor plan. */
+    @Put(":id/floor-plan-videos/:floorPlanId")
+    async setFloorPlanVideo(
+        @Param("id") id: string,
+        @Param("floorPlanId") floorPlanId: string,
+        @Body() dto: SetFloorPlanVideoDto,
+        @CurrentUser() user: AuthUser
+    ) {
+        await this.assertManager(user, id);
+        return this.agentService.setFloorPlanVideo(
+            id,
+            floorPlanId,
+            dto.videoUrl
+        );
     }
 
     /** Allow platform staff (owner/admin), or owners/admins of the target org. */

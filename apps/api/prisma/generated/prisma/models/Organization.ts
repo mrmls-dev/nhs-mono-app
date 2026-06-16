@@ -418,6 +418,7 @@ export type OrganizationWhereInput = {
   invitations?: Prisma.InvitationListRelationFilter
   assignedCounties?: Prisma.AgentCountyListRelationFilter
   hiddenCommunities?: Prisma.AgentHiddenCommunityListRelationFilter
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoListRelationFilter
 }
 
 export type OrganizationOrderByWithRelationInput = {
@@ -459,6 +460,7 @@ export type OrganizationOrderByWithRelationInput = {
   invitations?: Prisma.InvitationOrderByRelationAggregateInput
   assignedCounties?: Prisma.AgentCountyOrderByRelationAggregateInput
   hiddenCommunities?: Prisma.AgentHiddenCommunityOrderByRelationAggregateInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoOrderByRelationAggregateInput
 }
 
 export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -503,6 +505,7 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   invitations?: Prisma.InvitationListRelationFilter
   assignedCounties?: Prisma.AgentCountyListRelationFilter
   hiddenCommunities?: Prisma.AgentHiddenCommunityListRelationFilter
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoListRelationFilter
 }, "id" | "slug" | "customDomain" | "ghlLocationId">
 
 export type OrganizationOrderByWithAggregationInput = {
@@ -624,6 +627,7 @@ export type OrganizationCreateInput = {
   invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
   assignedCounties?: Prisma.AgentCountyCreateNestedManyWithoutOrganizationInput
   hiddenCommunities?: Prisma.AgentHiddenCommunityCreateNestedManyWithoutOrganizationInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateInput = {
@@ -665,6 +669,7 @@ export type OrganizationUncheckedCreateInput = {
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
   assignedCounties?: Prisma.AgentCountyUncheckedCreateNestedManyWithoutOrganizationInput
   hiddenCommunities?: Prisma.AgentHiddenCommunityUncheckedCreateNestedManyWithoutOrganizationInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUpdateInput = {
@@ -706,6 +711,7 @@ export type OrganizationUpdateInput = {
   invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
   assignedCounties?: Prisma.AgentCountyUpdateManyWithoutOrganizationNestedInput
   hiddenCommunities?: Prisma.AgentHiddenCommunityUpdateManyWithoutOrganizationNestedInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateInput = {
@@ -747,6 +753,7 @@ export type OrganizationUncheckedUpdateInput = {
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
   assignedCounties?: Prisma.AgentCountyUncheckedUpdateManyWithoutOrganizationNestedInput
   hiddenCommunities?: Prisma.AgentHiddenCommunityUncheckedUpdateManyWithoutOrganizationNestedInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyInput = {
@@ -1004,6 +1011,20 @@ export type OrganizationUpdateOneRequiredWithoutHiddenCommunitiesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutHiddenCommunitiesInput, Prisma.OrganizationUpdateWithoutHiddenCommunitiesInput>, Prisma.OrganizationUncheckedUpdateWithoutHiddenCommunitiesInput>
 }
 
+export type OrganizationCreateNestedOneWithoutFloorPlanVideosInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutFloorPlanVideosInput, Prisma.OrganizationUncheckedCreateWithoutFloorPlanVideosInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutFloorPlanVideosInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneRequiredWithoutFloorPlanVideosNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutFloorPlanVideosInput, Prisma.OrganizationUncheckedCreateWithoutFloorPlanVideosInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutFloorPlanVideosInput
+  upsert?: Prisma.OrganizationUpsertWithoutFloorPlanVideosInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutFloorPlanVideosInput, Prisma.OrganizationUpdateWithoutFloorPlanVideosInput>, Prisma.OrganizationUncheckedUpdateWithoutFloorPlanVideosInput>
+}
+
 export type OrganizationCreateNestedOneWithoutMembersInput = {
   create?: Prisma.XOR<Prisma.OrganizationCreateWithoutMembersInput, Prisma.OrganizationUncheckedCreateWithoutMembersInput>
   connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutMembersInput
@@ -1070,6 +1091,7 @@ export type OrganizationCreateWithoutAssignedCountiesInput = {
   members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
   hiddenCommunities?: Prisma.AgentHiddenCommunityCreateNestedManyWithoutOrganizationInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutAssignedCountiesInput = {
@@ -1110,6 +1132,7 @@ export type OrganizationUncheckedCreateWithoutAssignedCountiesInput = {
   members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
   hiddenCommunities?: Prisma.AgentHiddenCommunityUncheckedCreateNestedManyWithoutOrganizationInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutAssignedCountiesInput = {
@@ -1166,6 +1189,7 @@ export type OrganizationUpdateWithoutAssignedCountiesInput = {
   members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
   hiddenCommunities?: Prisma.AgentHiddenCommunityUpdateManyWithoutOrganizationNestedInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutAssignedCountiesInput = {
@@ -1206,6 +1230,7 @@ export type OrganizationUncheckedUpdateWithoutAssignedCountiesInput = {
   members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
   hiddenCommunities?: Prisma.AgentHiddenCommunityUncheckedUpdateManyWithoutOrganizationNestedInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutHiddenCommunitiesInput = {
@@ -1246,6 +1271,7 @@ export type OrganizationCreateWithoutHiddenCommunitiesInput = {
   members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
   assignedCounties?: Prisma.AgentCountyCreateNestedManyWithoutOrganizationInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutHiddenCommunitiesInput = {
@@ -1286,6 +1312,7 @@ export type OrganizationUncheckedCreateWithoutHiddenCommunitiesInput = {
   members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
   assignedCounties?: Prisma.AgentCountyUncheckedCreateNestedManyWithoutOrganizationInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutHiddenCommunitiesInput = {
@@ -1342,6 +1369,7 @@ export type OrganizationUpdateWithoutHiddenCommunitiesInput = {
   members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
   assignedCounties?: Prisma.AgentCountyUpdateManyWithoutOrganizationNestedInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutHiddenCommunitiesInput = {
@@ -1382,6 +1410,187 @@ export type OrganizationUncheckedUpdateWithoutHiddenCommunitiesInput = {
   members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
   assignedCounties?: Prisma.AgentCountyUncheckedUpdateManyWithoutOrganizationNestedInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutFloorPlanVideosInput = {
+  id?: string
+  name: string
+  slug: string
+  logo?: string | null
+  metadata?: string | null
+  serviceStatus?: string
+  customDomain?: string | null
+  domainStatus?: string | null
+  brandColor?: string | null
+  theme?: string | null
+  siteName?: string | null
+  seoTitle?: string | null
+  titleSuffix?: string | null
+  metaDescription?: string | null
+  contactPhone?: string | null
+  footerText?: string | null
+  ghlScheduleEmbed?: string | null
+  ownerFirstName?: string | null
+  ownerLastName?: string | null
+  businessEmail?: string | null
+  website?: string | null
+  address?: string | null
+  city?: string | null
+  state?: string | null
+  postalCode?: string | null
+  country?: string | null
+  timezone?: string | null
+  businessType?: string | null
+  ghlLocationId?: string | null
+  ghlAllowDuplicateContact?: boolean
+  ghlAllowDuplicateOpportunity?: boolean
+  ghlAllowFacebookNameMerge?: boolean
+  ghlDisableContactTimezone?: boolean
+  createdAt?: Date | string
+  members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
+  assignedCounties?: Prisma.AgentCountyCreateNestedManyWithoutOrganizationInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutFloorPlanVideosInput = {
+  id?: string
+  name: string
+  slug: string
+  logo?: string | null
+  metadata?: string | null
+  serviceStatus?: string
+  customDomain?: string | null
+  domainStatus?: string | null
+  brandColor?: string | null
+  theme?: string | null
+  siteName?: string | null
+  seoTitle?: string | null
+  titleSuffix?: string | null
+  metaDescription?: string | null
+  contactPhone?: string | null
+  footerText?: string | null
+  ghlScheduleEmbed?: string | null
+  ownerFirstName?: string | null
+  ownerLastName?: string | null
+  businessEmail?: string | null
+  website?: string | null
+  address?: string | null
+  city?: string | null
+  state?: string | null
+  postalCode?: string | null
+  country?: string | null
+  timezone?: string | null
+  businessType?: string | null
+  ghlLocationId?: string | null
+  ghlAllowDuplicateContact?: boolean
+  ghlAllowDuplicateOpportunity?: boolean
+  ghlAllowFacebookNameMerge?: boolean
+  ghlDisableContactTimezone?: boolean
+  createdAt?: Date | string
+  members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
+  assignedCounties?: Prisma.AgentCountyUncheckedCreateNestedManyWithoutOrganizationInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutFloorPlanVideosInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutFloorPlanVideosInput, Prisma.OrganizationUncheckedCreateWithoutFloorPlanVideosInput>
+}
+
+export type OrganizationUpsertWithoutFloorPlanVideosInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutFloorPlanVideosInput, Prisma.OrganizationUncheckedUpdateWithoutFloorPlanVideosInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutFloorPlanVideosInput, Prisma.OrganizationUncheckedCreateWithoutFloorPlanVideosInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutFloorPlanVideosInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutFloorPlanVideosInput, Prisma.OrganizationUncheckedUpdateWithoutFloorPlanVideosInput>
+}
+
+export type OrganizationUpdateWithoutFloorPlanVideosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  titleSuffix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  footerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ghlScheduleEmbed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerFirstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerLastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ghlLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ghlAllowDuplicateContact?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ghlAllowDuplicateOpportunity?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ghlAllowFacebookNameMerge?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ghlDisableContactTimezone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
+  assignedCounties?: Prisma.AgentCountyUpdateManyWithoutOrganizationNestedInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutFloorPlanVideosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seoTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  titleSuffix?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  footerText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ghlScheduleEmbed?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerFirstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerLastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postalCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ghlLocationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ghlAllowDuplicateContact?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ghlAllowDuplicateOpportunity?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ghlAllowFacebookNameMerge?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ghlDisableContactTimezone?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
+  assignedCounties?: Prisma.AgentCountyUncheckedUpdateManyWithoutOrganizationNestedInput
+  hiddenCommunities?: Prisma.AgentHiddenCommunityUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutMembersInput = {
@@ -1422,6 +1631,7 @@ export type OrganizationCreateWithoutMembersInput = {
   invitations?: Prisma.InvitationCreateNestedManyWithoutOrganizationInput
   assignedCounties?: Prisma.AgentCountyCreateNestedManyWithoutOrganizationInput
   hiddenCommunities?: Prisma.AgentHiddenCommunityCreateNestedManyWithoutOrganizationInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutMembersInput = {
@@ -1462,6 +1672,7 @@ export type OrganizationUncheckedCreateWithoutMembersInput = {
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutOrganizationInput
   assignedCounties?: Prisma.AgentCountyUncheckedCreateNestedManyWithoutOrganizationInput
   hiddenCommunities?: Prisma.AgentHiddenCommunityUncheckedCreateNestedManyWithoutOrganizationInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutMembersInput = {
@@ -1518,6 +1729,7 @@ export type OrganizationUpdateWithoutMembersInput = {
   invitations?: Prisma.InvitationUpdateManyWithoutOrganizationNestedInput
   assignedCounties?: Prisma.AgentCountyUpdateManyWithoutOrganizationNestedInput
   hiddenCommunities?: Prisma.AgentHiddenCommunityUpdateManyWithoutOrganizationNestedInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutMembersInput = {
@@ -1558,6 +1770,7 @@ export type OrganizationUncheckedUpdateWithoutMembersInput = {
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutOrganizationNestedInput
   assignedCounties?: Prisma.AgentCountyUncheckedUpdateManyWithoutOrganizationNestedInput
   hiddenCommunities?: Prisma.AgentHiddenCommunityUncheckedUpdateManyWithoutOrganizationNestedInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutInvitationsInput = {
@@ -1598,6 +1811,7 @@ export type OrganizationCreateWithoutInvitationsInput = {
   members?: Prisma.MemberCreateNestedManyWithoutOrganizationInput
   assignedCounties?: Prisma.AgentCountyCreateNestedManyWithoutOrganizationInput
   hiddenCommunities?: Prisma.AgentHiddenCommunityCreateNestedManyWithoutOrganizationInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutInvitationsInput = {
@@ -1638,6 +1852,7 @@ export type OrganizationUncheckedCreateWithoutInvitationsInput = {
   members?: Prisma.MemberUncheckedCreateNestedManyWithoutOrganizationInput
   assignedCounties?: Prisma.AgentCountyUncheckedCreateNestedManyWithoutOrganizationInput
   hiddenCommunities?: Prisma.AgentHiddenCommunityUncheckedCreateNestedManyWithoutOrganizationInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutInvitationsInput = {
@@ -1694,6 +1909,7 @@ export type OrganizationUpdateWithoutInvitationsInput = {
   members?: Prisma.MemberUpdateManyWithoutOrganizationNestedInput
   assignedCounties?: Prisma.AgentCountyUpdateManyWithoutOrganizationNestedInput
   hiddenCommunities?: Prisma.AgentHiddenCommunityUpdateManyWithoutOrganizationNestedInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutInvitationsInput = {
@@ -1734,6 +1950,7 @@ export type OrganizationUncheckedUpdateWithoutInvitationsInput = {
   members?: Prisma.MemberUncheckedUpdateManyWithoutOrganizationNestedInput
   assignedCounties?: Prisma.AgentCountyUncheckedUpdateManyWithoutOrganizationNestedInput
   hiddenCommunities?: Prisma.AgentHiddenCommunityUncheckedUpdateManyWithoutOrganizationNestedInput
+  floorPlanVideos?: Prisma.AgentFloorPlanVideoUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 
@@ -1746,6 +1963,7 @@ export type OrganizationCountOutputType = {
   invitations: number
   assignedCounties: number
   hiddenCommunities: number
+  floorPlanVideos: number
 }
 
 export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1753,6 +1971,7 @@ export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   invitations?: boolean | OrganizationCountOutputTypeCountInvitationsArgs
   assignedCounties?: boolean | OrganizationCountOutputTypeCountAssignedCountiesArgs
   hiddenCommunities?: boolean | OrganizationCountOutputTypeCountHiddenCommunitiesArgs
+  floorPlanVideos?: boolean | OrganizationCountOutputTypeCountFloorPlanVideosArgs
 }
 
 /**
@@ -1791,6 +2010,13 @@ export type OrganizationCountOutputTypeCountAssignedCountiesArgs<ExtArgs extends
  */
 export type OrganizationCountOutputTypeCountHiddenCommunitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AgentHiddenCommunityWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountFloorPlanVideosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AgentFloorPlanVideoWhereInput
 }
 
 
@@ -1833,6 +2059,7 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   invitations?: boolean | Prisma.Organization$invitationsArgs<ExtArgs>
   assignedCounties?: boolean | Prisma.Organization$assignedCountiesArgs<ExtArgs>
   hiddenCommunities?: boolean | Prisma.Organization$hiddenCommunitiesArgs<ExtArgs>
+  floorPlanVideos?: boolean | Prisma.Organization$floorPlanVideosArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
@@ -1953,6 +2180,7 @@ export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.Interna
   invitations?: boolean | Prisma.Organization$invitationsArgs<ExtArgs>
   assignedCounties?: boolean | Prisma.Organization$assignedCountiesArgs<ExtArgs>
   hiddenCommunities?: boolean | Prisma.Organization$hiddenCommunitiesArgs<ExtArgs>
+  floorPlanVideos?: boolean | Prisma.Organization$floorPlanVideosArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1965,6 +2193,7 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     invitations: Prisma.$InvitationPayload<ExtArgs>[]
     assignedCounties: Prisma.$AgentCountyPayload<ExtArgs>[]
     hiddenCommunities: Prisma.$AgentHiddenCommunityPayload<ExtArgs>[]
+    floorPlanVideos: Prisma.$AgentFloorPlanVideoPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2399,6 +2628,7 @@ export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends run
   invitations<T extends Prisma.Organization$invitationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$invitationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   assignedCounties<T extends Prisma.Organization$assignedCountiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$assignedCountiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AgentCountyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   hiddenCommunities<T extends Prisma.Organization$hiddenCommunitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$hiddenCommunitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AgentHiddenCommunityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  floorPlanVideos<T extends Prisma.Organization$floorPlanVideosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$floorPlanVideosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AgentFloorPlanVideoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2948,6 +3178,30 @@ export type Organization$hiddenCommunitiesArgs<ExtArgs extends runtime.Types.Ext
   take?: number
   skip?: number
   distinct?: Prisma.AgentHiddenCommunityScalarFieldEnum | Prisma.AgentHiddenCommunityScalarFieldEnum[]
+}
+
+/**
+ * Organization.floorPlanVideos
+ */
+export type Organization$floorPlanVideosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AgentFloorPlanVideo
+   */
+  select?: Prisma.AgentFloorPlanVideoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AgentFloorPlanVideo
+   */
+  omit?: Prisma.AgentFloorPlanVideoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AgentFloorPlanVideoInclude<ExtArgs> | null
+  where?: Prisma.AgentFloorPlanVideoWhereInput
+  orderBy?: Prisma.AgentFloorPlanVideoOrderByWithRelationInput | Prisma.AgentFloorPlanVideoOrderByWithRelationInput[]
+  cursor?: Prisma.AgentFloorPlanVideoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AgentFloorPlanVideoScalarFieldEnum | Prisma.AgentFloorPlanVideoScalarFieldEnum[]
 }
 
 /**

@@ -76,7 +76,7 @@ export function AgentsClient() {
                     </p>
                 </div>
                 <Button asChild>
-                    <Link href="/dashboard/agents/new">
+                    <Link href="/dashboard/new-agent">
                         <Plus data-icon="inline-start" />
                         Add Agent
                     </Link>
@@ -245,7 +245,7 @@ export function AgentsClient() {
                     </EmptyHeader>
                     <EmptyContent>
                         <Button asChild>
-                            <Link href="/dashboard/agents/new">
+                            <Link href="/dashboard/new-agent">
                                 <Plus data-icon="inline-start" />
                                 Add Agent
                             </Link>

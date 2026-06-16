@@ -63,7 +63,7 @@ const adminGroups: NavGroup[] = [
         label: "Agents",
         items: [
             { title: "Agents", href: "/dashboard/agents", icon: Users },
-            { title: "New Agent", href: "/dashboard/agents/new", icon: Plus },
+            { title: "New Agent", href: "/dashboard/new-agent", icon: Plus },
         ],
     },
     {
@@ -93,7 +93,8 @@ const agentGroups: NavGroup[] = [
     },
 ];
 
-/** Matches `/dashboard/agents/<id>...` (a specific agent), not the list. */
+/** Matches `/dashboard/agents/<id>...` (a specific agent), not the list. The
+ *  create form lives at `/dashboard/new-agent`, so it isn't matched here. */
 const isAgentDetailPath = (pathname: string) =>
     /^\/dashboard\/agents\/[^/]+/.test(pathname);
 

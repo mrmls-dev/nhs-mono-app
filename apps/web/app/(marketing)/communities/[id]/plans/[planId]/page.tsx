@@ -3,12 +3,13 @@ import { notFound } from "next/navigation";
 import { headers } from "next/headers";
 import { ArrowLeft, Phone } from "lucide-react";
 import { Badge } from "@workspace/ui/components/badge";
-import { getCommunity, getPublicCommunities } from "@/api/community";
+import { getCommunity, getPublicCommunity } from "@/api/community";
 import { getAgentByDomain } from "@/api/agent";
 import { formatPrice, formatStat } from "@/lib/format";
 import CommunityGallery from "@/components/CommunityGallery";
 import ExpandableText from "@/components/ExpandableText";
 import ScheduleVisitButton from "@/components/ScheduleVisitButton";
+import { ModelVideo } from "@/components/ModelVideo";
 
 type Props = { params: Promise<{ id: string; planId: string }> };
 
@@ -25,17 +26,15 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function FloorPlanPage({ params }: Props) {
     const { id, planId } = await params;
-    const community = await getCommunity(id);
+
+    // Agent-scoped fetch: 404s if the community isn't visible on this domain and
+    // applies the agent's per-floor-plan model-video overrides.
+    const host = (await headers()).get("host") ?? undefined;
+    const agent = await getAgentByDomain(host);
+    const community = await getPublicCommunity(id, agent.id);
     const plan = community?.floorPlans.find((p) => p.slug === planId);
 
     if (!community || !plan) notFound();
-
-    // Scope to the agent for this Host — a hidden/off-catalog community's plans
-    // must not be reachable on its domain.
-    const host = (await headers()).get("host") ?? undefined;
-    const agent = await getAgentByDomain(host);
-    const visible = await getPublicCommunities(agent.id);
-    if (!visible.some((c) => c.slug === community.slug)) notFound();
 
     const galleryItems = plan.gallery.map((m) => ({
         type: "image" as const,
@@ -132,6 +131,13 @@ export default async function FloorPlanPage({ params }: Props) {
                 <section className="max-w-2xl flex flex-col gap-3">
                     <h2 className="text-2xl font-bold text-foreground">About this floor plan</h2>
                     <ExpandableText text={plan.description} />
+                </section>
+            )}
+
+            {plan.modelVideo && (
+                <section className="flex flex-col gap-4">
+                    <h2 className="text-2xl font-bold text-foreground">Model video</h2>
+                    <ModelVideo url={plan.modelVideo} title={plan.name} />
                 </section>
             )}
 

@@ -66,6 +66,7 @@ export type CommunityMinAggregateOutputType = {
   location: string | null
   image: string | null
   status: $Enums.CommunityStatus | null
+  published: boolean | null
   homesForSale: number | null
   bedsMin: number | null
   bedsMax: number | null
@@ -93,6 +94,7 @@ export type CommunityMaxAggregateOutputType = {
   location: string | null
   image: string | null
   status: $Enums.CommunityStatus | null
+  published: boolean | null
   homesForSale: number | null
   bedsMin: number | null
   bedsMax: number | null
@@ -120,6 +122,7 @@ export type CommunityCountAggregateOutputType = {
   location: number
   image: number
   status: number
+  published: number
   homesForSale: number
   bedsMin: number
   bedsMax: number
@@ -181,6 +184,7 @@ export type CommunityMinAggregateInputType = {
   location?: true
   image?: true
   status?: true
+  published?: true
   homesForSale?: true
   bedsMin?: true
   bedsMax?: true
@@ -208,6 +212,7 @@ export type CommunityMaxAggregateInputType = {
   location?: true
   image?: true
   status?: true
+  published?: true
   homesForSale?: true
   bedsMin?: true
   bedsMax?: true
@@ -235,6 +240,7 @@ export type CommunityCountAggregateInputType = {
   location?: true
   image?: true
   status?: true
+  published?: true
   homesForSale?: true
   bedsMin?: true
   bedsMax?: true
@@ -349,6 +355,7 @@ export type CommunityGroupByOutputType = {
   location: string
   image: string
   status: $Enums.CommunityStatus
+  published: boolean
   homesForSale: number
   bedsMin: number
   bedsMax: number
@@ -399,6 +406,7 @@ export type CommunityWhereInput = {
   location?: Prisma.StringFilter<"Community"> | string
   image?: Prisma.StringFilter<"Community"> | string
   status?: Prisma.EnumCommunityStatusFilter<"Community"> | $Enums.CommunityStatus
+  published?: Prisma.BoolFilter<"Community"> | boolean
   homesForSale?: Prisma.IntFilter<"Community"> | number
   bedsMin?: Prisma.IntFilter<"Community"> | number
   bedsMax?: Prisma.IntFilter<"Community"> | number
@@ -431,6 +439,7 @@ export type CommunityOrderByWithRelationInput = {
   location?: Prisma.SortOrder
   image?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  published?: Prisma.SortOrder
   homesForSale?: Prisma.SortOrder
   bedsMin?: Prisma.SortOrder
   bedsMax?: Prisma.SortOrder
@@ -466,6 +475,7 @@ export type CommunityWhereUniqueInput = Prisma.AtLeast<{
   location?: Prisma.StringFilter<"Community"> | string
   image?: Prisma.StringFilter<"Community"> | string
   status?: Prisma.EnumCommunityStatusFilter<"Community"> | $Enums.CommunityStatus
+  published?: Prisma.BoolFilter<"Community"> | boolean
   homesForSale?: Prisma.IntFilter<"Community"> | number
   bedsMin?: Prisma.IntFilter<"Community"> | number
   bedsMax?: Prisma.IntFilter<"Community"> | number
@@ -498,6 +508,7 @@ export type CommunityOrderByWithAggregationInput = {
   location?: Prisma.SortOrder
   image?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  published?: Prisma.SortOrder
   homesForSale?: Prisma.SortOrder
   bedsMin?: Prisma.SortOrder
   bedsMax?: Prisma.SortOrder
@@ -533,6 +544,7 @@ export type CommunityScalarWhereWithAggregatesInput = {
   location?: Prisma.StringWithAggregatesFilter<"Community"> | string
   image?: Prisma.StringWithAggregatesFilter<"Community"> | string
   status?: Prisma.EnumCommunityStatusWithAggregatesFilter<"Community"> | $Enums.CommunityStatus
+  published?: Prisma.BoolWithAggregatesFilter<"Community"> | boolean
   homesForSale?: Prisma.IntWithAggregatesFilter<"Community"> | number
   bedsMin?: Prisma.IntWithAggregatesFilter<"Community"> | number
   bedsMax?: Prisma.IntWithAggregatesFilter<"Community"> | number
@@ -560,6 +572,7 @@ export type CommunityCreateInput = {
   location: string
   image: string
   status: $Enums.CommunityStatus
+  published?: boolean
   homesForSale?: number
   bedsMin: number
   bedsMax: number
@@ -591,6 +604,7 @@ export type CommunityUncheckedCreateInput = {
   location: string
   image: string
   status: $Enums.CommunityStatus
+  published?: boolean
   homesForSale?: number
   bedsMin: number
   bedsMax: number
@@ -622,6 +636,7 @@ export type CommunityUpdateInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCommunityStatusFieldUpdateOperationsInput | $Enums.CommunityStatus
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   homesForSale?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMin?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMax?: Prisma.IntFieldUpdateOperationsInput | number
@@ -653,6 +668,7 @@ export type CommunityUncheckedUpdateInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCommunityStatusFieldUpdateOperationsInput | $Enums.CommunityStatus
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   homesForSale?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMin?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMax?: Prisma.IntFieldUpdateOperationsInput | number
@@ -684,6 +700,7 @@ export type CommunityCreateManyInput = {
   location: string
   image: string
   status: $Enums.CommunityStatus
+  published?: boolean
   homesForSale?: number
   bedsMin: number
   bedsMax: number
@@ -711,6 +728,7 @@ export type CommunityUpdateManyMutationInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCommunityStatusFieldUpdateOperationsInput | $Enums.CommunityStatus
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   homesForSale?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMin?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMax?: Prisma.IntFieldUpdateOperationsInput | number
@@ -737,6 +755,7 @@ export type CommunityUncheckedUpdateManyInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCommunityStatusFieldUpdateOperationsInput | $Enums.CommunityStatus
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   homesForSale?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMin?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMax?: Prisma.IntFieldUpdateOperationsInput | number
@@ -774,6 +793,7 @@ export type CommunityCountOrderByAggregateInput = {
   location?: Prisma.SortOrder
   image?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  published?: Prisma.SortOrder
   homesForSale?: Prisma.SortOrder
   bedsMin?: Prisma.SortOrder
   bedsMax?: Prisma.SortOrder
@@ -817,6 +837,7 @@ export type CommunityMaxOrderByAggregateInput = {
   location?: Prisma.SortOrder
   image?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  published?: Prisma.SortOrder
   homesForSale?: Prisma.SortOrder
   bedsMin?: Prisma.SortOrder
   bedsMax?: Prisma.SortOrder
@@ -844,6 +865,7 @@ export type CommunityMinOrderByAggregateInput = {
   location?: Prisma.SortOrder
   image?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  published?: Prisma.SortOrder
   homesForSale?: Prisma.SortOrder
   bedsMin?: Prisma.SortOrder
   bedsMax?: Prisma.SortOrder
@@ -934,6 +956,10 @@ export type EnumCommunityStatusFieldUpdateOperationsInput = {
   set?: $Enums.CommunityStatus
 }
 
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -1014,6 +1040,7 @@ export type CommunityCreateWithoutCountyInput = {
   location: string
   image: string
   status: $Enums.CommunityStatus
+  published?: boolean
   homesForSale?: number
   bedsMin: number
   bedsMax: number
@@ -1044,6 +1071,7 @@ export type CommunityUncheckedCreateWithoutCountyInput = {
   location: string
   image: string
   status: $Enums.CommunityStatus
+  published?: boolean
   homesForSale?: number
   bedsMin: number
   bedsMax: number
@@ -1103,6 +1131,7 @@ export type CommunityScalarWhereInput = {
   location?: Prisma.StringFilter<"Community"> | string
   image?: Prisma.StringFilter<"Community"> | string
   status?: Prisma.EnumCommunityStatusFilter<"Community"> | $Enums.CommunityStatus
+  published?: Prisma.BoolFilter<"Community"> | boolean
   homesForSale?: Prisma.IntFilter<"Community"> | number
   bedsMin?: Prisma.IntFilter<"Community"> | number
   bedsMax?: Prisma.IntFilter<"Community"> | number
@@ -1130,6 +1159,7 @@ export type CommunityCreateWithoutAmenitiesInput = {
   location: string
   image: string
   status: $Enums.CommunityStatus
+  published?: boolean
   homesForSale?: number
   bedsMin: number
   bedsMax: number
@@ -1160,6 +1190,7 @@ export type CommunityUncheckedCreateWithoutAmenitiesInput = {
   location: string
   image: string
   status: $Enums.CommunityStatus
+  published?: boolean
   homesForSale?: number
   bedsMin: number
   bedsMax: number
@@ -1206,6 +1237,7 @@ export type CommunityUpdateWithoutAmenitiesInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCommunityStatusFieldUpdateOperationsInput | $Enums.CommunityStatus
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   homesForSale?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMin?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMax?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1236,6 +1268,7 @@ export type CommunityUncheckedUpdateWithoutAmenitiesInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCommunityStatusFieldUpdateOperationsInput | $Enums.CommunityStatus
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   homesForSale?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMin?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMax?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1266,6 +1299,7 @@ export type CommunityCreateWithoutSchoolsInput = {
   location: string
   image: string
   status: $Enums.CommunityStatus
+  published?: boolean
   homesForSale?: number
   bedsMin: number
   bedsMax: number
@@ -1296,6 +1330,7 @@ export type CommunityUncheckedCreateWithoutSchoolsInput = {
   location: string
   image: string
   status: $Enums.CommunityStatus
+  published?: boolean
   homesForSale?: number
   bedsMin: number
   bedsMax: number
@@ -1342,6 +1377,7 @@ export type CommunityUpdateWithoutSchoolsInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCommunityStatusFieldUpdateOperationsInput | $Enums.CommunityStatus
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   homesForSale?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMin?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMax?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1372,6 +1408,7 @@ export type CommunityUncheckedUpdateWithoutSchoolsInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCommunityStatusFieldUpdateOperationsInput | $Enums.CommunityStatus
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   homesForSale?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMin?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMax?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1402,6 +1439,7 @@ export type CommunityCreateWithoutFloorPlansInput = {
   location: string
   image: string
   status: $Enums.CommunityStatus
+  published?: boolean
   homesForSale?: number
   bedsMin: number
   bedsMax: number
@@ -1432,6 +1470,7 @@ export type CommunityUncheckedCreateWithoutFloorPlansInput = {
   location: string
   image: string
   status: $Enums.CommunityStatus
+  published?: boolean
   homesForSale?: number
   bedsMin: number
   bedsMax: number
@@ -1478,6 +1517,7 @@ export type CommunityUpdateWithoutFloorPlansInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCommunityStatusFieldUpdateOperationsInput | $Enums.CommunityStatus
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   homesForSale?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMin?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMax?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1508,6 +1548,7 @@ export type CommunityUncheckedUpdateWithoutFloorPlansInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCommunityStatusFieldUpdateOperationsInput | $Enums.CommunityStatus
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   homesForSale?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMin?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMax?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1538,6 +1579,7 @@ export type CommunityCreateWithoutHiddenByAgentsInput = {
   location: string
   image: string
   status: $Enums.CommunityStatus
+  published?: boolean
   homesForSale?: number
   bedsMin: number
   bedsMax: number
@@ -1568,6 +1610,7 @@ export type CommunityUncheckedCreateWithoutHiddenByAgentsInput = {
   location: string
   image: string
   status: $Enums.CommunityStatus
+  published?: boolean
   homesForSale?: number
   bedsMin: number
   bedsMax: number
@@ -1614,6 +1657,7 @@ export type CommunityUpdateWithoutHiddenByAgentsInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCommunityStatusFieldUpdateOperationsInput | $Enums.CommunityStatus
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   homesForSale?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMin?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMax?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1644,6 +1688,7 @@ export type CommunityUncheckedUpdateWithoutHiddenByAgentsInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCommunityStatusFieldUpdateOperationsInput | $Enums.CommunityStatus
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   homesForSale?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMin?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMax?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1674,6 +1719,7 @@ export type CommunityCreateManyCountyInput = {
   location: string
   image: string
   status: $Enums.CommunityStatus
+  published?: boolean
   homesForSale?: number
   bedsMin: number
   bedsMax: number
@@ -1700,6 +1746,7 @@ export type CommunityUpdateWithoutCountyInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCommunityStatusFieldUpdateOperationsInput | $Enums.CommunityStatus
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   homesForSale?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMin?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMax?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1730,6 +1777,7 @@ export type CommunityUncheckedUpdateWithoutCountyInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCommunityStatusFieldUpdateOperationsInput | $Enums.CommunityStatus
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   homesForSale?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMin?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMax?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1760,6 +1808,7 @@ export type CommunityUncheckedUpdateManyWithoutCountyInput = {
   location?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumCommunityStatusFieldUpdateOperationsInput | $Enums.CommunityStatus
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   homesForSale?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMin?: Prisma.IntFieldUpdateOperationsInput | number
   bedsMax?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1844,6 +1893,7 @@ export type CommunitySelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   location?: boolean
   image?: boolean
   status?: boolean
+  published?: boolean
   homesForSale?: boolean
   bedsMin?: boolean
   bedsMax?: boolean
@@ -1877,6 +1927,7 @@ export type CommunitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   location?: boolean
   image?: boolean
   status?: boolean
+  published?: boolean
   homesForSale?: boolean
   bedsMin?: boolean
   bedsMax?: boolean
@@ -1905,6 +1956,7 @@ export type CommunitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   location?: boolean
   image?: boolean
   status?: boolean
+  published?: boolean
   homesForSale?: boolean
   bedsMin?: boolean
   bedsMax?: boolean
@@ -1933,6 +1985,7 @@ export type CommunitySelectScalar = {
   location?: boolean
   image?: boolean
   status?: boolean
+  published?: boolean
   homesForSale?: boolean
   bedsMin?: boolean
   bedsMax?: boolean
@@ -1952,7 +2005,7 @@ export type CommunitySelectScalar = {
   updatedAt?: boolean
 }
 
-export type CommunityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "brand" | "location" | "image" | "status" | "homesForSale" | "bedsMin" | "bedsMax" | "bathsMin" | "bathsMax" | "garageMin" | "garageMax" | "storiesMin" | "storiesMax" | "sqftFrom" | "priceFrom" | "lat" | "lng" | "about" | "countyId" | "createdAt" | "updatedAt", ExtArgs["result"]["community"]>
+export type CommunityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "brand" | "location" | "image" | "status" | "published" | "homesForSale" | "bedsMin" | "bedsMax" | "bathsMin" | "bathsMax" | "garageMin" | "garageMax" | "storiesMin" | "storiesMax" | "sqftFrom" | "priceFrom" | "lat" | "lng" | "about" | "countyId" | "createdAt" | "updatedAt", ExtArgs["result"]["community"]>
 export type CommunityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   county?: boolean | Prisma.CountyDefaultArgs<ExtArgs>
   amenities?: boolean | Prisma.Community$amenitiesArgs<ExtArgs>
@@ -1985,6 +2038,7 @@ export type $CommunityPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     location: string
     image: string
     status: $Enums.CommunityStatus
+    published: boolean
     homesForSale: number
     bedsMin: number
     bedsMax: number
@@ -2437,6 +2491,7 @@ export interface CommunityFieldRefs {
   readonly location: Prisma.FieldRef<"Community", 'String'>
   readonly image: Prisma.FieldRef<"Community", 'String'>
   readonly status: Prisma.FieldRef<"Community", 'CommunityStatus'>
+  readonly published: Prisma.FieldRef<"Community", 'Boolean'>
   readonly homesForSale: Prisma.FieldRef<"Community", 'Int'>
   readonly bedsMin: Prisma.FieldRef<"Community", 'Int'>
   readonly bedsMax: Prisma.FieldRef<"Community", 'Int'>

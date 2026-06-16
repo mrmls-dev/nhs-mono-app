@@ -10,6 +10,9 @@ import {
     Plus,
     Trash2,
     LayoutTemplate,
+    Eye,
+    EyeOff,
+    Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@workspace/ui/components/button";
@@ -22,7 +25,11 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from "@workspace/ui/components/empty";
-import { getCommunity, deleteCommunity } from "@/api/community";
+import {
+    getCommunity,
+    deleteCommunity,
+    publishCommunity,
+} from "@/api/community";
 import { deleteFloorPlan } from "@/api/floor-plan";
 import { DeleteDialog } from "@/components/DeleteDialog";
 import { ErrorDialog } from "@/components/ErrorDialog";
@@ -69,6 +76,16 @@ export function CommunityDetailClient({ slug }: { slug: string }) {
             setDeleteCommunityOpen(false);
             setErrorMessage(err.message);
         },
+    });
+
+    const publishMutation = useMutation({
+        mutationFn: (next: boolean) => publishCommunity(community!.id, next),
+        onSuccess: (_data, next) => {
+            qc.invalidateQueries({ queryKey: ["community", slug] });
+            qc.invalidateQueries({ queryKey: ["communities"] });
+            toast.success(next ? "Community published." : "Community unpublished.");
+        },
+        onError: (err: Error) => setErrorMessage(err.message),
     });
 
     const deletePlanMutation = useMutation({
@@ -127,6 +144,16 @@ export function CommunityDetailClient({ slug }: { slug: string }) {
                         <h1 className="text-2xl font-semibold tracking-tight">
                             {community.name}
                         </h1>
+                        {community.published ? (
+                            <Badge variant="default">Published</Badge>
+                        ) : (
+                            <Badge
+                                variant="outline"
+                                className="border-amber-500/50 text-amber-600 dark:text-amber-400"
+                            >
+                                Draft
+                            </Badge>
+                        )}
                         <Badge variant="secondary">
                             {STATUS_LABEL[community.status] ??
                                 community.status}
@@ -136,8 +163,33 @@ export function CommunityDetailClient({ slug }: { slug: string }) {
                         <span className="font-mono">{community.slug}</span> ·{" "}
                         {community.location}
                     </p>
+                    {!community.published && (
+                        <p className="text-xs text-muted-foreground">
+                            This community is a draft and isn&rsquo;t visible on
+                            any public site yet.
+                        </p>
+                    )}
                 </div>
                 <div className="flex items-center gap-2">
+                    <Button
+                        variant={community.published ? "outline" : "default"}
+                        onClick={() =>
+                            publishMutation.mutate(!community.published)
+                        }
+                        disabled={publishMutation.isPending}
+                    >
+                        {publishMutation.isPending ? (
+                            <Loader2
+                                data-icon="inline-start"
+                                className="animate-spin"
+                            />
+                        ) : community.published ? (
+                            <EyeOff data-icon="inline-start" />
+                        ) : (
+                            <Eye data-icon="inline-start" />
+                        )}
+                        {community.published ? "Unpublish" : "Publish"}
+                    </Button>
                     <Button variant="outline" asChild>
                         <Link href={`/dashboard/communities/${slug}/edit`}>
                             <Pencil data-icon="inline-start" />

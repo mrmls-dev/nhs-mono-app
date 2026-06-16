@@ -399,6 +399,7 @@ export const ModelName = {
   Organization: 'Organization',
   AgentCounty: 'AgentCounty',
   AgentHiddenCommunity: 'AgentHiddenCommunity',
+  AgentFloorPlanVideo: 'AgentFloorPlanVideo',
   Member: 'Member',
   Invitation: 'Invitation'
 } as const
@@ -416,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "region" | "county" | "community" | "amenity" | "communityAmenity" | "school" | "floorPlanModel" | "floorPlanModelMedia" | "user" | "session" | "account" | "verification" | "organization" | "agentCounty" | "agentHiddenCommunity" | "member" | "invitation"
+    modelProps: "region" | "county" | "community" | "amenity" | "communityAmenity" | "school" | "floorPlanModel" | "floorPlanModelMedia" | "user" | "session" | "account" | "verification" | "organization" | "agentCounty" | "agentHiddenCommunity" | "agentFloorPlanVideo" | "member" | "invitation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1530,6 +1531,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AgentFloorPlanVideo: {
+      payload: Prisma.$AgentFloorPlanVideoPayload<ExtArgs>
+      fields: Prisma.AgentFloorPlanVideoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AgentFloorPlanVideoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentFloorPlanVideoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AgentFloorPlanVideoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentFloorPlanVideoPayload>
+        }
+        findFirst: {
+          args: Prisma.AgentFloorPlanVideoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentFloorPlanVideoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AgentFloorPlanVideoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentFloorPlanVideoPayload>
+        }
+        findMany: {
+          args: Prisma.AgentFloorPlanVideoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentFloorPlanVideoPayload>[]
+        }
+        create: {
+          args: Prisma.AgentFloorPlanVideoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentFloorPlanVideoPayload>
+        }
+        createMany: {
+          args: Prisma.AgentFloorPlanVideoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AgentFloorPlanVideoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentFloorPlanVideoPayload>[]
+        }
+        delete: {
+          args: Prisma.AgentFloorPlanVideoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentFloorPlanVideoPayload>
+        }
+        update: {
+          args: Prisma.AgentFloorPlanVideoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentFloorPlanVideoPayload>
+        }
+        deleteMany: {
+          args: Prisma.AgentFloorPlanVideoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AgentFloorPlanVideoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AgentFloorPlanVideoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentFloorPlanVideoPayload>[]
+        }
+        upsert: {
+          args: Prisma.AgentFloorPlanVideoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AgentFloorPlanVideoPayload>
+        }
+        aggregate: {
+          args: Prisma.AgentFloorPlanVideoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAgentFloorPlanVideo>
+        }
+        groupBy: {
+          args: Prisma.AgentFloorPlanVideoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AgentFloorPlanVideoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AgentFloorPlanVideoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AgentFloorPlanVideoCountAggregateOutputType> | number
+        }
+      }
+    }
     Member: {
       payload: Prisma.$MemberPayload<ExtArgs>
       fields: Prisma.MemberFieldRefs
@@ -1753,6 +1828,7 @@ export const CommunityScalarFieldEnum = {
   location: 'location',
   image: 'image',
   status: 'status',
+  published: 'published',
   homesForSale: 'homesForSale',
   bedsMin: 'bedsMin',
   bedsMax: 'bedsMax',
@@ -1962,6 +2038,18 @@ export const AgentHiddenCommunityScalarFieldEnum = {
 export type AgentHiddenCommunityScalarFieldEnum = (typeof AgentHiddenCommunityScalarFieldEnum)[keyof typeof AgentHiddenCommunityScalarFieldEnum]
 
 
+export const AgentFloorPlanVideoScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  floorPlanId: 'floorPlanId',
+  videoUrl: 'videoUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AgentFloorPlanVideoScalarFieldEnum = (typeof AgentFloorPlanVideoScalarFieldEnum)[keyof typeof AgentFloorPlanVideoScalarFieldEnum]
+
+
 export const MemberScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
@@ -2073,6 +2161,13 @@ export type ListEnumCommunityStatusFieldRefInput<$PrismaModel> = FieldRefInputTy
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -2097,13 +2192,6 @@ export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
  * Reference to a field of type 'Decimal[]'
  */
 export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 /**
@@ -2231,6 +2319,7 @@ export type GlobalOmitConfig = {
   organization?: Prisma.OrganizationOmit
   agentCounty?: Prisma.AgentCountyOmit
   agentHiddenCommunity?: Prisma.AgentHiddenCommunityOmit
+  agentFloorPlanVideo?: Prisma.AgentFloorPlanVideoOmit
   member?: Prisma.MemberOmit
   invitation?: Prisma.InvitationOmit
 }

@@ -7,6 +7,7 @@ export type CommunityListItem = {
     slug: string;
     name: string;
     status: "NOW_SELLING" | "COMING_SOON" | "SOLD_OUT";
+    published: boolean;
     location: string;
     image: string;
     priceFrom: number;
@@ -59,6 +60,7 @@ export type FullCommunity = {
     location: string;
     image: string;
     status: "NOW_SELLING" | "COMING_SOON" | "SOLD_OUT";
+    published: boolean;
     homesForSale: number;
     bedsMin: number;
     bedsMax: number;
@@ -117,6 +119,24 @@ export async function getCommunity(slug: string): Promise<FullCommunity | null> 
     return res.json();
 }
 
+/**
+ * Public, agent-scoped community detail: 404s when the community isn't visible
+ * for the agent (draft, county not assigned, or hidden) and applies the agent's
+ * per-floor-plan model-video overrides.
+ */
+export async function getPublicCommunity(
+    slug: string,
+    agentId: string,
+): Promise<FullCommunity | null> {
+    const res = await fetch(
+        `${API_BASE}/communities/${slug}?agentId=${encodeURIComponent(agentId)}`,
+        { cache: "no-store" },
+    );
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error("Failed to fetch community");
+    return res.json();
+}
+
 export async function deleteCommunity(id: string): Promise<void> {
     const res = await fetch(`${API_BASE}/communities/${id}`, {
         method: "DELETE",
@@ -147,6 +167,26 @@ export async function createCommunity(input: CommunityFormOutput) {
             Array.isArray(msg)
                 ? msg.join(", ")
                 : (msg ?? "Failed to create community"),
+        );
+    }
+    return res.json();
+}
+
+/** Toggle a community's publication state (draft ↔ published). */
+export async function publishCommunity(id: string, published: boolean) {
+    const res = await fetch(`${API_BASE}/communities/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ published }),
+    });
+    if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        const msg = body?.message;
+        throw new Error(
+            Array.isArray(msg)
+                ? msg.join(", ")
+                : (msg ?? "Failed to update publication state"),
         );
     }
     return res.json();

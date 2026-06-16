@@ -611,7 +611,11 @@ export class AgentService {
 
         const [communities, hidden] = await Promise.all([
             this.prisma.community.findMany({
-                where: { countyId: { in: counties.map((c) => c.countyId) } },
+                // Drafts are globally invisible — agents only manage published ones.
+                where: {
+                    countyId: { in: counties.map((c) => c.countyId) },
+                    published: true,
+                },
                 select: {
                     id: true,
                     name: true,
@@ -674,6 +678,101 @@ export class AgentService {
         });
 
         return this.getManagedCommunities(id);
+    }
+
+    // ── Per-agent floor-plan video overrides ────────────────────────────────────
+
+    /** The floor plans the agent can customise (within its published, assigned
+     *  communities), each with its default video and the agent's override. */
+    async getFloorPlanVideos(id: string) {
+        await this.assertExists(id);
+        const counties = await this.prisma.agentCounty.findMany({
+            where: { organizationId: id },
+            select: { countyId: true },
+        });
+        if (counties.length === 0) return [];
+
+        const [plans, overrides] = await Promise.all([
+            this.prisma.floorPlanModel.findMany({
+                where: {
+                    community: {
+                        published: true,
+                        countyId: { in: counties.map((c) => c.countyId) },
+                    },
+                },
+                select: {
+                    id: true,
+                    name: true,
+                    modelVideo: true,
+                    communityId: true,
+                    community: { select: { id: true, name: true } },
+                },
+                orderBy: [{ community: { name: "asc" } }, { name: "asc" }],
+            }),
+            this.prisma.agentFloorPlanVideo.findMany({
+                where: { organizationId: id },
+                select: { floorPlanId: true, videoUrl: true },
+            }),
+        ]);
+        const overrideMap = new Map(
+            overrides.map((o) => [o.floorPlanId, o.videoUrl])
+        );
+        return plans.map((p) => ({
+            floorPlanId: p.id,
+            floorPlanName: p.name,
+            communityId: p.communityId,
+            communityName: p.community.name,
+            defaultVideo: p.modelVideo,
+            videoUrl: overrideMap.get(p.id) ?? null,
+        }));
+    }
+
+    /** Set (upsert) or clear an agent's video override for one floor plan. */
+    async setFloorPlanVideo(
+        id: string,
+        floorPlanId: string,
+        videoUrl?: string
+    ) {
+        await this.assertExists(id);
+
+        // The floor plan must belong to a community in the agent's assigned counties.
+        const plan = await this.prisma.floorPlanModel.findFirst({
+            where: {
+                id: floorPlanId,
+                community: {
+                    countyId: {
+                        in: (
+                            await this.prisma.agentCounty.findMany({
+                                where: { organizationId: id },
+                                select: { countyId: true },
+                            })
+                        ).map((c) => c.countyId),
+                    },
+                },
+            },
+            select: { id: true },
+        });
+        if (!plan) {
+            throw new NotFoundException(
+                "Floor plan not found in this agent's service areas"
+            );
+        }
+
+        if (!videoUrl) {
+            await this.prisma.agentFloorPlanVideo.deleteMany({
+                where: { organizationId: id, floorPlanId },
+            });
+            return { floorPlanId, videoUrl: null };
+        }
+
+        await this.prisma.agentFloorPlanVideo.upsert({
+            where: {
+                organizationId_floorPlanId: { organizationId: id, floorPlanId },
+            },
+            create: { organizationId: id, floorPlanId, videoUrl },
+            update: { videoUrl },
+        });
+        return { floorPlanId, videoUrl };
     }
 
     // ── Mappers ────────────────────────────────────────────────────────────────

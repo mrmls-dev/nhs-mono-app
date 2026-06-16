@@ -334,6 +334,7 @@ export type FloorPlanModelWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"FloorPlanModel"> | Date | string
   community?: Prisma.XOR<Prisma.CommunityScalarRelationFilter, Prisma.CommunityWhereInput>
   gallery?: Prisma.FloorPlanModelMediaListRelationFilter
+  agentVideos?: Prisma.AgentFloorPlanVideoListRelationFilter
 }
 
 export type FloorPlanModelOrderByWithRelationInput = {
@@ -356,6 +357,7 @@ export type FloorPlanModelOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   community?: Prisma.CommunityOrderByWithRelationInput
   gallery?: Prisma.FloorPlanModelMediaOrderByRelationAggregateInput
+  agentVideos?: Prisma.AgentFloorPlanVideoOrderByRelationAggregateInput
 }
 
 export type FloorPlanModelWhereUniqueInput = Prisma.AtLeast<{
@@ -382,6 +384,7 @@ export type FloorPlanModelWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"FloorPlanModel"> | Date | string
   community?: Prisma.XOR<Prisma.CommunityScalarRelationFilter, Prisma.CommunityWhereInput>
   gallery?: Prisma.FloorPlanModelMediaListRelationFilter
+  agentVideos?: Prisma.AgentFloorPlanVideoListRelationFilter
 }, "id" | "communityId_slug">
 
 export type FloorPlanModelOrderByWithAggregationInput = {
@@ -451,6 +454,7 @@ export type FloorPlanModelCreateInput = {
   updatedAt?: Date | string
   community: Prisma.CommunityCreateNestedOneWithoutFloorPlansInput
   gallery?: Prisma.FloorPlanModelMediaCreateNestedManyWithoutFloorPlanInput
+  agentVideos?: Prisma.AgentFloorPlanVideoCreateNestedManyWithoutFloorPlanInput
 }
 
 export type FloorPlanModelUncheckedCreateInput = {
@@ -472,6 +476,7 @@ export type FloorPlanModelUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   gallery?: Prisma.FloorPlanModelMediaUncheckedCreateNestedManyWithoutFloorPlanInput
+  agentVideos?: Prisma.AgentFloorPlanVideoUncheckedCreateNestedManyWithoutFloorPlanInput
 }
 
 export type FloorPlanModelUpdateInput = {
@@ -493,6 +498,7 @@ export type FloorPlanModelUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   community?: Prisma.CommunityUpdateOneRequiredWithoutFloorPlansNestedInput
   gallery?: Prisma.FloorPlanModelMediaUpdateManyWithoutFloorPlanNestedInput
+  agentVideos?: Prisma.AgentFloorPlanVideoUpdateManyWithoutFloorPlanNestedInput
 }
 
 export type FloorPlanModelUncheckedUpdateInput = {
@@ -514,6 +520,7 @@ export type FloorPlanModelUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gallery?: Prisma.FloorPlanModelMediaUncheckedUpdateManyWithoutFloorPlanNestedInput
+  agentVideos?: Prisma.AgentFloorPlanVideoUncheckedUpdateManyWithoutFloorPlanNestedInput
 }
 
 export type FloorPlanModelCreateManyInput = {
@@ -729,6 +736,20 @@ export type FloorPlanModelUpdateOneRequiredWithoutGalleryNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FloorPlanModelUpdateToOneWithWhereWithoutGalleryInput, Prisma.FloorPlanModelUpdateWithoutGalleryInput>, Prisma.FloorPlanModelUncheckedUpdateWithoutGalleryInput>
 }
 
+export type FloorPlanModelCreateNestedOneWithoutAgentVideosInput = {
+  create?: Prisma.XOR<Prisma.FloorPlanModelCreateWithoutAgentVideosInput, Prisma.FloorPlanModelUncheckedCreateWithoutAgentVideosInput>
+  connectOrCreate?: Prisma.FloorPlanModelCreateOrConnectWithoutAgentVideosInput
+  connect?: Prisma.FloorPlanModelWhereUniqueInput
+}
+
+export type FloorPlanModelUpdateOneRequiredWithoutAgentVideosNestedInput = {
+  create?: Prisma.XOR<Prisma.FloorPlanModelCreateWithoutAgentVideosInput, Prisma.FloorPlanModelUncheckedCreateWithoutAgentVideosInput>
+  connectOrCreate?: Prisma.FloorPlanModelCreateOrConnectWithoutAgentVideosInput
+  upsert?: Prisma.FloorPlanModelUpsertWithoutAgentVideosInput
+  connect?: Prisma.FloorPlanModelWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FloorPlanModelUpdateToOneWithWhereWithoutAgentVideosInput, Prisma.FloorPlanModelUpdateWithoutAgentVideosInput>, Prisma.FloorPlanModelUncheckedUpdateWithoutAgentVideosInput>
+}
+
 export type FloorPlanModelCreateWithoutCommunityInput = {
   id?: string
   slug: string
@@ -747,6 +768,7 @@ export type FloorPlanModelCreateWithoutCommunityInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   gallery?: Prisma.FloorPlanModelMediaCreateNestedManyWithoutFloorPlanInput
+  agentVideos?: Prisma.AgentFloorPlanVideoCreateNestedManyWithoutFloorPlanInput
 }
 
 export type FloorPlanModelUncheckedCreateWithoutCommunityInput = {
@@ -767,6 +789,7 @@ export type FloorPlanModelUncheckedCreateWithoutCommunityInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   gallery?: Prisma.FloorPlanModelMediaUncheckedCreateNestedManyWithoutFloorPlanInput
+  agentVideos?: Prisma.AgentFloorPlanVideoUncheckedCreateNestedManyWithoutFloorPlanInput
 }
 
 export type FloorPlanModelCreateOrConnectWithoutCommunityInput = {
@@ -836,6 +859,7 @@ export type FloorPlanModelCreateWithoutGalleryInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   community: Prisma.CommunityCreateNestedOneWithoutFloorPlansInput
+  agentVideos?: Prisma.AgentFloorPlanVideoCreateNestedManyWithoutFloorPlanInput
 }
 
 export type FloorPlanModelUncheckedCreateWithoutGalleryInput = {
@@ -856,6 +880,7 @@ export type FloorPlanModelUncheckedCreateWithoutGalleryInput = {
   communityId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  agentVideos?: Prisma.AgentFloorPlanVideoUncheckedCreateNestedManyWithoutFloorPlanInput
 }
 
 export type FloorPlanModelCreateOrConnectWithoutGalleryInput = {
@@ -892,6 +917,7 @@ export type FloorPlanModelUpdateWithoutGalleryInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   community?: Prisma.CommunityUpdateOneRequiredWithoutFloorPlansNestedInput
+  agentVideos?: Prisma.AgentFloorPlanVideoUpdateManyWithoutFloorPlanNestedInput
 }
 
 export type FloorPlanModelUncheckedUpdateWithoutGalleryInput = {
@@ -912,6 +938,107 @@ export type FloorPlanModelUncheckedUpdateWithoutGalleryInput = {
   communityId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  agentVideos?: Prisma.AgentFloorPlanVideoUncheckedUpdateManyWithoutFloorPlanNestedInput
+}
+
+export type FloorPlanModelCreateWithoutAgentVideosInput = {
+  id?: string
+  slug: string
+  name: string
+  brand?: string | null
+  startingPrice: number
+  beds: number
+  baths: runtime.Decimal | runtime.DecimalJsLike | number | string
+  garage: number
+  stories: number
+  sqft: number
+  image: string
+  modelVideo?: string | null
+  description?: string | null
+  diagramImage?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  community: Prisma.CommunityCreateNestedOneWithoutFloorPlansInput
+  gallery?: Prisma.FloorPlanModelMediaCreateNestedManyWithoutFloorPlanInput
+}
+
+export type FloorPlanModelUncheckedCreateWithoutAgentVideosInput = {
+  id?: string
+  slug: string
+  name: string
+  brand?: string | null
+  startingPrice: number
+  beds: number
+  baths: runtime.Decimal | runtime.DecimalJsLike | number | string
+  garage: number
+  stories: number
+  sqft: number
+  image: string
+  modelVideo?: string | null
+  description?: string | null
+  diagramImage?: string | null
+  communityId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  gallery?: Prisma.FloorPlanModelMediaUncheckedCreateNestedManyWithoutFloorPlanInput
+}
+
+export type FloorPlanModelCreateOrConnectWithoutAgentVideosInput = {
+  where: Prisma.FloorPlanModelWhereUniqueInput
+  create: Prisma.XOR<Prisma.FloorPlanModelCreateWithoutAgentVideosInput, Prisma.FloorPlanModelUncheckedCreateWithoutAgentVideosInput>
+}
+
+export type FloorPlanModelUpsertWithoutAgentVideosInput = {
+  update: Prisma.XOR<Prisma.FloorPlanModelUpdateWithoutAgentVideosInput, Prisma.FloorPlanModelUncheckedUpdateWithoutAgentVideosInput>
+  create: Prisma.XOR<Prisma.FloorPlanModelCreateWithoutAgentVideosInput, Prisma.FloorPlanModelUncheckedCreateWithoutAgentVideosInput>
+  where?: Prisma.FloorPlanModelWhereInput
+}
+
+export type FloorPlanModelUpdateToOneWithWhereWithoutAgentVideosInput = {
+  where?: Prisma.FloorPlanModelWhereInput
+  data: Prisma.XOR<Prisma.FloorPlanModelUpdateWithoutAgentVideosInput, Prisma.FloorPlanModelUncheckedUpdateWithoutAgentVideosInput>
+}
+
+export type FloorPlanModelUpdateWithoutAgentVideosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startingPrice?: Prisma.IntFieldUpdateOperationsInput | number
+  beds?: Prisma.IntFieldUpdateOperationsInput | number
+  baths?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  garage?: Prisma.IntFieldUpdateOperationsInput | number
+  stories?: Prisma.IntFieldUpdateOperationsInput | number
+  sqft?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.StringFieldUpdateOperationsInput | string
+  modelVideo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  diagramImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  community?: Prisma.CommunityUpdateOneRequiredWithoutFloorPlansNestedInput
+  gallery?: Prisma.FloorPlanModelMediaUpdateManyWithoutFloorPlanNestedInput
+}
+
+export type FloorPlanModelUncheckedUpdateWithoutAgentVideosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startingPrice?: Prisma.IntFieldUpdateOperationsInput | number
+  beds?: Prisma.IntFieldUpdateOperationsInput | number
+  baths?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  garage?: Prisma.IntFieldUpdateOperationsInput | number
+  stories?: Prisma.IntFieldUpdateOperationsInput | number
+  sqft?: Prisma.IntFieldUpdateOperationsInput | number
+  image?: Prisma.StringFieldUpdateOperationsInput | string
+  modelVideo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  diagramImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  communityId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gallery?: Prisma.FloorPlanModelMediaUncheckedUpdateManyWithoutFloorPlanNestedInput
 }
 
 export type FloorPlanModelCreateManyCommunityInput = {
@@ -951,6 +1078,7 @@ export type FloorPlanModelUpdateWithoutCommunityInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gallery?: Prisma.FloorPlanModelMediaUpdateManyWithoutFloorPlanNestedInput
+  agentVideos?: Prisma.AgentFloorPlanVideoUpdateManyWithoutFloorPlanNestedInput
 }
 
 export type FloorPlanModelUncheckedUpdateWithoutCommunityInput = {
@@ -971,6 +1099,7 @@ export type FloorPlanModelUncheckedUpdateWithoutCommunityInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gallery?: Prisma.FloorPlanModelMediaUncheckedUpdateManyWithoutFloorPlanNestedInput
+  agentVideos?: Prisma.AgentFloorPlanVideoUncheckedUpdateManyWithoutFloorPlanNestedInput
 }
 
 export type FloorPlanModelUncheckedUpdateManyWithoutCommunityInput = {
@@ -999,10 +1128,12 @@ export type FloorPlanModelUncheckedUpdateManyWithoutCommunityInput = {
 
 export type FloorPlanModelCountOutputType = {
   gallery: number
+  agentVideos: number
 }
 
 export type FloorPlanModelCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   gallery?: boolean | FloorPlanModelCountOutputTypeCountGalleryArgs
+  agentVideos?: boolean | FloorPlanModelCountOutputTypeCountAgentVideosArgs
 }
 
 /**
@@ -1020,6 +1151,13 @@ export type FloorPlanModelCountOutputTypeDefaultArgs<ExtArgs extends runtime.Typ
  */
 export type FloorPlanModelCountOutputTypeCountGalleryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.FloorPlanModelMediaWhereInput
+}
+
+/**
+ * FloorPlanModelCountOutputType without action
+ */
+export type FloorPlanModelCountOutputTypeCountAgentVideosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AgentFloorPlanVideoWhereInput
 }
 
 
@@ -1043,6 +1181,7 @@ export type FloorPlanModelSelect<ExtArgs extends runtime.Types.Extensions.Intern
   updatedAt?: boolean
   community?: boolean | Prisma.CommunityDefaultArgs<ExtArgs>
   gallery?: boolean | Prisma.FloorPlanModel$galleryArgs<ExtArgs>
+  agentVideos?: boolean | Prisma.FloorPlanModel$agentVideosArgs<ExtArgs>
   _count?: boolean | Prisma.FloorPlanModelCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["floorPlanModel"]>
 
@@ -1112,6 +1251,7 @@ export type FloorPlanModelOmit<ExtArgs extends runtime.Types.Extensions.Internal
 export type FloorPlanModelInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   community?: boolean | Prisma.CommunityDefaultArgs<ExtArgs>
   gallery?: boolean | Prisma.FloorPlanModel$galleryArgs<ExtArgs>
+  agentVideos?: boolean | Prisma.FloorPlanModel$agentVideosArgs<ExtArgs>
   _count?: boolean | Prisma.FloorPlanModelCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FloorPlanModelIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1126,6 +1266,7 @@ export type $FloorPlanModelPayload<ExtArgs extends runtime.Types.Extensions.Inte
   objects: {
     community: Prisma.$CommunityPayload<ExtArgs>
     gallery: Prisma.$FloorPlanModelMediaPayload<ExtArgs>[]
+    agentVideos: Prisma.$AgentFloorPlanVideoPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1541,6 +1682,7 @@ export interface Prisma__FloorPlanModelClient<T, Null = never, ExtArgs extends r
   readonly [Symbol.toStringTag]: "PrismaPromise"
   community<T extends Prisma.CommunityDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CommunityDefaultArgs<ExtArgs>>): Prisma.Prisma__CommunityClient<runtime.Types.Result.GetResult<Prisma.$CommunityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   gallery<T extends Prisma.FloorPlanModel$galleryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FloorPlanModel$galleryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FloorPlanModelMediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  agentVideos<T extends Prisma.FloorPlanModel$agentVideosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FloorPlanModel$agentVideosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AgentFloorPlanVideoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2009,6 +2151,30 @@ export type FloorPlanModel$galleryArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.FloorPlanModelMediaScalarFieldEnum | Prisma.FloorPlanModelMediaScalarFieldEnum[]
+}
+
+/**
+ * FloorPlanModel.agentVideos
+ */
+export type FloorPlanModel$agentVideosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AgentFloorPlanVideo
+   */
+  select?: Prisma.AgentFloorPlanVideoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AgentFloorPlanVideo
+   */
+  omit?: Prisma.AgentFloorPlanVideoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AgentFloorPlanVideoInclude<ExtArgs> | null
+  where?: Prisma.AgentFloorPlanVideoWhereInput
+  orderBy?: Prisma.AgentFloorPlanVideoOrderByWithRelationInput | Prisma.AgentFloorPlanVideoOrderByWithRelationInput[]
+  cursor?: Prisma.AgentFloorPlanVideoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AgentFloorPlanVideoScalarFieldEnum | Prisma.AgentFloorPlanVideoScalarFieldEnum[]
 }
 
 /**

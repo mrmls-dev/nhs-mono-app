@@ -12,10 +12,15 @@ export class CommunityService {
     constructor(private readonly prisma: PrismaService) {}
 
     async findAll(agentId?: string) {
-        // Per-agent scoping: only communities in the agent's assigned counties,
-        // minus the ones the agent has hidden. No counties assigned → empty.
+        // Per-agent scoping: only PUBLISHED communities in the agent's assigned
+        // counties, minus the ones the agent has hidden. No counties → empty.
+        // No agentId (admin catalog) → full list including drafts.
         let where:
-            | { countyId: { in: string[] }; id?: { notIn: string[] } }
+            | {
+                  countyId: { in: string[] };
+                  published: true;
+                  id?: { notIn: string[] };
+              }
             | undefined;
         if (agentId) {
             const [counties, hidden] = await Promise.all([
@@ -31,6 +36,7 @@ export class CommunityService {
             if (counties.length === 0) return [];
             where = {
                 countyId: { in: counties.map((c) => c.countyId) },
+                published: true,
                 ...(hidden.length > 0
                     ? { id: { notIn: hidden.map((h) => h.communityId) } }
                     : {}),
@@ -44,6 +50,7 @@ export class CommunityService {
                 slug: true,
                 name: true,
                 status: true,
+                published: true,
                 location: true,
                 image: true,
                 priceFrom: true,
@@ -205,7 +212,7 @@ export class CommunityService {
         }
     }
 
-    async findOne(slug: string) {
+    async findOne(slug: string, agentId?: string) {
         const community = await this.prisma.community.findUnique({
             where: { slug },
             include: {
@@ -239,6 +246,51 @@ export class CommunityService {
         if (!community) {
             throw new NotFoundException(`Community "${slug}" not found`);
         }
+
+        // Agent-scoped request (public white-label site): enforce visibility and
+        // apply per-agent model-video overrides. Unscoped (admin) returns as-is.
+        if (agentId) {
+            const [assigned, hidden] = await Promise.all([
+                this.prisma.agentCounty.findUnique({
+                    where: {
+                        organizationId_countyId: {
+                            organizationId: agentId,
+                            countyId: community.countyId,
+                        },
+                    },
+                    select: { id: true },
+                }),
+                this.prisma.agentHiddenCommunity.findUnique({
+                    where: {
+                        organizationId_communityId: {
+                            organizationId: agentId,
+                            communityId: community.id,
+                        },
+                    },
+                    select: { id: true },
+                }),
+            ]);
+            if (!community.published || !assigned || hidden) {
+                throw new NotFoundException(`Community "${slug}" not found`);
+            }
+
+            const overrides = await this.prisma.agentFloorPlanVideo.findMany({
+                where: {
+                    organizationId: agentId,
+                    floorPlanId: { in: community.floorPlans.map((f) => f.id) },
+                },
+                select: { floorPlanId: true, videoUrl: true },
+            });
+            if (overrides.length > 0) {
+                const map = new Map(
+                    overrides.map((o) => [o.floorPlanId, o.videoUrl])
+                );
+                community.floorPlans = community.floorPlans.map((fp) =>
+                    map.has(fp.id) ? { ...fp, modelVideo: map.get(fp.id)! } : fp
+                );
+            }
+        }
+
         return community;
     }
 

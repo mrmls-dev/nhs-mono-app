@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import { ArrowLeft, ArrowRight, Phone } from "lucide-react";
 import { Badge } from "@workspace/ui/components/badge";
 import { Card, CardContent } from "@workspace/ui/components/card";
-import { getCommunity, getPublicCommunities } from "@/api/community";
+import { getCommunity, getPublicCommunity } from "@/api/community";
 import { getAgentByDomain } from "@/api/agent";
 import {
     formatRange,
@@ -33,15 +33,13 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function CommunityPage({ params }: Props) {
     const { id } = await params;
-    const community = await getCommunity(id);
-    if (!community) notFound();
 
-    // Scope to the agent for this Host: a community outside the agent's assigned
-    // counties (or one it has hidden) must not be reachable on its domain.
+    // Scope to the agent for this Host: a community that's a draft, outside the
+    // agent's assigned counties, or hidden must not be reachable on its domain.
     const host = (await headers()).get("host") ?? undefined;
     const agent = await getAgentByDomain(host);
-    const visible = await getPublicCommunities(agent.id);
-    if (!visible.some((c) => c.slug === community.slug)) notFound();
+    const community = await getPublicCommunity(id, agent.id);
+    if (!community) notFound();
 
     const isSelling = community.status === "NOW_SELLING";
     const status = STATUS_LABELS[community.status] ?? community.status;

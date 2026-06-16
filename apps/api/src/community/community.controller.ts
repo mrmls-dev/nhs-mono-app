@@ -35,9 +35,11 @@ export class CommunityController {
         return this.communityService.findAmenities();
     }
 
+    // `agentId` (optional) enforces white-label visibility and applies the
+    // agent's per-floor-plan video overrides; omitted = admin (raw) view.
     @Get(":slug")
-    findOne(@Param("slug") slug: string) {
-        return this.communityService.findOne(slug);
+    findOne(@Param("slug") slug: string, @Query("agentId") agentId?: string) {
+        return this.communityService.findOne(slug, agentId);
     }
 
     @Post()

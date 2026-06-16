@@ -6,6 +6,7 @@ import {
     IsInt,
     IsNumber,
     IsArray,
+    IsBoolean,
     ValidateNested,
     Min,
 } from "class-validator";
@@ -40,6 +41,11 @@ export class UpdateCommunityDto {
     @IsEnum(CommunityStatus)
     @IsOptional()
     status?: CommunityStatus;
+
+    // Publication gate — flip to true to make the community public-eligible.
+    @IsBoolean()
+    @IsOptional()
+    published?: boolean;
 
     @IsInt()
     @Min(0)
