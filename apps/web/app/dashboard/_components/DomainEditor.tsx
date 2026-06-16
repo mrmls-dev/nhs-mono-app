@@ -3,7 +3,14 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2, Copy, Globe, Trash2, RefreshCw } from "lucide-react";
+import {
+    Loader2,
+    Copy,
+    Globe,
+    Trash2,
+    RefreshCw,
+    ShieldCheck,
+} from "lucide-react";
 import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -53,6 +60,13 @@ export function DomainEditor({ agent }: { agent: Agent }) {
         queryKey: ["agent-domain", agent.id],
         queryFn: () => getDomainSetup(agent.id),
         enabled: Boolean(domain),
+        // While the domain is still settling (DNS propagating / SSL issuing),
+        // re-poll so the panel advances pending → provisioning → active on its
+        // own. Stop once it's live.
+        refetchInterval: (query) =>
+            query.state.data && query.state.data.status !== "active"
+                ? 15000
+                : false,
     });
 
     // Prefer the freshly-fetched status; fall back to the persisted one.
@@ -95,11 +109,14 @@ export function DomainEditor({ agent }: { agent: Agent }) {
         mutationFn: () => refreshDomainStatus(agent.id),
         onSuccess: (res) => {
             invalidate();
-            toast.success(
-                res.domainStatus === "active"
-                    ? "Domain verified and live."
-                    : "Still pending — DNS may take a few minutes to propagate.",
-            );
+            const messages: Record<typeof res.domainStatus, string> = {
+                active: "Domain verified and live.",
+                provisioning:
+                    "Verified! Vercel is issuing your SSL certificate — this usually takes a few minutes.",
+                pending:
+                    "Still pending — DNS may take a few minutes to propagate.",
+            };
+            toast.success(messages[res.domainStatus]);
         },
         onError: (err: Error) => toast.error(err.message),
     });
@@ -255,6 +272,45 @@ export function DomainEditor({ agent }: { agent: Agent }) {
                 </CardContent>
             </Card>
 
+            {domain && status === "provisioning" && (
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <ShieldCheck className="size-5 text-sky-600 dark:text-sky-400" />
+                            Issuing SSL certificate
+                        </CardTitle>
+                        <CardDescription>
+                            Ownership is verified and your DNS points to us.
+                            We&apos;re now issuing a free SSL certificate — this
+                            usually finishes within a few minutes. Your site
+                            starts serving secure HTTPS automatically once it&apos;s
+                            ready.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex flex-wrap items-center justify-between gap-4">
+                        <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                            <Loader2 className="size-4 animate-spin text-sky-600 dark:text-sky-400" />
+                            Generating certificate…
+                        </div>
+                        <Button
+                            variant="outline"
+                            onClick={() => verifyMutation.mutate()}
+                            disabled={verifyMutation.isPending}
+                        >
+                            {verifyMutation.isPending ? (
+                                <Loader2
+                                    data-icon="inline-start"
+                                    className="animate-spin"
+                                />
+                            ) : (
+                                <RefreshCw data-icon="inline-start" />
+                            )}
+                            Check SSL status
+                        </Button>
+                    </CardContent>
+                </Card>
+            )}
+
             {domain && (
                 <Card>
                     <CardHeader>
@@ -263,7 +319,9 @@ export function DomainEditor({ agent }: { agent: Agent }) {
                             Add these at your domain registrar.{" "}
                             {status === "pending"
                                 ? "Verification can take a few minutes to propagate."
-                                : "Your domain is verified and serving traffic."}
+                                : status === "provisioning"
+                                  ? "Verified — your SSL certificate is being issued."
+                                  : "Your domain is verified and serving traffic."}
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="flex flex-col gap-4">

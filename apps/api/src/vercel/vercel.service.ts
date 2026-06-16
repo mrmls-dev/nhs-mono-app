@@ -2,15 +2,27 @@ import { Injectable, Logger, BadGatewayException } from "@nestjs/common";
 
 export type DnsRecord = { type: string; name: string; value: string };
 
+/**
+ * Lifecycle of a custom domain:
+ *  - `pending`      — ownership not yet verified, or routing DNS not pointing at
+ *                     Vercel (the agent still has records to add).
+ *  - `provisioning` — verified + DNS correct; Vercel is issuing the Let's Encrypt
+ *                     certificate (typically a few minutes) — not yet serving HTTPS.
+ *  - `active`       — certificate issued and the domain is serving HTTPS.
+ */
+export type DomainStatus = "pending" | "provisioning" | "active";
+
 export type DomainSetupResult = {
     /** Echoes the domain (kept for API-shape parity with the web client). */
     id: string | null;
     hostname: string;
-    /** "pending" until DNS resolves + SSL is issued, then "active". */
-    status: "pending" | "active";
+    status: DomainStatus;
     /** DNS records the agent must add at their registrar. */
     dnsInstructions: DnsRecord[];
 };
+
+/** How long to wait for the HTTPS handshake when probing cert readiness. */
+const SSL_PROBE_TIMEOUT_MS = 4000;
 
 /**
  * Vercel-native custom domains. Agents (and their free `{slug}` subdomains)
@@ -102,26 +114,55 @@ export class VercelDomainsService {
             res.verification
         );
 
-        // `verified` only means ownership is settled (no TXT challenge needed);
-        // it does NOT mean DNS points at Vercel. A just-added domain whose CNAME
-        // isn't in place yet must read "pending", so confirm via the config
-        // endpoint — `misconfigured: false` is the real "live + cert issued" gate.
-        const active =
-            Boolean(res.verified) && !(await this.isMisconfigured(domain));
-
         return {
             id: domain,
             hostname: domain,
-            status: active ? "active" : "pending",
+            status: await this.resolveStatus(domain, Boolean(res.verified)),
             dnsInstructions,
         };
     }
 
     /**
-     * Re-check a domain: nudge verification, then confirm DNS points at Vercel.
-     * "active" means verified AND not misconfigured (cert issued + serving).
+     * Map Vercel's signals to a lifecycle status:
+     *   not verified OR DNS not pointing at Vercel  → "pending"
+     *   verified + DNS correct + HTTPS not serving  → "provisioning" (cert issuing)
+     *   verified + DNS correct + HTTPS serving       → "active"
+     * `verified` alone only means ownership is settled — it does NOT mean the
+     * routing record is in place, so the config (`misconfigured`) check gates it,
+     * and an HTTPS probe distinguishes "cert issuing" from "live".
      */
-    async getDomainStatus(domain: string): Promise<"pending" | "active"> {
+    private async resolveStatus(
+        domain: string,
+        verified: boolean
+    ): Promise<DomainStatus> {
+        if (!verified || (await this.isMisconfigured(domain))) return "pending";
+        return (await this.isHttpsReady(domain)) ? "active" : "provisioning";
+    }
+
+    /**
+     * Whether the domain is already serving HTTPS with a valid certificate. A
+     * successful TLS handshake (any HTTP response, redirects not followed) means
+     * Vercel has issued the cert; a handshake failure means it's still being
+     * provisioned. HEAD only, short timeout, body never read.
+     */
+    private async isHttpsReady(domain: string): Promise<boolean> {
+        try {
+            await fetch(`https://${domain}/`, {
+                method: "HEAD",
+                redirect: "manual",
+                signal: AbortSignal.timeout(SSL_PROBE_TIMEOUT_MS),
+            });
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+    /**
+     * Re-check a domain: nudge verification, confirm DNS points at Vercel, then
+     * probe HTTPS. Returns "pending" → "provisioning" (cert issuing) → "active".
+     */
+    async getDomainStatus(domain: string): Promise<DomainStatus> {
         if (!this.isLive) {
             this.logger.warn(
                 `[mock] Vercel not configured — reporting "active" for "${domain}"`
@@ -152,10 +193,8 @@ export class VercelDomainsService {
                 // leave unverified
             }
         }
-        if (!verified) return "pending";
 
-        // Verified — confirm the CNAME/A actually resolves to Vercel (cert needs it).
-        return (await this.isMisconfigured(domain)) ? "pending" : "active";
+        return this.resolveStatus(domain, verified);
     }
 
     /**
@@ -195,13 +234,10 @@ export class VercelDomainsService {
             };
         }
 
-        const active =
-            Boolean(info.verified) && !(await this.isMisconfigured(domain));
-
         return {
             id: domain,
             hostname: domain,
-            status: active ? "active" : "pending",
+            status: await this.resolveStatus(domain, Boolean(info.verified)),
             dnsInstructions: this.buildDnsInstructions(
                 domain,
                 info.verification

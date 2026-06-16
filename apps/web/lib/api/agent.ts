@@ -12,7 +12,12 @@ const SERVER_API_BASE =
     process.env.API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? API_BASE;
 
 export type ServiceStatus = "active" | "suspended";
-export type DomainStatus = "pending" | "active";
+/**
+ * `pending` — DNS records still need to be added/verified.
+ * `provisioning` — verified; Vercel is issuing the SSL certificate (a few minutes).
+ * `active` — certificate issued, domain serving HTTPS.
+ */
+export type DomainStatus = "pending" | "provisioning" | "active";
 
 /** Full agent record (admin/owner view). */
 export type Agent = {

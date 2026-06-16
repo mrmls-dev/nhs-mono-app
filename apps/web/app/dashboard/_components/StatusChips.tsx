@@ -1,3 +1,4 @@
+import { Loader2 } from "lucide-react";
 import { Badge } from "@workspace/ui/components/badge";
 import { cn } from "@workspace/ui/lib/utils";
 import type { DomainStatus, ServiceStatus } from "@/api/agent";
@@ -32,6 +33,19 @@ export function DomainStatusBadge({ status }: { status: DomainStatus | null }) {
             </Badge>
         );
     }
+
+    if (status === "provisioning") {
+        return (
+            <Badge
+                variant="outline"
+                className="gap-1.5 border-sky-500/30 bg-sky-500/10 text-sky-700 dark:text-sky-400"
+            >
+                <Loader2 className="size-3 animate-spin" />
+                Issuing SSL
+            </Badge>
+        );
+    }
+
     return (
         <Badge
             variant="outline"
