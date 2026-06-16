@@ -10,8 +10,12 @@ node_modules
 !.yarn/releases
 !.yarn/versions
 
-# testing
-coverage
+# testing — only the generated coverage output at the repo/package roots.
+# A bare `coverage` also matched the Next.js route at
+# app/dashboard/agents/[id]/coverage/, leaving its page untracked (404 in prod).
+/coverage/
+apps/*/coverage/
+packages/*/coverage/
 
 # next.js
 .next/
