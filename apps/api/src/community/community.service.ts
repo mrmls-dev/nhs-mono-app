@@ -5,6 +5,7 @@ import {
 } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { CreateCommunityDto } from "./dto/create-community.dto";
+import { UpdateCommunityDto } from "./dto/update-community.dto";
 
 @Injectable()
 export class CommunityService {
@@ -40,6 +41,15 @@ export class CommunityService {
         });
     }
 
+    /** Existing amenity names (alphabetical) for the form's tag autocomplete. */
+    async findAmenities() {
+        const amenities = await this.prisma.amenity.findMany({
+            select: { name: true },
+            orderBy: { name: "asc" },
+        });
+        return amenities.map((a) => a.name);
+    }
+
     async create(dto: CreateCommunityDto) {
         const county = await this.prisma.county.findUnique({
             where: { id: dto.countyId },
@@ -63,7 +73,7 @@ export class CommunityService {
             })
         );
 
-        const { amenities, floorPlans, schools, countyId, ...core } = dto;
+        const { amenities, schools, countyId, ...core } = dto;
 
         try {
             return await this.prisma.community.create({
@@ -76,25 +86,87 @@ export class CommunityService {
                             amenity: { connect: { id: amenityId } },
                         })),
                     },
-                    floorPlans: {
-                        create: floorPlans.map(
-                            ({ gallery: fpGallery, ...fpCore }) => ({
-                                ...fpCore,
-                                gallery: {
-                                    create: fpGallery.map((m, i) => ({
-                                        ...m,
-                                        sortOrder: i,
-                                    })),
-                                },
-                            })
-                        ),
-                    },
                 },
                 include: {
                     county: { select: { id: true, name: true } },
                     schools: true,
                     amenities: { include: { amenity: true } },
-                    floorPlans: { include: { gallery: true } },
+                },
+            });
+        } catch (err: any) {
+            if (err?.code === "P2002") {
+                throw new ConflictException(
+                    `A community with slug "${dto.slug}" already exists`
+                );
+            }
+            throw err;
+        }
+    }
+
+    async update(id: string, dto: UpdateCommunityDto) {
+        const existing = await this.prisma.community.findUnique({
+            where: { id },
+            select: { id: true },
+        });
+        if (!existing) {
+            throw new NotFoundException(`Community "${id}" not found`);
+        }
+
+        const { amenities, schools, countyId, ...core } = dto;
+
+        if (countyId) {
+            const county = await this.prisma.county.findUnique({
+                where: { id: countyId },
+                select: { id: true },
+            });
+            if (!county) {
+                throw new NotFoundException(
+                    `County with id "${countyId}" not found`
+                );
+            }
+        }
+
+        // Resolve amenity names → ids up front (when a new set was supplied).
+        const amenityIds = amenities
+            ? await Promise.all(
+                  amenities.map(async (name) => {
+                      const amenity = await this.prisma.amenity.upsert({
+                          where: { name },
+                          create: { name },
+                          update: {},
+                          select: { id: true },
+                      });
+                      return amenity.id;
+                  })
+              )
+            : null;
+
+        try {
+            return await this.prisma.community.update({
+                where: { id },
+                data: {
+                    ...core,
+                    ...(countyId
+                        ? { county: { connect: { id: countyId } } }
+                        : {}),
+                    ...(schools
+                        ? { schools: { deleteMany: {}, create: schools } }
+                        : {}),
+                    ...(amenityIds
+                        ? {
+                              amenities: {
+                                  deleteMany: {},
+                                  create: amenityIds.map((amenityId) => ({
+                                      amenity: { connect: { id: amenityId } },
+                                  })),
+                              },
+                          }
+                        : {}),
+                },
+                include: {
+                    county: { select: { id: true, name: true } },
+                    schools: true,
+                    amenities: { include: { amenity: true } },
                 },
             });
         } catch (err: any) {
@@ -111,7 +183,7 @@ export class CommunityService {
         const community = await this.prisma.community.findUnique({
             where: { slug },
             include: {
-                county: { select: { id: true, name: true } },
+                county: { select: { id: true, name: true, slug: true } },
                 amenities: {
                     include: { amenity: { select: { name: true } } },
                 },
@@ -129,7 +201,6 @@ export class CommunityService {
                         gallery: {
                             orderBy: { sortOrder: "asc" },
                             select: {
-                                type: true,
                                 src: true,
                                 alt: true,
                                 caption: true,

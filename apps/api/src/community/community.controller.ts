@@ -6,11 +6,13 @@ import {
     HttpCode,
     HttpStatus,
     Param,
+    Patch,
     Post,
     UseGuards,
 } from "@nestjs/common";
 import { CommunityService } from "./community.service";
 import { CreateCommunityDto } from "./dto/create-community.dto";
+import { UpdateCommunityDto } from "./dto/update-community.dto";
 import { SessionGuard } from "../auth/session.guard";
 import { RolesGuard } from "../auth/roles.guard";
 import { Roles } from "../auth/auth.decorators";
@@ -24,6 +26,12 @@ export class CommunityController {
         return this.communityService.findAll();
     }
 
+    // Must be declared before ":slug" so it isn't matched as a slug.
+    @Get("amenities")
+    findAmenities() {
+        return this.communityService.findAmenities();
+    }
+
     @Get(":slug")
     findOne(@Param("slug") slug: string) {
         return this.communityService.findOne(slug);
@@ -35,6 +43,13 @@ export class CommunityController {
     @HttpCode(HttpStatus.CREATED)
     create(@Body() dto: CreateCommunityDto) {
         return this.communityService.create(dto);
+    }
+
+    @Patch(":id")
+    @UseGuards(SessionGuard, RolesGuard)
+    @Roles("admin")
+    update(@Param("id") id: string, @Body() dto: UpdateCommunityDto) {
+        return this.communityService.update(id, dto);
     }
 
     @Delete(":id")

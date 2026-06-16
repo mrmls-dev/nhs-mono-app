@@ -25,8 +25,8 @@ export default async function NewCommunityPage() {
                     Add Community
                 </h1>
                 <p className="text-sm text-muted-foreground">
-                    Create a new community with its gallery, amenities, schools,
-                    and floor plans.
+                    Create a new community with its amenities and schools. Add
+                    floor plans from the community page after saving.
                 </p>
             </div>
 

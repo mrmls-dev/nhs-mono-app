@@ -195,7 +195,6 @@ export type FloorPlanModelScalarFieldEnum = (typeof FloorPlanModelScalarFieldEnu
 
 export const FloorPlanModelMediaScalarFieldEnum = {
   id: 'id',
-  type: 'type',
   src: 'src',
   alt: 'alt',
   caption: 'caption',

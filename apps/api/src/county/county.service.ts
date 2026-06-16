@@ -5,10 +5,94 @@ import {
 } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { CreateCountyDto } from "./dto/create-county.dto";
+import { UpdateCountyDto } from "./dto/update-county.dto";
 
 @Injectable()
 export class CountyService {
     constructor(private readonly prisma: PrismaService) {}
+
+    async findOne(slug: string) {
+        const county = await this.prisma.county.findUnique({
+            where: { slug },
+            select: {
+                id: true,
+                name: true,
+                slug: true,
+                boundsNorth: true,
+                boundsSouth: true,
+                boundsEast: true,
+                boundsWest: true,
+                region: { select: { id: true, name: true, slug: true } },
+                communities: {
+                    select: {
+                        id: true,
+                        name: true,
+                        slug: true,
+                        status: true,
+                        image: true,
+                        priceFrom: true,
+                        _count: { select: { floorPlans: true } },
+                    },
+                    orderBy: { name: "asc" },
+                },
+            },
+        });
+        if (!county) {
+            throw new NotFoundException(`County "${slug}" not found`);
+        }
+        return county;
+    }
+
+    async update(id: string, dto: UpdateCountyDto) {
+        const county = await this.prisma.county.findUnique({
+            where: { id },
+            select: { id: true },
+        });
+        if (!county) {
+            throw new NotFoundException(`County "${id}" not found`);
+        }
+        if (dto.regionId) {
+            const region = await this.prisma.region.findUnique({
+                where: { id: dto.regionId },
+                select: { id: true },
+            });
+            if (!region) {
+                throw new NotFoundException(
+                    `Region with id "${dto.regionId}" not found`
+                );
+            }
+        }
+
+        const { regionId, ...rest } = dto;
+        try {
+            return await this.prisma.county.update({
+                where: { id },
+                data: {
+                    ...rest,
+                    ...(regionId
+                        ? { region: { connect: { id: regionId } } }
+                        : {}),
+                },
+                select: {
+                    id: true,
+                    name: true,
+                    slug: true,
+                    boundsNorth: true,
+                    boundsSouth: true,
+                    boundsEast: true,
+                    boundsWest: true,
+                    region: { select: { id: true, name: true } },
+                },
+            });
+        } catch (err: any) {
+            if (err?.code === "P2002") {
+                throw new ConflictException(
+                    `County with slug "${dto.slug}" already exists`
+                );
+            }
+            throw err;
+        }
+    }
 
     async findAll() {
         return this.prisma.county.findMany({

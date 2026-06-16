@@ -7,7 +7,6 @@ import {
     Building2,
     MapPinned,
     Map,
-    LayoutTemplate,
     Plus,
     Users,
     UserCog,
@@ -55,14 +54,9 @@ const adminGroups: NavGroup[] = [
     {
         label: "Catalog",
         items: [
-            { title: "Communities", href: "/dashboard/communities", icon: Building2 },
             { title: "Regions", href: "/dashboard/regions", icon: Map },
             { title: "Counties", href: "/dashboard/counties", icon: MapPinned },
-            {
-                title: "Floor Plans",
-                href: "/dashboard/floor-plans",
-                icon: LayoutTemplate,
-            },
+            { title: "Communities", href: "/dashboard/communities", icon: Building2 },
         ],
     },
     {

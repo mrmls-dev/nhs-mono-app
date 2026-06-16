@@ -55,11 +55,12 @@ export default async function MarketingLayout({
 
     const counties = await getCounties();
     const logoSrc = agent.logo ?? "/images/logo.png";
+    console.log("Resolved agent for host", { host, agent });
 
     return (
         <BrandThemeProvider theme={resolveTheme(agent)}>
             <nav className="sticky top-0 z-50 h-21.25 bg-muted px-5 shadow-sm">
-                <div className="container flex items-center justify-between h-full mx-auto">
+                <div className="container mx-auto flex h-full items-center justify-between">
                     <Link href="/" className="flex items-center gap-3">
                         <Image
                             src={logoSrc}
@@ -67,10 +68,10 @@ export default async function MarketingLayout({
                             width={110}
                             height={50}
                             priority
-                            className="md:w-36.25 md:h-16.25 object-contain"
+                            className="object-contain md:h-16.25 md:w-36.25"
                         />
-                        <p className="hidden sm:flex flex-col border-l pl-3 ml-3">
-                            <span className="text-foreground font-semibold text-sm md:text-base">
+                        <p className="ml-3 hidden flex-col border-l pl-3 sm:flex">
+                            <span className="text-sm font-semibold text-foreground md:text-base">
                                 {siteName}
                             </span>
                         </p>
@@ -82,16 +83,16 @@ export default async function MarketingLayout({
                             href="https://nationalhousesearch.com"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-3 h-8 sm:px-5 sm:h-10 rounded text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground hover:bg-border transition-colors"
+                            className="inline-flex h-8 items-center gap-1.5 rounded px-3 text-xs font-semibold text-muted-foreground transition-colors hover:bg-border hover:text-foreground sm:h-10 sm:px-5 sm:text-sm"
                         >
-                            <Home className="size-3.5 sm:size-4 shrink-0" />
+                            <Home className="size-3.5 shrink-0 sm:size-4" />
                             Home
                         </a>
                         <Suspense
                             fallback={
                                 <button
                                     type="button"
-                                    className="inline-flex items-center gap-2 px-5 h-10 bg-primary text-primary-foreground font-semibold rounded"
+                                    className="inline-flex h-10 items-center gap-2 rounded bg-primary px-5 font-semibold text-primary-foreground"
                                     disabled
                                 >
                                     All Counties
@@ -107,14 +108,14 @@ export default async function MarketingLayout({
             {children}
 
             <footer className="bg-secondary text-secondary-foreground">
-                <div className="container mx-auto px-5 py-10 flex flex-col items-center gap-6 text-center">
+                <div className="container mx-auto flex flex-col items-center gap-6 px-5 py-10 text-center">
                     <div className="flex flex-col items-center gap-1">
                         <Image
                             src={logoSrc}
                             alt={siteName}
                             width={145}
                             height={65}
-                            className="brightness-0 invert object-contain"
+                            className="object-contain brightness-0 invert"
                         />
                         <p className="text-sm font-semibold tracking-wide text-secondary-foreground/80">
                             {agent.footerText ?? ""}
@@ -122,8 +123,13 @@ export default async function MarketingLayout({
                     </div>
 
                     <div className="flex items-center gap-1.5 text-secondary-foreground/40">
-                        <Home className="size-5" aria-label="Equal Housing Opportunity" />
-                        <span className="text-xs">Equal Housing Opportunity</span>
+                        <Home
+                            className="size-5"
+                            aria-label="Equal Housing Opportunity"
+                        />
+                        <span className="text-xs">
+                            Equal Housing Opportunity
+                        </span>
                     </div>
 
                     <div className="w-16 border-t border-secondary-foreground/20" />
@@ -135,7 +141,7 @@ export default async function MarketingLayout({
                                 &nbsp;·&nbsp;{" "}
                                 <a
                                     href={`tel:${agent.contactPhone.replace(/\D/g, "")}`}
-                                    className="hover:text-primary transition-colors"
+                                    className="transition-colors hover:text-primary"
                                 >
                                     {agent.contactPhone}
                                 </a>
@@ -143,12 +149,13 @@ export default async function MarketingLayout({
                         )}
                     </p>
 
-                    <p className="max-w-2xl text-xs text-secondary-foreground/50 leading-relaxed">
-                        All rates, financing programs, closing-cost incentives, buyer
-                        credits, commissions, and bonuses are subject to change,
-                        qualification, builder program rules, community availability, and
-                        broker participation. Equal Housing Opportunity. This page is for
-                        informational and marketing purposes only.
+                    <p className="max-w-2xl text-xs leading-relaxed text-secondary-foreground/50">
+                        All rates, financing programs, closing-cost incentives,
+                        buyer credits, commissions, and bonuses are subject to
+                        change, qualification, builder program rules, community
+                        availability, and broker participation. Equal Housing
+                        Opportunity. This page is for informational and
+                        marketing purposes only.
                     </p>
                 </div>
             </footer>

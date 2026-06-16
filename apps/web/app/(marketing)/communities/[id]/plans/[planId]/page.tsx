@@ -29,7 +29,7 @@ export default async function FloorPlanPage({ params }: Props) {
     if (!community || !plan) notFound();
 
     const galleryItems = plan.gallery.map((m) => ({
-        type: m.type.toLowerCase() as "image" | "video",
+        type: "image" as const,
         src: m.src,
         alt: m.alt,
         caption: m.caption ?? undefined,

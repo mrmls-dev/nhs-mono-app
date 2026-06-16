@@ -4,6 +4,7 @@ import { AuthModule } from "./auth/auth.module";
 import { RegionModule } from "./region/region.module";
 import { CountyModule } from "./county/county.module";
 import { CommunityModule } from "./community/community.module";
+import { FloorPlanModule } from "./floor-plan/floor-plan.module";
 import { StorageModule } from "./storage/storage.module";
 import { AgentModule } from "./agent/agent.module";
 import { StaffModule } from "./staff/staff.module";
@@ -15,6 +16,7 @@ import { StaffModule } from "./staff/staff.module";
         RegionModule,
         CountyModule,
         CommunityModule,
+        FloorPlanModule,
         StorageModule,
         AgentModule,
         StaffModule,

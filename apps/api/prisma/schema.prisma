@@ -19,11 +19,6 @@ enum CommunityStatus {
   SOLD_OUT
 }
 
-enum MediaType {
-  IMAGE
-  VIDEO
-}
-
 // ─── Geography ────────────────────────────────────────────────────────────────
 
 model Region {
@@ -158,7 +153,6 @@ model FloorPlanModel {
 
 model FloorPlanModelMedia {
   id          String    @id @default(cuid())
-  type        MediaType
   src         String
   alt         String
   caption     String?

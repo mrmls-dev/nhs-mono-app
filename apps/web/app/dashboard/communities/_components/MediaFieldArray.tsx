@@ -5,7 +5,8 @@ import {
     Controller,
     useFieldArray,
     useFormContext,
-    useWatch,
+    type FieldValues,
+    type Path,
 } from "react-hook-form";
 import { Plus, Trash2, ImageIcon, Upload } from "lucide-react";
 import { toast } from "sonner";
@@ -18,14 +19,6 @@ import {
 } from "@workspace/ui/components/field";
 import { Input } from "@workspace/ui/components/input";
 import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@workspace/ui/components/select";
-import {
     Empty,
     EmptyDescription,
     EmptyHeader,
@@ -34,28 +27,30 @@ import {
 } from "@workspace/ui/components/empty";
 import { ImagePicker } from "@/components/ImagePicker";
 import { uploadFile } from "@/api/storage";
-import type { CommunityFormValues } from "../community-schema";
-
-type MediaArrayName = `floorPlans.${number}.gallery`;
 
 type MediaItemErrors = Record<
-    "src" | "alt" | "caption" | "type",
+    "src" | "alt" | "caption",
     { message?: string } | undefined
 >;
 
+// Image-only gallery editor. Works for any form whose `name` path is an array
+// of { src, alt, caption }. Plan video lives in the separate `modelVideo` field.
 export function MediaFieldArray({
     name,
     folder = "uploads",
 }: {
-    name: MediaArrayName;
+    name: string;
     folder?: string;
 }) {
     const {
         control,
         formState: { errors },
-    } = useFormContext<CommunityFormValues>();
+    } = useFormContext<FieldValues>();
 
-    const { fields, append, remove } = useFieldArray({ control, name });
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: name as Path<FieldValues>,
+    });
 
     const bulkInputRef = useRef<HTMLInputElement>(null);
     const [bulkUploading, setBulkUploading] = useState(false);
@@ -73,7 +68,6 @@ export function MediaFieldArray({
                 const result = results[i]!;
                 if (result.status === "fulfilled") {
                     append({
-                        type: "IMAGE",
                         src: result.value.url,
                         alt: files[i]!.name.replace(/\.[^.]+$/, ""),
                         caption: "",
@@ -108,9 +102,9 @@ export function MediaFieldArray({
                         <EmptyMedia variant="icon">
                             <ImageIcon />
                         </EmptyMedia>
-                        <EmptyTitle>No media yet</EmptyTitle>
+                        <EmptyTitle>No images yet</EmptyTitle>
                         <EmptyDescription>
-                            Add images or YouTube videos for this gallery.
+                            Upload images for this gallery.
                         </EmptyDescription>
                     </EmptyHeader>
                 </Empty>
@@ -151,12 +145,10 @@ export function MediaFieldArray({
                     variant="outline"
                     size="sm"
                     disabled={bulkUploading}
-                    onClick={() =>
-                        append({ type: "VIDEO", src: "", alt: "", caption: "" })
-                    }
+                    onClick={() => append({ src: "", alt: "", caption: "" })}
                 >
                     <Plus data-icon="inline-start" />
-                    Add video
+                    Add image
                 </Button>
             </div>
         </div>
@@ -170,84 +162,50 @@ function MediaRow({
     errors,
     onRemove,
 }: {
-    name: MediaArrayName;
+    name: string;
     index: number;
     folder: string;
     errors?: MediaItemErrors;
     onRemove: () => void;
 }) {
-    const { control, register } = useFormContext<CommunityFormValues>();
+    const { control, register } = useFormContext<FieldValues>();
 
-    const type = useWatch({ control, name: `${name}.${index}.type` });
-    const isVideo = type === "VIDEO";
+    const srcPath = `${name}.${index}.src` as Path<FieldValues>;
+    const altPath = `${name}.${index}.alt` as Path<FieldValues>;
+    const captionPath = `${name}.${index}.caption` as Path<FieldValues>;
 
     return (
         <div className="rounded-lg border p-4">
             <div className="mb-3 flex items-center justify-between">
                 <span className="text-sm font-medium text-muted-foreground">
-                    Media #{index + 1}
+                    Image #{index + 1}
                 </span>
                 <Button
                     type="button"
                     variant="ghost"
                     size="icon-sm"
                     onClick={onRemove}
-                    aria-label="Remove media"
+                    aria-label="Remove image"
                 >
                     <Trash2 />
                 </Button>
             </div>
             <FieldGroup className="gap-3">
-                <Field className="sm:max-w-40">
-                    <FieldLabel>Type</FieldLabel>
+                <Field data-invalid={errors?.src ? true : undefined}>
+                    <FieldLabel>Image</FieldLabel>
                     <Controller
                         control={control}
-                        name={`${name}.${index}.type`}
+                        name={srcPath}
                         render={({ field: f }) => (
-                            <Select value={f.value} onValueChange={f.onChange}>
-                                <SelectTrigger>
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectItem value="IMAGE">
-                                            Image
-                                        </SelectItem>
-                                        <SelectItem value="VIDEO">
-                                            Video (YouTube)
-                                        </SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
+                            <ImagePicker
+                                value={f.value}
+                                onChange={f.onChange}
+                                onBlur={f.onBlur}
+                                folder={folder}
+                                invalid={Boolean(errors?.src)}
+                            />
                         )}
                     />
-                </Field>
-
-                <Field data-invalid={errors?.src ? true : undefined}>
-                    <FieldLabel>
-                        {isVideo ? "YouTube URL" : "Image"}
-                    </FieldLabel>
-                    {isVideo ? (
-                        <Input
-                            placeholder="https://www.youtube.com/watch?v=..."
-                            aria-invalid={errors?.src ? true : undefined}
-                            {...register(`${name}.${index}.src`)}
-                        />
-                    ) : (
-                        <Controller
-                            control={control}
-                            name={`${name}.${index}.src`}
-                            render={({ field: f }) => (
-                                <ImagePicker
-                                    value={f.value}
-                                    onChange={f.onChange}
-                                    onBlur={f.onBlur}
-                                    folder={folder}
-                                    invalid={Boolean(errors?.src)}
-                                />
-                            )}
-                        />
-                    )}
                     {errors?.src && (
                         <FieldError errors={[{ message: errors.src.message }]} />
                     )}
@@ -259,7 +217,7 @@ function MediaRow({
                         <Input
                             placeholder="Community entrance"
                             aria-invalid={errors?.alt ? true : undefined}
-                            {...register(`${name}.${index}.alt`)}
+                            {...register(altPath)}
                         />
                         {errors?.alt && (
                             <FieldError
@@ -271,7 +229,7 @@ function MediaRow({
                         <FieldLabel>Caption (optional)</FieldLabel>
                         <Input
                             placeholder="Front entry"
-                            {...register(`${name}.${index}.caption`)}
+                            {...register(captionPath)}
                         />
                     </Field>
                 </div>

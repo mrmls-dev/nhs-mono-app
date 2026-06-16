@@ -40,7 +40,7 @@ export default async function CommunityPage({ params }: Props) {
     // Merge all floor plan galleries for the hero gallery component
     const galleryItems = community.floorPlans.flatMap((fp) =>
         fp.gallery.map((m) => ({
-            type: m.type.toLowerCase() as "image" | "video",
+            type: "image" as const,
             src: m.src,
             alt: m.alt,
             caption: m.caption ?? undefined,

@@ -5,10 +5,60 @@ import {
 } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { CreateRegionDto } from "./dto/create-region.dto";
+import { UpdateRegionDto } from "./dto/update-region.dto";
 
 @Injectable()
 export class RegionService {
     constructor(private readonly prisma: PrismaService) {}
+
+    async findOne(slug: string) {
+        const region = await this.prisma.region.findUnique({
+            where: { slug },
+            select: {
+                id: true,
+                name: true,
+                slug: true,
+                state: true,
+                counties: {
+                    select: {
+                        id: true,
+                        name: true,
+                        slug: true,
+                        _count: { select: { communities: true } },
+                    },
+                    orderBy: { name: "asc" },
+                },
+            },
+        });
+        if (!region) {
+            throw new NotFoundException(`Region "${slug}" not found`);
+        }
+        return region;
+    }
+
+    async update(id: string, dto: UpdateRegionDto) {
+        const region = await this.prisma.region.findUnique({
+            where: { id },
+            select: { id: true },
+        });
+        if (!region) {
+            throw new NotFoundException(`Region "${id}" not found`);
+        }
+        try {
+            return await this.prisma.region.update({
+                where: { id },
+                data: { name: dto.name, slug: dto.slug, state: dto.state },
+                select: { id: true, name: true, slug: true, state: true },
+            });
+        } catch (err: any) {
+            if (err?.code === "P2002") {
+                throw new ConflictException(
+                    `Region with slug "${dto.slug}" already exists`
+                );
+            }
+            throw err;
+        }
+    }
 
     async findAll() {
         return this.prisma.region.findMany({

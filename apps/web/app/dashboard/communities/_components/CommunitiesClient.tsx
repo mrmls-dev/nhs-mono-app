@@ -122,7 +122,12 @@ export function CommunitiesClient() {
                                     }
                                 >
                                     <td className="px-4 py-3">
-                                        <div className="font-medium">{c.name}</div>
+                                        <Link
+                                            href={`/dashboard/communities/${c.slug}`}
+                                            className="font-medium hover:text-primary hover:underline"
+                                        >
+                                            {c.name}
+                                        </Link>
                                         <div className="text-xs text-muted-foreground font-mono">
                                             {c.slug}
                                         </div>

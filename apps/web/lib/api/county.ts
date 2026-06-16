@@ -22,9 +22,62 @@ export type CreateCountyInput = {
     boundsWest: number;
 };
 
+export type UpdateCountyInput = Partial<CreateCountyInput>;
+
+export type CountyCommunity = {
+    id: string;
+    name: string;
+    slug: string;
+    status: "NOW_SELLING" | "COMING_SOON" | "SOLD_OUT";
+    image: string;
+    priceFrom: number;
+    _count: { floorPlans: number };
+};
+
+export type CountyDetail = {
+    id: string;
+    name: string;
+    slug: string;
+    boundsNorth: number;
+    boundsSouth: number;
+    boundsEast: number;
+    boundsWest: number;
+    region: { id: string; name: string; slug: string };
+    communities: CountyCommunity[];
+};
+
 export async function getCounties(): Promise<County[]> {
     const res = await fetch(`${API_BASE}/counties`, { cache: "no-store" });
     if (!res.ok) throw new Error("Failed to fetch counties");
+    return res.json();
+}
+
+export async function getCounty(slug: string): Promise<CountyDetail | null> {
+    const res = await fetch(`${API_BASE}/counties/${slug}`, {
+        cache: "no-store",
+    });
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error("Failed to fetch county");
+    return res.json();
+}
+
+export async function updateCounty(
+    id: string,
+    input: UpdateCountyInput,
+): Promise<County> {
+    const res = await fetch(`${API_BASE}/counties/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(input),
+    });
+    if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        const msg = body?.message;
+        throw new Error(
+            Array.isArray(msg) ? msg.join(", ") : (msg ?? "Failed to update county"),
+        );
+    }
     return res.json();
 }
 

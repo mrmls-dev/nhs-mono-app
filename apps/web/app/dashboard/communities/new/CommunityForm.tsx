@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm, FormProvider, Controller, useWatch } from "react-hook-form";
-import { ImageSelector } from "./_components/ImageSelector";
+import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Save } from "lucide-react";
 import { toast } from "sonner";
@@ -35,9 +35,9 @@ import {
     type CommunityFormOutput,
 } from "./community-schema";
 import { SchoolFieldArray } from "./_components/SchoolFieldArray";
-import { FloorPlanFieldArray } from "./_components/FloorPlanFieldArray";
 import { AmenitiesField } from "./_components/AmenitiesField";
-import { createCommunity } from "@/api/community";
+import { ImagePicker } from "@/components/ImagePicker";
+import { createCommunity, updateCommunity } from "@/api/community";
 
 type County = { id: string; name: string; region: string };
 
@@ -71,13 +71,31 @@ const defaultValues: CommunityFormValues = {
     countyId: "",
     amenities: [],
     schools: [],
-    floorPlans: [],
 };
 
-export function CommunityForm({ counties }: { counties: County[] }) {
+export function CommunityForm({
+    counties,
+    communityId,
+    initialValues,
+    submitLabel = "Save community",
+}: {
+    counties: County[];
+    /** When set, the form edits this community instead of creating one. */
+    communityId?: string;
+    initialValues?: Partial<CommunityFormValues>;
+    submitLabel?: string;
+}) {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const countyParam = searchParams.get("county") ?? "";
+
     const form = useForm<CommunityFormValues, unknown, CommunityFormOutput>({
         resolver: zodResolver(communitySchema),
-        defaultValues,
+        defaultValues: {
+            ...defaultValues,
+            countyId: countyParam,
+            ...initialValues,
+        },
         mode: "onBlur",
     });
 
@@ -89,17 +107,15 @@ export function CommunityForm({ counties }: { counties: County[] }) {
         formState: { errors, isSubmitting },
     } = form;
 
-    const floorPlans = useWatch({ control, name: "floorPlans" });
-    const allGalleryImages = floorPlans
-        .flatMap((fp) => fp.gallery ?? [])
-        .filter((m) => m.type === "IMAGE" && m.src?.startsWith("http"))
-        .map((m) => m.src);
+    const slug = useWatch({ control, name: "slug" });
 
     const onSubmit = async (values: CommunityFormOutput) => {
         try {
-            await createCommunity(values);
+            const community = communityId
+                ? await updateCommunity(communityId, values)
+                : await createCommunity(values);
             toast.success(`"${values.name}" saved successfully.`);
-            reset();
+            router.push(`/dashboard/communities/${community.slug}`);
         } catch (err: unknown) {
             toast.error(
                 err instanceof Error ? err.message : "Something went wrong",
@@ -283,18 +299,18 @@ export function CommunityForm({ counties }: { counties: County[] }) {
                             <Field data-invalid={errors.image ? true : undefined}>
                                 <FieldLabel>Hero image</FieldLabel>
                                 <p className="text-sm text-muted-foreground">
-                                    Select one image from the floor plan galleries below.
+                                    Upload the main image shown for this community.
                                 </p>
                                 <Controller
                                     control={control}
                                     name="image"
                                     render={({ field }) => (
-                                        <ImageSelector
-                                            images={allGalleryImages}
+                                        <ImagePicker
                                             value={field.value}
                                             onChange={field.onChange}
+                                            onBlur={field.onBlur}
+                                            folder={`communities/${slug || "new"}`}
                                             invalid={Boolean(errors.image)}
-                                            emptyText="Add floor plan gallery images first"
                                         />
                                     )}
                                 />
@@ -423,7 +439,7 @@ export function CommunityForm({ counties }: { counties: County[] }) {
                     <CardHeader>
                         <CardTitle>Amenities</CardTitle>
                         <CardDescription>
-                            Select all amenities offered.
+                            Search existing amenities or create new ones.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -442,20 +458,6 @@ export function CommunityForm({ counties }: { counties: County[] }) {
                     </CardContent>
                 </Card>
 
-                {/* Floor Plans */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Floor Plans</CardTitle>
-                        <CardDescription>
-                            Floor plans available in this community, each with its
-                            own gallery.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <FloorPlanFieldArray />
-                    </CardContent>
-                </Card>
-
                 <div className="flex items-center justify-end gap-3">
                     <Button
                         type="button"
@@ -467,7 +469,7 @@ export function CommunityForm({ counties }: { counties: County[] }) {
                     </Button>
                     <Button type="submit" disabled={isSubmitting}>
                         <Save data-icon="inline-start" />
-                        Save community
+                        {submitLabel}
                     </Button>
                 </div>
             </form>

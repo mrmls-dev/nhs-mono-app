@@ -28,7 +28,6 @@ export type CommunityListItem = {
 };
 
 export type FloorPlanMedia = {
-    type: "IMAGE" | "VIDEO";
     src: string;
     alt: string;
     caption?: string | null;
@@ -74,7 +73,7 @@ export type FullCommunity = {
     lat: number;
     lng: number;
     about: string;
-    county: { id: string; name: string };
+    county: { id: string; name: string; slug: string };
     amenities: { amenity: { name: string } }[];
     schools: { name: string; type: string; grades: string; distance: string }[];
     floorPlans: FloorPlanDetail[];
@@ -83,6 +82,14 @@ export type FullCommunity = {
 export async function getCommunities(): Promise<CommunityListItem[]> {
     const res = await fetch(`${API_BASE}/communities`, { cache: "no-store" });
     if (!res.ok) throw new Error("Failed to fetch communities");
+    return res.json();
+}
+
+export async function getAmenities(): Promise<string[]> {
+    const res = await fetch(`${API_BASE}/communities/amenities`, {
+        cache: "no-store",
+    });
+    if (!res.ok) throw new Error("Failed to fetch amenities");
     return res.json();
 }
 
@@ -114,6 +121,7 @@ export async function createCommunity(input: CommunityFormOutput) {
     const res = await fetch(`${API_BASE}/communities`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(input),
     });
     if (!res.ok) {
@@ -123,6 +131,28 @@ export async function createCommunity(input: CommunityFormOutput) {
             Array.isArray(msg)
                 ? msg.join(", ")
                 : (msg ?? "Failed to create community"),
+        );
+    }
+    return res.json();
+}
+
+export async function updateCommunity(
+    id: string,
+    input: Partial<CommunityFormOutput>,
+) {
+    const res = await fetch(`${API_BASE}/communities/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(input),
+    });
+    if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        const msg = body?.message;
+        throw new Error(
+            Array.isArray(msg)
+                ? msg.join(", ")
+                : (msg ?? "Failed to update community"),
         );
     }
     return res.json();

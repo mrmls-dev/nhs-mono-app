@@ -1678,7 +1678,6 @@ export type FloorPlanModelScalarFieldEnum = (typeof FloorPlanModelScalarFieldEnu
 
 export const FloorPlanModelMediaScalarFieldEnum = {
   id: 'id',
-  type: 'type',
   src: 'src',
   alt: 'alt',
   caption: 'caption',
@@ -1928,20 +1927,6 @@ export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
  * Reference to a field of type 'Decimal[]'
  */
 export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
-    
-
-
-/**
- * Reference to a field of type 'MediaType'
- */
-export type EnumMediaTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MediaType'>
-    
-
-
-/**
- * Reference to a field of type 'MediaType[]'
- */
-export type ListEnumMediaTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MediaType[]'>
     
 
 

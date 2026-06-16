@@ -36,7 +36,6 @@ export type FloorPlanModelMediaSumAggregateOutputType = {
 
 export type FloorPlanModelMediaMinAggregateOutputType = {
   id: string | null
-  type: $Enums.MediaType | null
   src: string | null
   alt: string | null
   caption: string | null
@@ -46,7 +45,6 @@ export type FloorPlanModelMediaMinAggregateOutputType = {
 
 export type FloorPlanModelMediaMaxAggregateOutputType = {
   id: string | null
-  type: $Enums.MediaType | null
   src: string | null
   alt: string | null
   caption: string | null
@@ -56,7 +54,6 @@ export type FloorPlanModelMediaMaxAggregateOutputType = {
 
 export type FloorPlanModelMediaCountAggregateOutputType = {
   id: number
-  type: number
   src: number
   alt: number
   caption: number
@@ -76,7 +73,6 @@ export type FloorPlanModelMediaSumAggregateInputType = {
 
 export type FloorPlanModelMediaMinAggregateInputType = {
   id?: true
-  type?: true
   src?: true
   alt?: true
   caption?: true
@@ -86,7 +82,6 @@ export type FloorPlanModelMediaMinAggregateInputType = {
 
 export type FloorPlanModelMediaMaxAggregateInputType = {
   id?: true
-  type?: true
   src?: true
   alt?: true
   caption?: true
@@ -96,7 +91,6 @@ export type FloorPlanModelMediaMaxAggregateInputType = {
 
 export type FloorPlanModelMediaCountAggregateInputType = {
   id?: true
-  type?: true
   src?: true
   alt?: true
   caption?: true
@@ -193,7 +187,6 @@ export type FloorPlanModelMediaGroupByArgs<ExtArgs extends runtime.Types.Extensi
 
 export type FloorPlanModelMediaGroupByOutputType = {
   id: string
-  type: $Enums.MediaType
   src: string
   alt: string
   caption: string | null
@@ -226,7 +219,6 @@ export type FloorPlanModelMediaWhereInput = {
   OR?: Prisma.FloorPlanModelMediaWhereInput[]
   NOT?: Prisma.FloorPlanModelMediaWhereInput | Prisma.FloorPlanModelMediaWhereInput[]
   id?: Prisma.StringFilter<"FloorPlanModelMedia"> | string
-  type?: Prisma.EnumMediaTypeFilter<"FloorPlanModelMedia"> | $Enums.MediaType
   src?: Prisma.StringFilter<"FloorPlanModelMedia"> | string
   alt?: Prisma.StringFilter<"FloorPlanModelMedia"> | string
   caption?: Prisma.StringNullableFilter<"FloorPlanModelMedia"> | string | null
@@ -237,7 +229,6 @@ export type FloorPlanModelMediaWhereInput = {
 
 export type FloorPlanModelMediaOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   src?: Prisma.SortOrder
   alt?: Prisma.SortOrder
   caption?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -251,7 +242,6 @@ export type FloorPlanModelMediaWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.FloorPlanModelMediaWhereInput | Prisma.FloorPlanModelMediaWhereInput[]
   OR?: Prisma.FloorPlanModelMediaWhereInput[]
   NOT?: Prisma.FloorPlanModelMediaWhereInput | Prisma.FloorPlanModelMediaWhereInput[]
-  type?: Prisma.EnumMediaTypeFilter<"FloorPlanModelMedia"> | $Enums.MediaType
   src?: Prisma.StringFilter<"FloorPlanModelMedia"> | string
   alt?: Prisma.StringFilter<"FloorPlanModelMedia"> | string
   caption?: Prisma.StringNullableFilter<"FloorPlanModelMedia"> | string | null
@@ -262,7 +252,6 @@ export type FloorPlanModelMediaWhereUniqueInput = Prisma.AtLeast<{
 
 export type FloorPlanModelMediaOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   src?: Prisma.SortOrder
   alt?: Prisma.SortOrder
   caption?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -280,7 +269,6 @@ export type FloorPlanModelMediaScalarWhereWithAggregatesInput = {
   OR?: Prisma.FloorPlanModelMediaScalarWhereWithAggregatesInput[]
   NOT?: Prisma.FloorPlanModelMediaScalarWhereWithAggregatesInput | Prisma.FloorPlanModelMediaScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"FloorPlanModelMedia"> | string
-  type?: Prisma.EnumMediaTypeWithAggregatesFilter<"FloorPlanModelMedia"> | $Enums.MediaType
   src?: Prisma.StringWithAggregatesFilter<"FloorPlanModelMedia"> | string
   alt?: Prisma.StringWithAggregatesFilter<"FloorPlanModelMedia"> | string
   caption?: Prisma.StringNullableWithAggregatesFilter<"FloorPlanModelMedia"> | string | null
@@ -290,7 +278,6 @@ export type FloorPlanModelMediaScalarWhereWithAggregatesInput = {
 
 export type FloorPlanModelMediaCreateInput = {
   id?: string
-  type: $Enums.MediaType
   src: string
   alt: string
   caption?: string | null
@@ -300,7 +287,6 @@ export type FloorPlanModelMediaCreateInput = {
 
 export type FloorPlanModelMediaUncheckedCreateInput = {
   id?: string
-  type: $Enums.MediaType
   src: string
   alt: string
   caption?: string | null
@@ -310,7 +296,6 @@ export type FloorPlanModelMediaUncheckedCreateInput = {
 
 export type FloorPlanModelMediaUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
   src?: Prisma.StringFieldUpdateOperationsInput | string
   alt?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -320,7 +305,6 @@ export type FloorPlanModelMediaUpdateInput = {
 
 export type FloorPlanModelMediaUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
   src?: Prisma.StringFieldUpdateOperationsInput | string
   alt?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -330,7 +314,6 @@ export type FloorPlanModelMediaUncheckedUpdateInput = {
 
 export type FloorPlanModelMediaCreateManyInput = {
   id?: string
-  type: $Enums.MediaType
   src: string
   alt: string
   caption?: string | null
@@ -340,7 +323,6 @@ export type FloorPlanModelMediaCreateManyInput = {
 
 export type FloorPlanModelMediaUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
   src?: Prisma.StringFieldUpdateOperationsInput | string
   alt?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -349,7 +331,6 @@ export type FloorPlanModelMediaUpdateManyMutationInput = {
 
 export type FloorPlanModelMediaUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
   src?: Prisma.StringFieldUpdateOperationsInput | string
   alt?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -369,7 +350,6 @@ export type FloorPlanModelMediaOrderByRelationAggregateInput = {
 
 export type FloorPlanModelMediaCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   src?: Prisma.SortOrder
   alt?: Prisma.SortOrder
   caption?: Prisma.SortOrder
@@ -383,7 +363,6 @@ export type FloorPlanModelMediaAvgOrderByAggregateInput = {
 
 export type FloorPlanModelMediaMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   src?: Prisma.SortOrder
   alt?: Prisma.SortOrder
   caption?: Prisma.SortOrder
@@ -393,7 +372,6 @@ export type FloorPlanModelMediaMaxOrderByAggregateInput = {
 
 export type FloorPlanModelMediaMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  type?: Prisma.SortOrder
   src?: Prisma.SortOrder
   alt?: Prisma.SortOrder
   caption?: Prisma.SortOrder
@@ -447,13 +425,8 @@ export type FloorPlanModelMediaUncheckedUpdateManyWithoutFloorPlanNestedInput = 
   deleteMany?: Prisma.FloorPlanModelMediaScalarWhereInput | Prisma.FloorPlanModelMediaScalarWhereInput[]
 }
 
-export type EnumMediaTypeFieldUpdateOperationsInput = {
-  set?: $Enums.MediaType
-}
-
 export type FloorPlanModelMediaCreateWithoutFloorPlanInput = {
   id?: string
-  type: $Enums.MediaType
   src: string
   alt: string
   caption?: string | null
@@ -462,7 +435,6 @@ export type FloorPlanModelMediaCreateWithoutFloorPlanInput = {
 
 export type FloorPlanModelMediaUncheckedCreateWithoutFloorPlanInput = {
   id?: string
-  type: $Enums.MediaType
   src: string
   alt: string
   caption?: string | null
@@ -500,7 +472,6 @@ export type FloorPlanModelMediaScalarWhereInput = {
   OR?: Prisma.FloorPlanModelMediaScalarWhereInput[]
   NOT?: Prisma.FloorPlanModelMediaScalarWhereInput | Prisma.FloorPlanModelMediaScalarWhereInput[]
   id?: Prisma.StringFilter<"FloorPlanModelMedia"> | string
-  type?: Prisma.EnumMediaTypeFilter<"FloorPlanModelMedia"> | $Enums.MediaType
   src?: Prisma.StringFilter<"FloorPlanModelMedia"> | string
   alt?: Prisma.StringFilter<"FloorPlanModelMedia"> | string
   caption?: Prisma.StringNullableFilter<"FloorPlanModelMedia"> | string | null
@@ -510,7 +481,6 @@ export type FloorPlanModelMediaScalarWhereInput = {
 
 export type FloorPlanModelMediaCreateManyFloorPlanInput = {
   id?: string
-  type: $Enums.MediaType
   src: string
   alt: string
   caption?: string | null
@@ -519,7 +489,6 @@ export type FloorPlanModelMediaCreateManyFloorPlanInput = {
 
 export type FloorPlanModelMediaUpdateWithoutFloorPlanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
   src?: Prisma.StringFieldUpdateOperationsInput | string
   alt?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -528,7 +497,6 @@ export type FloorPlanModelMediaUpdateWithoutFloorPlanInput = {
 
 export type FloorPlanModelMediaUncheckedUpdateWithoutFloorPlanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
   src?: Prisma.StringFieldUpdateOperationsInput | string
   alt?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -537,7 +505,6 @@ export type FloorPlanModelMediaUncheckedUpdateWithoutFloorPlanInput = {
 
 export type FloorPlanModelMediaUncheckedUpdateManyWithoutFloorPlanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType
   src?: Prisma.StringFieldUpdateOperationsInput | string
   alt?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -548,7 +515,6 @@ export type FloorPlanModelMediaUncheckedUpdateManyWithoutFloorPlanInput = {
 
 export type FloorPlanModelMediaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  type?: boolean
   src?: boolean
   alt?: boolean
   caption?: boolean
@@ -559,7 +525,6 @@ export type FloorPlanModelMediaSelect<ExtArgs extends runtime.Types.Extensions.I
 
 export type FloorPlanModelMediaSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  type?: boolean
   src?: boolean
   alt?: boolean
   caption?: boolean
@@ -570,7 +535,6 @@ export type FloorPlanModelMediaSelectCreateManyAndReturn<ExtArgs extends runtime
 
 export type FloorPlanModelMediaSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  type?: boolean
   src?: boolean
   alt?: boolean
   caption?: boolean
@@ -581,7 +545,6 @@ export type FloorPlanModelMediaSelectUpdateManyAndReturn<ExtArgs extends runtime
 
 export type FloorPlanModelMediaSelectScalar = {
   id?: boolean
-  type?: boolean
   src?: boolean
   alt?: boolean
   caption?: boolean
@@ -589,7 +552,7 @@ export type FloorPlanModelMediaSelectScalar = {
   floorPlanId?: boolean
 }
 
-export type FloorPlanModelMediaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "src" | "alt" | "caption" | "sortOrder" | "floorPlanId", ExtArgs["result"]["floorPlanModelMedia"]>
+export type FloorPlanModelMediaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "src" | "alt" | "caption" | "sortOrder" | "floorPlanId", ExtArgs["result"]["floorPlanModelMedia"]>
 export type FloorPlanModelMediaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   floorPlan?: boolean | Prisma.FloorPlanModelDefaultArgs<ExtArgs>
 }
@@ -607,7 +570,6 @@ export type $FloorPlanModelMediaPayload<ExtArgs extends runtime.Types.Extensions
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    type: $Enums.MediaType
     src: string
     alt: string
     caption: string | null
@@ -1038,7 +1000,6 @@ export interface Prisma__FloorPlanModelMediaClient<T, Null = never, ExtArgs exte
  */
 export interface FloorPlanModelMediaFieldRefs {
   readonly id: Prisma.FieldRef<"FloorPlanModelMedia", 'String'>
-  readonly type: Prisma.FieldRef<"FloorPlanModelMedia", 'MediaType'>
   readonly src: Prisma.FieldRef<"FloorPlanModelMedia", 'String'>
   readonly alt: Prisma.FieldRef<"FloorPlanModelMedia", 'String'>
   readonly caption: Prisma.FieldRef<"FloorPlanModelMedia", 'String'>

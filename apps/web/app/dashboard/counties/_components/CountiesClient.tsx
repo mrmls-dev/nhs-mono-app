@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -196,7 +197,12 @@ export function CountiesClient() {
                                     }
                                 >
                                     <td className="px-4 py-3 font-medium">
-                                        {c.name}
+                                        <Link
+                                            href={`/dashboard/counties/${c.slug}`}
+                                            className="hover:text-primary hover:underline"
+                                        >
+                                            {c.name}
+                                        </Link>
                                     </td>
                                     <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
                                         {c.slug}

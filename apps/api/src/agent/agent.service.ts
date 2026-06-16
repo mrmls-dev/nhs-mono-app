@@ -9,6 +9,7 @@ import {
 } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { VercelDomainsService } from "../vercel/vercel.service";
+import { StorageService } from "../storage/storage.service";
 import {
     AUTH_INSTANCE,
     PLATFORM_ADMIN_ROLE,
@@ -35,7 +36,8 @@ export class AgentService {
     constructor(
         @Inject(AUTH_INSTANCE) private readonly auth: Auth,
         private readonly prisma: PrismaService,
-        private readonly vercel: VercelDomainsService
+        private readonly vercel: VercelDomainsService,
+        private readonly storage: StorageService
     ) {}
 
     // ── Reads ────────────────────────────────────────────────────────────────
@@ -300,7 +302,7 @@ export class AgentService {
     }
 
     async updateBranding(id: string, dto: UpdateBrandingDto) {
-        await this.assertExists(id);
+        const existing = await this.assertExists(id);
         // `theme` is a structured object on the wire but stored JSON-serialized.
         const { theme, ...rest } = dto;
         const org = await this.prisma.organization.update({
@@ -313,6 +315,20 @@ export class AgentService {
             },
             include: orgWithOwner,
         });
+
+        // Replacing the logo? Remove the previous object from storage so old
+        // logos don't accumulate. Best-effort — a storage hiccup must not fail
+        // the save.
+        if (dto.logo && existing.logo && dto.logo !== existing.logo) {
+            await this.storage
+                .deleteByUrl(existing.logo)
+                .catch((err) =>
+                    this.logger.warn(
+                        `Failed to delete old logo ${existing.logo}: ${(err as Error).message}`
+                    )
+                );
+        }
+
         return this.toAdminAgent(org);
     }
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -167,7 +168,12 @@ export function RegionsClient() {
                                     }
                                 >
                                     <td className="px-4 py-3 font-medium">
-                                        {r.name}
+                                        <Link
+                                            href={`/dashboard/regions/${r.slug}`}
+                                            className="hover:text-primary hover:underline"
+                                        >
+                                            {r.name}
+                                        </Link>
                                     </td>
                                     <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
                                         {r.slug}

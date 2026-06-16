@@ -74,6 +74,18 @@ export class StorageService {
         );
     }
 
+    /**
+     * Delete an object by its public CDN URL. No-op for URLs that don't belong
+     * to our CDN (e.g. external/legacy logos), so callers can pass any stored
+     * URL safely.
+     */
+    async deleteByUrl(url: string): Promise<void> {
+        const prefix = `${this.cdnBaseUrl}/`;
+        if (!url.startsWith(prefix)) return;
+        const key = url.slice(prefix.length);
+        if (key) await this.deleteFile(key);
+    }
+
     async listFiles(prefix?: string): Promise<string[]> {
         const result = await this.client.send(
             new ListObjectsV2Command({
