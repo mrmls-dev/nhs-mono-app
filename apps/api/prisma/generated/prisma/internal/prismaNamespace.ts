@@ -401,7 +401,9 @@ export const ModelName = {
   AgentHiddenCommunity: 'AgentHiddenCommunity',
   AgentFloorPlanVideo: 'AgentFloorPlanVideo',
   Member: 'Member',
-  Invitation: 'Invitation'
+  Invitation: 'Invitation',
+  MarketingContact: 'MarketingContact',
+  GhlIntegration: 'GhlIntegration'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -417,7 +419,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "region" | "county" | "community" | "amenity" | "communityAmenity" | "school" | "floorPlanModel" | "floorPlanModelMedia" | "user" | "session" | "account" | "verification" | "organization" | "agentCounty" | "agentHiddenCommunity" | "agentFloorPlanVideo" | "member" | "invitation"
+    modelProps: "region" | "county" | "community" | "amenity" | "communityAmenity" | "school" | "floorPlanModel" | "floorPlanModelMedia" | "user" | "session" | "account" | "verification" | "organization" | "agentCounty" | "agentHiddenCommunity" | "agentFloorPlanVideo" | "member" | "invitation" | "marketingContact" | "ghlIntegration"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1753,6 +1755,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    MarketingContact: {
+      payload: Prisma.$MarketingContactPayload<ExtArgs>
+      fields: Prisma.MarketingContactFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MarketingContactFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingContactPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MarketingContactFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingContactPayload>
+        }
+        findFirst: {
+          args: Prisma.MarketingContactFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingContactPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MarketingContactFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingContactPayload>
+        }
+        findMany: {
+          args: Prisma.MarketingContactFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingContactPayload>[]
+        }
+        create: {
+          args: Prisma.MarketingContactCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingContactPayload>
+        }
+        createMany: {
+          args: Prisma.MarketingContactCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MarketingContactCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingContactPayload>[]
+        }
+        delete: {
+          args: Prisma.MarketingContactDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingContactPayload>
+        }
+        update: {
+          args: Prisma.MarketingContactUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingContactPayload>
+        }
+        deleteMany: {
+          args: Prisma.MarketingContactDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MarketingContactUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MarketingContactUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingContactPayload>[]
+        }
+        upsert: {
+          args: Prisma.MarketingContactUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingContactPayload>
+        }
+        aggregate: {
+          args: Prisma.MarketingContactAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMarketingContact>
+        }
+        groupBy: {
+          args: Prisma.MarketingContactGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketingContactGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MarketingContactCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketingContactCountAggregateOutputType> | number
+        }
+      }
+    }
+    GhlIntegration: {
+      payload: Prisma.$GhlIntegrationPayload<ExtArgs>
+      fields: Prisma.GhlIntegrationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GhlIntegrationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GhlIntegrationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GhlIntegrationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GhlIntegrationPayload>
+        }
+        findFirst: {
+          args: Prisma.GhlIntegrationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GhlIntegrationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GhlIntegrationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GhlIntegrationPayload>
+        }
+        findMany: {
+          args: Prisma.GhlIntegrationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GhlIntegrationPayload>[]
+        }
+        create: {
+          args: Prisma.GhlIntegrationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GhlIntegrationPayload>
+        }
+        createMany: {
+          args: Prisma.GhlIntegrationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GhlIntegrationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GhlIntegrationPayload>[]
+        }
+        delete: {
+          args: Prisma.GhlIntegrationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GhlIntegrationPayload>
+        }
+        update: {
+          args: Prisma.GhlIntegrationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GhlIntegrationPayload>
+        }
+        deleteMany: {
+          args: Prisma.GhlIntegrationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GhlIntegrationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GhlIntegrationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GhlIntegrationPayload>[]
+        }
+        upsert: {
+          args: Prisma.GhlIntegrationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GhlIntegrationPayload>
+        }
+        aggregate: {
+          args: Prisma.GhlIntegrationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGhlIntegration>
+        }
+        groupBy: {
+          args: Prisma.GhlIntegrationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GhlIntegrationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GhlIntegrationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GhlIntegrationCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1987,6 +2137,10 @@ export const OrganizationScalarFieldEnum = {
   serviceStatus: 'serviceStatus',
   customDomain: 'customDomain',
   domainStatus: 'domainStatus',
+  mapboxPublicToken: 'mapboxPublicToken',
+  mapboxTokenId: 'mapboxTokenId',
+  mapboxTokenStatus: 'mapboxTokenStatus',
+  mapboxTokenError: 'mapboxTokenError',
   brandColor: 'brandColor',
   theme: 'theme',
   siteName: 'siteName',
@@ -2072,6 +2226,43 @@ export const InvitationScalarFieldEnum = {
 } as const
 
 export type InvitationScalarFieldEnum = (typeof InvitationScalarFieldEnum)[keyof typeof InvitationScalarFieldEnum]
+
+
+export const MarketingContactScalarFieldEnum = {
+  id: 'id',
+  ghlContactId: 'ghlContactId',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  email: 'email',
+  phone: 'phone',
+  tags: 'tags',
+  leadStatus: 'leadStatus',
+  lastOutreach: 'lastOutreach',
+  note: 'note',
+  phoneSyncedAt: 'phoneSyncedAt',
+  phoneSyncError: 'phoneSyncError',
+  lastFetchedAt: 'lastFetchedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarketingContactScalarFieldEnum = (typeof MarketingContactScalarFieldEnum)[keyof typeof MarketingContactScalarFieldEnum]
+
+
+export const GhlIntegrationScalarFieldEnum = {
+  id: 'id',
+  locationId: 'locationId',
+  tokenCipher: 'tokenCipher',
+  tokenLast4: 'tokenLast4',
+  status: 'status',
+  lastError: 'lastError',
+  lastVerifiedAt: 'lastVerifiedAt',
+  updatedById: 'updatedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GhlIntegrationScalarFieldEnum = (typeof GhlIntegrationScalarFieldEnum)[keyof typeof GhlIntegrationScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2192,6 +2383,34 @@ export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
  * Reference to a field of type 'Decimal[]'
  */
 export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+/**
+ * Reference to a field of type 'LeadStatus'
+ */
+export type EnumLeadStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'LeadStatus[]'
+ */
+export type ListEnumLeadStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'LastOutreach'
+ */
+export type EnumLastOutreachFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LastOutreach'>
+    
+
+
+/**
+ * Reference to a field of type 'LastOutreach[]'
+ */
+export type ListEnumLastOutreachFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LastOutreach[]'>
     
 
 /**
@@ -2322,6 +2541,8 @@ export type GlobalOmitConfig = {
   agentFloorPlanVideo?: Prisma.AgentFloorPlanVideoOmit
   member?: Prisma.MemberOmit
   invitation?: Prisma.InvitationOmit
+  marketingContact?: Prisma.MarketingContactOmit
+  ghlIntegration?: Prisma.GhlIntegrationOmit
 }
 
 /* Types for Logging */

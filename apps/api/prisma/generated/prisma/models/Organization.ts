@@ -33,6 +33,10 @@ export type OrganizationMinAggregateOutputType = {
   serviceStatus: string | null
   customDomain: string | null
   domainStatus: string | null
+  mapboxPublicToken: string | null
+  mapboxTokenId: string | null
+  mapboxTokenStatus: string | null
+  mapboxTokenError: string | null
   brandColor: string | null
   theme: string | null
   siteName: string | null
@@ -70,6 +74,10 @@ export type OrganizationMaxAggregateOutputType = {
   serviceStatus: string | null
   customDomain: string | null
   domainStatus: string | null
+  mapboxPublicToken: string | null
+  mapboxTokenId: string | null
+  mapboxTokenStatus: string | null
+  mapboxTokenError: string | null
   brandColor: string | null
   theme: string | null
   siteName: string | null
@@ -107,6 +115,10 @@ export type OrganizationCountAggregateOutputType = {
   serviceStatus: number
   customDomain: number
   domainStatus: number
+  mapboxPublicToken: number
+  mapboxTokenId: number
+  mapboxTokenStatus: number
+  mapboxTokenError: number
   brandColor: number
   theme: number
   siteName: number
@@ -146,6 +158,10 @@ export type OrganizationMinAggregateInputType = {
   serviceStatus?: true
   customDomain?: true
   domainStatus?: true
+  mapboxPublicToken?: true
+  mapboxTokenId?: true
+  mapboxTokenStatus?: true
+  mapboxTokenError?: true
   brandColor?: true
   theme?: true
   siteName?: true
@@ -183,6 +199,10 @@ export type OrganizationMaxAggregateInputType = {
   serviceStatus?: true
   customDomain?: true
   domainStatus?: true
+  mapboxPublicToken?: true
+  mapboxTokenId?: true
+  mapboxTokenStatus?: true
+  mapboxTokenError?: true
   brandColor?: true
   theme?: true
   siteName?: true
@@ -220,6 +240,10 @@ export type OrganizationCountAggregateInputType = {
   serviceStatus?: true
   customDomain?: true
   domainStatus?: true
+  mapboxPublicToken?: true
+  mapboxTokenId?: true
+  mapboxTokenStatus?: true
+  mapboxTokenError?: true
   brandColor?: true
   theme?: true
   siteName?: true
@@ -330,6 +354,10 @@ export type OrganizationGroupByOutputType = {
   serviceStatus: string
   customDomain: string | null
   domainStatus: string | null
+  mapboxPublicToken: string | null
+  mapboxTokenId: string | null
+  mapboxTokenStatus: string | null
+  mapboxTokenError: string | null
   brandColor: string | null
   theme: string | null
   siteName: string | null
@@ -388,6 +416,10 @@ export type OrganizationWhereInput = {
   serviceStatus?: Prisma.StringFilter<"Organization"> | string
   customDomain?: Prisma.StringNullableFilter<"Organization"> | string | null
   domainStatus?: Prisma.StringNullableFilter<"Organization"> | string | null
+  mapboxPublicToken?: Prisma.StringNullableFilter<"Organization"> | string | null
+  mapboxTokenId?: Prisma.StringNullableFilter<"Organization"> | string | null
+  mapboxTokenStatus?: Prisma.StringNullableFilter<"Organization"> | string | null
+  mapboxTokenError?: Prisma.StringNullableFilter<"Organization"> | string | null
   brandColor?: Prisma.StringNullableFilter<"Organization"> | string | null
   theme?: Prisma.StringNullableFilter<"Organization"> | string | null
   siteName?: Prisma.StringNullableFilter<"Organization"> | string | null
@@ -430,6 +462,10 @@ export type OrganizationOrderByWithRelationInput = {
   serviceStatus?: Prisma.SortOrder
   customDomain?: Prisma.SortOrderInput | Prisma.SortOrder
   domainStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  mapboxPublicToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  mapboxTokenId?: Prisma.SortOrderInput | Prisma.SortOrder
+  mapboxTokenStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  mapboxTokenError?: Prisma.SortOrderInput | Prisma.SortOrder
   brandColor?: Prisma.SortOrderInput | Prisma.SortOrder
   theme?: Prisma.SortOrderInput | Prisma.SortOrder
   siteName?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -476,6 +512,10 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   metadata?: Prisma.StringNullableFilter<"Organization"> | string | null
   serviceStatus?: Prisma.StringFilter<"Organization"> | string
   domainStatus?: Prisma.StringNullableFilter<"Organization"> | string | null
+  mapboxPublicToken?: Prisma.StringNullableFilter<"Organization"> | string | null
+  mapboxTokenId?: Prisma.StringNullableFilter<"Organization"> | string | null
+  mapboxTokenStatus?: Prisma.StringNullableFilter<"Organization"> | string | null
+  mapboxTokenError?: Prisma.StringNullableFilter<"Organization"> | string | null
   brandColor?: Prisma.StringNullableFilter<"Organization"> | string | null
   theme?: Prisma.StringNullableFilter<"Organization"> | string | null
   siteName?: Prisma.StringNullableFilter<"Organization"> | string | null
@@ -517,6 +557,10 @@ export type OrganizationOrderByWithAggregationInput = {
   serviceStatus?: Prisma.SortOrder
   customDomain?: Prisma.SortOrderInput | Prisma.SortOrder
   domainStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  mapboxPublicToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  mapboxTokenId?: Prisma.SortOrderInput | Prisma.SortOrder
+  mapboxTokenStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  mapboxTokenError?: Prisma.SortOrderInput | Prisma.SortOrder
   brandColor?: Prisma.SortOrderInput | Prisma.SortOrder
   theme?: Prisma.SortOrderInput | Prisma.SortOrder
   siteName?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -560,6 +604,10 @@ export type OrganizationScalarWhereWithAggregatesInput = {
   serviceStatus?: Prisma.StringWithAggregatesFilter<"Organization"> | string
   customDomain?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   domainStatus?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
+  mapboxPublicToken?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
+  mapboxTokenId?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
+  mapboxTokenStatus?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
+  mapboxTokenError?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   brandColor?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   theme?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   siteName?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
@@ -597,6 +645,10 @@ export type OrganizationCreateInput = {
   serviceStatus?: string
   customDomain?: string | null
   domainStatus?: string | null
+  mapboxPublicToken?: string | null
+  mapboxTokenId?: string | null
+  mapboxTokenStatus?: string | null
+  mapboxTokenError?: string | null
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
@@ -639,6 +691,10 @@ export type OrganizationUncheckedCreateInput = {
   serviceStatus?: string
   customDomain?: string | null
   domainStatus?: string | null
+  mapboxPublicToken?: string | null
+  mapboxTokenId?: string | null
+  mapboxTokenStatus?: string | null
+  mapboxTokenError?: string | null
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
@@ -681,6 +737,10 @@ export type OrganizationUpdateInput = {
   serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxPublicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -723,6 +783,10 @@ export type OrganizationUncheckedUpdateInput = {
   serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxPublicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -765,6 +829,10 @@ export type OrganizationCreateManyInput = {
   serviceStatus?: string
   customDomain?: string | null
   domainStatus?: string | null
+  mapboxPublicToken?: string | null
+  mapboxTokenId?: string | null
+  mapboxTokenStatus?: string | null
+  mapboxTokenError?: string | null
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
@@ -802,6 +870,10 @@ export type OrganizationUpdateManyMutationInput = {
   serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxPublicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -839,6 +911,10 @@ export type OrganizationUncheckedUpdateManyInput = {
   serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxPublicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -876,6 +952,10 @@ export type OrganizationCountOrderByAggregateInput = {
   serviceStatus?: Prisma.SortOrder
   customDomain?: Prisma.SortOrder
   domainStatus?: Prisma.SortOrder
+  mapboxPublicToken?: Prisma.SortOrder
+  mapboxTokenId?: Prisma.SortOrder
+  mapboxTokenStatus?: Prisma.SortOrder
+  mapboxTokenError?: Prisma.SortOrder
   brandColor?: Prisma.SortOrder
   theme?: Prisma.SortOrder
   siteName?: Prisma.SortOrder
@@ -913,6 +993,10 @@ export type OrganizationMaxOrderByAggregateInput = {
   serviceStatus?: Prisma.SortOrder
   customDomain?: Prisma.SortOrder
   domainStatus?: Prisma.SortOrder
+  mapboxPublicToken?: Prisma.SortOrder
+  mapboxTokenId?: Prisma.SortOrder
+  mapboxTokenStatus?: Prisma.SortOrder
+  mapboxTokenError?: Prisma.SortOrder
   brandColor?: Prisma.SortOrder
   theme?: Prisma.SortOrder
   siteName?: Prisma.SortOrder
@@ -950,6 +1034,10 @@ export type OrganizationMinOrderByAggregateInput = {
   serviceStatus?: Prisma.SortOrder
   customDomain?: Prisma.SortOrder
   domainStatus?: Prisma.SortOrder
+  mapboxPublicToken?: Prisma.SortOrder
+  mapboxTokenId?: Prisma.SortOrder
+  mapboxTokenStatus?: Prisma.SortOrder
+  mapboxTokenError?: Prisma.SortOrder
   brandColor?: Prisma.SortOrder
   theme?: Prisma.SortOrder
   siteName?: Prisma.SortOrder
@@ -1062,6 +1150,10 @@ export type OrganizationCreateWithoutAssignedCountiesInput = {
   serviceStatus?: string
   customDomain?: string | null
   domainStatus?: string | null
+  mapboxPublicToken?: string | null
+  mapboxTokenId?: string | null
+  mapboxTokenStatus?: string | null
+  mapboxTokenError?: string | null
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
@@ -1103,6 +1195,10 @@ export type OrganizationUncheckedCreateWithoutAssignedCountiesInput = {
   serviceStatus?: string
   customDomain?: string | null
   domainStatus?: string | null
+  mapboxPublicToken?: string | null
+  mapboxTokenId?: string | null
+  mapboxTokenStatus?: string | null
+  mapboxTokenError?: string | null
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
@@ -1160,6 +1256,10 @@ export type OrganizationUpdateWithoutAssignedCountiesInput = {
   serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxPublicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1201,6 +1301,10 @@ export type OrganizationUncheckedUpdateWithoutAssignedCountiesInput = {
   serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxPublicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1242,6 +1346,10 @@ export type OrganizationCreateWithoutHiddenCommunitiesInput = {
   serviceStatus?: string
   customDomain?: string | null
   domainStatus?: string | null
+  mapboxPublicToken?: string | null
+  mapboxTokenId?: string | null
+  mapboxTokenStatus?: string | null
+  mapboxTokenError?: string | null
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
@@ -1283,6 +1391,10 @@ export type OrganizationUncheckedCreateWithoutHiddenCommunitiesInput = {
   serviceStatus?: string
   customDomain?: string | null
   domainStatus?: string | null
+  mapboxPublicToken?: string | null
+  mapboxTokenId?: string | null
+  mapboxTokenStatus?: string | null
+  mapboxTokenError?: string | null
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
@@ -1340,6 +1452,10 @@ export type OrganizationUpdateWithoutHiddenCommunitiesInput = {
   serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxPublicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1381,6 +1497,10 @@ export type OrganizationUncheckedUpdateWithoutHiddenCommunitiesInput = {
   serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxPublicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1422,6 +1542,10 @@ export type OrganizationCreateWithoutFloorPlanVideosInput = {
   serviceStatus?: string
   customDomain?: string | null
   domainStatus?: string | null
+  mapboxPublicToken?: string | null
+  mapboxTokenId?: string | null
+  mapboxTokenStatus?: string | null
+  mapboxTokenError?: string | null
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
@@ -1463,6 +1587,10 @@ export type OrganizationUncheckedCreateWithoutFloorPlanVideosInput = {
   serviceStatus?: string
   customDomain?: string | null
   domainStatus?: string | null
+  mapboxPublicToken?: string | null
+  mapboxTokenId?: string | null
+  mapboxTokenStatus?: string | null
+  mapboxTokenError?: string | null
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
@@ -1520,6 +1648,10 @@ export type OrganizationUpdateWithoutFloorPlanVideosInput = {
   serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxPublicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1561,6 +1693,10 @@ export type OrganizationUncheckedUpdateWithoutFloorPlanVideosInput = {
   serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxPublicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1602,6 +1738,10 @@ export type OrganizationCreateWithoutMembersInput = {
   serviceStatus?: string
   customDomain?: string | null
   domainStatus?: string | null
+  mapboxPublicToken?: string | null
+  mapboxTokenId?: string | null
+  mapboxTokenStatus?: string | null
+  mapboxTokenError?: string | null
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
@@ -1643,6 +1783,10 @@ export type OrganizationUncheckedCreateWithoutMembersInput = {
   serviceStatus?: string
   customDomain?: string | null
   domainStatus?: string | null
+  mapboxPublicToken?: string | null
+  mapboxTokenId?: string | null
+  mapboxTokenStatus?: string | null
+  mapboxTokenError?: string | null
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
@@ -1700,6 +1844,10 @@ export type OrganizationUpdateWithoutMembersInput = {
   serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxPublicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1741,6 +1889,10 @@ export type OrganizationUncheckedUpdateWithoutMembersInput = {
   serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxPublicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1782,6 +1934,10 @@ export type OrganizationCreateWithoutInvitationsInput = {
   serviceStatus?: string
   customDomain?: string | null
   domainStatus?: string | null
+  mapboxPublicToken?: string | null
+  mapboxTokenId?: string | null
+  mapboxTokenStatus?: string | null
+  mapboxTokenError?: string | null
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
@@ -1823,6 +1979,10 @@ export type OrganizationUncheckedCreateWithoutInvitationsInput = {
   serviceStatus?: string
   customDomain?: string | null
   domainStatus?: string | null
+  mapboxPublicToken?: string | null
+  mapboxTokenId?: string | null
+  mapboxTokenStatus?: string | null
+  mapboxTokenError?: string | null
   brandColor?: string | null
   theme?: string | null
   siteName?: string | null
@@ -1880,6 +2040,10 @@ export type OrganizationUpdateWithoutInvitationsInput = {
   serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxPublicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1921,6 +2085,10 @@ export type OrganizationUncheckedUpdateWithoutInvitationsInput = {
   serviceStatus?: Prisma.StringFieldUpdateOperationsInput | string
   customDomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   domainStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxPublicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mapboxTokenError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   siteName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2029,6 +2197,10 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   serviceStatus?: boolean
   customDomain?: boolean
   domainStatus?: boolean
+  mapboxPublicToken?: boolean
+  mapboxTokenId?: boolean
+  mapboxTokenStatus?: boolean
+  mapboxTokenError?: boolean
   brandColor?: boolean
   theme?: boolean
   siteName?: boolean
@@ -2072,6 +2244,10 @@ export type OrganizationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   serviceStatus?: boolean
   customDomain?: boolean
   domainStatus?: boolean
+  mapboxPublicToken?: boolean
+  mapboxTokenId?: boolean
+  mapboxTokenStatus?: boolean
+  mapboxTokenError?: boolean
   brandColor?: boolean
   theme?: boolean
   siteName?: boolean
@@ -2109,6 +2285,10 @@ export type OrganizationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   serviceStatus?: boolean
   customDomain?: boolean
   domainStatus?: boolean
+  mapboxPublicToken?: boolean
+  mapboxTokenId?: boolean
+  mapboxTokenStatus?: boolean
+  mapboxTokenError?: boolean
   brandColor?: boolean
   theme?: boolean
   siteName?: boolean
@@ -2146,6 +2326,10 @@ export type OrganizationSelectScalar = {
   serviceStatus?: boolean
   customDomain?: boolean
   domainStatus?: boolean
+  mapboxPublicToken?: boolean
+  mapboxTokenId?: boolean
+  mapboxTokenStatus?: boolean
+  mapboxTokenError?: boolean
   brandColor?: boolean
   theme?: boolean
   siteName?: boolean
@@ -2174,7 +2358,7 @@ export type OrganizationSelectScalar = {
   createdAt?: boolean
 }
 
-export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "logo" | "metadata" | "serviceStatus" | "customDomain" | "domainStatus" | "brandColor" | "theme" | "siteName" | "seoTitle" | "titleSuffix" | "metaDescription" | "contactPhone" | "footerText" | "ghlScheduleEmbed" | "ownerFirstName" | "ownerLastName" | "businessEmail" | "website" | "address" | "city" | "state" | "postalCode" | "country" | "timezone" | "businessType" | "ghlLocationId" | "ghlAllowDuplicateContact" | "ghlAllowDuplicateOpportunity" | "ghlAllowFacebookNameMerge" | "ghlDisableContactTimezone" | "createdAt", ExtArgs["result"]["organization"]>
+export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "logo" | "metadata" | "serviceStatus" | "customDomain" | "domainStatus" | "mapboxPublicToken" | "mapboxTokenId" | "mapboxTokenStatus" | "mapboxTokenError" | "brandColor" | "theme" | "siteName" | "seoTitle" | "titleSuffix" | "metaDescription" | "contactPhone" | "footerText" | "ghlScheduleEmbed" | "ownerFirstName" | "ownerLastName" | "businessEmail" | "website" | "address" | "city" | "state" | "postalCode" | "country" | "timezone" | "businessType" | "ghlLocationId" | "ghlAllowDuplicateContact" | "ghlAllowDuplicateOpportunity" | "ghlAllowFacebookNameMerge" | "ghlDisableContactTimezone" | "createdAt", ExtArgs["result"]["organization"]>
 export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | Prisma.Organization$membersArgs<ExtArgs>
   invitations?: boolean | Prisma.Organization$invitationsArgs<ExtArgs>
@@ -2204,6 +2388,10 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     serviceStatus: string
     customDomain: string | null
     domainStatus: string | null
+    mapboxPublicToken: string | null
+    mapboxTokenId: string | null
+    mapboxTokenStatus: string | null
+    mapboxTokenError: string | null
     brandColor: string | null
     theme: string | null
     siteName: string | null
@@ -2666,6 +2854,10 @@ export interface OrganizationFieldRefs {
   readonly serviceStatus: Prisma.FieldRef<"Organization", 'String'>
   readonly customDomain: Prisma.FieldRef<"Organization", 'String'>
   readonly domainStatus: Prisma.FieldRef<"Organization", 'String'>
+  readonly mapboxPublicToken: Prisma.FieldRef<"Organization", 'String'>
+  readonly mapboxTokenId: Prisma.FieldRef<"Organization", 'String'>
+  readonly mapboxTokenStatus: Prisma.FieldRef<"Organization", 'String'>
+  readonly mapboxTokenError: Prisma.FieldRef<"Organization", 'String'>
   readonly brandColor: Prisma.FieldRef<"Organization", 'String'>
   readonly theme: Prisma.FieldRef<"Organization", 'String'>
   readonly siteName: Prisma.FieldRef<"Organization", 'String'>

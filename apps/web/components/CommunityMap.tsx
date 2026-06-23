@@ -9,16 +9,18 @@ import Map, {
 } from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import type { School } from "./CommunityCard";
-import { mapTransformRequest } from "@/lib/mapbox";
 
 export default function CommunityMap({
     name,
     coords,
     schools = [],
+    mapboxToken,
 }: {
     name: string;
     coords: { lat: number; lng: number };
     schools?: School[];
+    /** Agent's domain-restricted token (custom domains); falls back to shared. */
+    mapboxToken?: string | null;
 }) {
     const [activeSchool, setActiveSchool] = useState<School | null>(null);
 
@@ -29,8 +31,9 @@ export default function CommunityMap({
     return (
         <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-border shadow-sm">
             <Map
-                mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-                transformRequest={mapTransformRequest}
+                mapboxAccessToken={
+                    mapboxToken ?? process.env.NEXT_PUBLIC_MAPBOX_TOKEN
+                }
                 initialViewState={{
                     longitude: coords.lng,
                     latitude: coords.lat,

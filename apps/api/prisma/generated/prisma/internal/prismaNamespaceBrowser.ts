@@ -68,7 +68,9 @@ export const ModelName = {
   AgentHiddenCommunity: 'AgentHiddenCommunity',
   AgentFloorPlanVideo: 'AgentFloorPlanVideo',
   Member: 'Member',
-  Invitation: 'Invitation'
+  Invitation: 'Invitation',
+  MarketingContact: 'MarketingContact',
+  GhlIntegration: 'GhlIntegration'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -282,6 +284,10 @@ export const OrganizationScalarFieldEnum = {
   serviceStatus: 'serviceStatus',
   customDomain: 'customDomain',
   domainStatus: 'domainStatus',
+  mapboxPublicToken: 'mapboxPublicToken',
+  mapboxTokenId: 'mapboxTokenId',
+  mapboxTokenStatus: 'mapboxTokenStatus',
+  mapboxTokenError: 'mapboxTokenError',
   brandColor: 'brandColor',
   theme: 'theme',
   siteName: 'siteName',
@@ -367,6 +373,43 @@ export const InvitationScalarFieldEnum = {
 } as const
 
 export type InvitationScalarFieldEnum = (typeof InvitationScalarFieldEnum)[keyof typeof InvitationScalarFieldEnum]
+
+
+export const MarketingContactScalarFieldEnum = {
+  id: 'id',
+  ghlContactId: 'ghlContactId',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  email: 'email',
+  phone: 'phone',
+  tags: 'tags',
+  leadStatus: 'leadStatus',
+  lastOutreach: 'lastOutreach',
+  note: 'note',
+  phoneSyncedAt: 'phoneSyncedAt',
+  phoneSyncError: 'phoneSyncError',
+  lastFetchedAt: 'lastFetchedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarketingContactScalarFieldEnum = (typeof MarketingContactScalarFieldEnum)[keyof typeof MarketingContactScalarFieldEnum]
+
+
+export const GhlIntegrationScalarFieldEnum = {
+  id: 'id',
+  locationId: 'locationId',
+  tokenCipher: 'tokenCipher',
+  tokenLast4: 'tokenLast4',
+  status: 'status',
+  lastError: 'lastError',
+  lastVerifiedAt: 'lastVerifiedAt',
+  updatedById: 'updatedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GhlIntegrationScalarFieldEnum = (typeof GhlIntegrationScalarFieldEnum)[keyof typeof GhlIntegrationScalarFieldEnum]
 
 
 export const SortOrder = {

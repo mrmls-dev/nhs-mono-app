@@ -61,8 +61,15 @@ export type Agent = {
     ghlDisableContactTimezone: boolean;
 };
 
-/** Public-site view (no owner PII). */
-export type PublicAgent = Omit<Agent, "ownerName" | "ownerEmail" | "createdAt">;
+/**
+ * Public-site view (no owner PII). `mapboxToken` is the agent's domain-restricted
+ * Mapbox token, set ONLY when the request resolved by custom domain; on
+ * subdomain/apex sites it's null and maps fall back to the shared client token.
+ */
+export type PublicAgent = Omit<
+    Agent,
+    "ownerName" | "ownerEmail" | "createdAt"
+> & { mapboxToken: string | null };
 
 export type CreateAgentInput = {
     // Owner
@@ -190,7 +197,8 @@ export async function updateAgent(
 
 /**
  * Admin: permanently delete an agent and everything tied to it (organization,
- * members, invitations, the owner's login, and any Cloudflare custom hostname).
+ * members, invitations, the owner's login, its Vercel custom domain, and its
+ * Mapbox token).
  */
 export async function deleteAgent(id: string): Promise<void> {
     const res = await fetch(`${API_BASE}/agents/${id}`, {
@@ -242,10 +250,15 @@ export async function setDomain(
     return res.json();
 }
 
+/** Per-custom-domain Mapbox token state (null = not minted yet). */
+export type MapboxTokenStatus = "active" | "failed";
+
 export type DomainSetup = {
     domain: string;
     status: DomainStatus;
     dnsInstructions: { type: string; name: string; value: string }[];
+    /** Map token for this domain: "active" = ready, "failed" = mint failed. */
+    mapboxTokenStatus: MapboxTokenStatus | null;
 };
 
 /**

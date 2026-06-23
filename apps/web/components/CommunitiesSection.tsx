@@ -51,21 +51,27 @@ export default async function CommunitiesSection({
     countyId,
     countyBounds,
     countyName,
+    mapboxToken,
 }: {
     agentId: string;
     countyId?: string;
     countyBounds?: CountyBounds;
     countyName?: string;
+    /** Agent's domain-restricted Mapbox token (null on subdomain/apex sites). */
+    mapboxToken?: string | null;
 }) {
     const all = await getPublicCommunities(agentId);
 
-    const filtered = countyId ? all.filter((c) => c.countyId === countyId) : all;
+    const filtered = countyId
+        ? all.filter((c) => c.countyId === countyId)
+        : all;
     const data = filtered.map(toCard);
 
     const pins: CommunityPin[] = filtered
         .filter((c) => c.lat !== 0 || c.lng !== 0)
         .map((c) => ({
             id: c.id,
+            slug: c.slug,
             name: c.name,
             location: c.location,
             status: c.status,
@@ -76,21 +82,25 @@ export default async function CommunitiesSection({
 
     return (
         <>
-            <section className="w-full flex flex-col md:flex-row items-start">
+            <section className="flex w-full flex-col items-start md:flex-row">
                 {/* Map */}
                 <div
                     id="map-section"
-                    className="w-full h-[58vh] md:w-1/2 md:sticky md:top-21.25 md:h-[calc(100dvh-5.3125rem)]"
+                    className="h-[58vh] w-full md:sticky md:top-21.25 md:h-[calc(100dvh-5.3125rem)] md:w-1/2"
                 >
-                    <ListingMap communities={pins} countyBounds={countyBounds} />
+                    <ListingMap
+                        communities={pins}
+                        countyBounds={countyBounds}
+                        mapboxToken={mapboxToken}
+                    />
                 </div>
 
                 {/* Listings */}
                 <div
                     id="listings-section"
-                    className="w-full md:w-1/2 p-4 md:p-6 flex flex-col gap-4 md:gap-6 pb-28 md:pb-6"
+                    className="flex w-full flex-col gap-4 p-4 pb-28 md:w-1/2 md:gap-6 md:p-6 md:pb-6"
                 >
-                    <div className="flex items-start justify-between gap-4 flex-wrap">
+                    <div className="flex flex-wrap items-start justify-between gap-4">
                         <div className="flex flex-col gap-0.5">
                             <h2 className="text-xl font-bold text-foreground">
                                 {countyName ?? "Southeast Florida Communities"}
@@ -99,16 +109,16 @@ export default async function CommunitiesSection({
                                 {data.length > 0
                                     ? `${data.length} ${data.length === 1 ? "community" : "communities"} available`
                                     : countyName
-                                    ? "No communities listed yet"
-                                    : "Explore new construction across all counties"}
+                                      ? "No communities listed yet"
+                                      : "Explore new construction across all counties"}
                             </p>
                         </div>
                         <ScheduleVisitButton size="sm" />
                     </div>
 
                     {data.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center min-h-96 text-center gap-4">
-                            <div className="size-16 rounded-full bg-muted flex items-center justify-center text-3xl">
+                        <div className="flex min-h-96 flex-col items-center justify-center gap-4 text-center">
+                            <div className="flex size-16 items-center justify-center rounded-full bg-muted text-3xl">
                                 🏗️
                             </div>
                             <div className="flex flex-col gap-1">
@@ -116,15 +126,18 @@ export default async function CommunitiesSection({
                                     No communities yet in{" "}
                                     {countyName ?? "this county"}
                                 </p>
-                                <p className="text-sm text-muted-foreground max-w-xs">
-                                    We&rsquo;re actively expanding into this area.
-                                    Check back soon for new communities.
+                                <p className="max-w-xs text-sm text-muted-foreground">
+                                    We&rsquo;re actively expanding into this
+                                    area. Check back soon for new communities.
                                 </p>
                             </div>
                         </div>
                     ) : (
                         data.map((community) => (
-                            <CommunityCard key={community.id} community={community} />
+                            <CommunityCard
+                                key={community.id}
+                                community={community}
+                            />
                         ))
                     )}
                 </div>

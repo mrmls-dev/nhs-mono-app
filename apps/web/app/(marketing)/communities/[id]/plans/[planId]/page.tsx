@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { headers } from "next/headers";
-import { ArrowLeft, Phone } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Badge } from "@workspace/ui/components/badge";
 import { getCommunity, getPublicCommunity } from "@/api/community";
 import { getAgentByDomain } from "@/api/agent";
@@ -9,6 +9,7 @@ import { formatPrice, formatStat } from "@/lib/format";
 import CommunityGallery from "@/components/CommunityGallery";
 import ExpandableText from "@/components/ExpandableText";
 import ScheduleVisitButton from "@/components/ScheduleVisitButton";
+import CallButton from "@/components/CallButton";
 import { ModelVideo } from "@/components/ModelVideo";
 
 type Props = { params: Promise<{ id: string; planId: string }> };
@@ -117,27 +118,29 @@ export default async function FloorPlanPage({ params }: Props) {
 
                 <div className="flex flex-wrap gap-3 pt-2 md:justify-end">
                     <ScheduleVisitButton size="lg" comm={community.name} fpModel={plan.name} />
-                    <a
-                        href="tel:5617040091"
-                        className="inline-flex items-center gap-2 px-6 py-3 text-base font-semibold rounded-lg border border-border text-foreground hover:bg-muted transition-colors"
-                    >
-                        <Phone className="size-4 shrink-0" aria-hidden />
-                        561-704-0091
-                    </a>
+                    <CallButton phone={agent.contactPhone} size="lg" />
                 </div>
             </section>
 
-            {plan.description && (
-                <section className="max-w-2xl flex flex-col gap-3">
-                    <h2 className="text-2xl font-bold text-foreground">About this floor plan</h2>
-                    <ExpandableText text={plan.description} />
-                </section>
-            )}
+            {(plan.description || plan.modelVideo) && (
+                <section className="flex flex-col gap-8 md:flex-row md:items-start md:gap-10">
+                    {plan.description && (
+                        <div className="flex flex-1 flex-col gap-3">
+                            <h2 className="text-2xl font-bold text-foreground">
+                                About this floor plan
+                            </h2>
+                            <ExpandableText text={plan.description} />
+                        </div>
+                    )}
 
-            {plan.modelVideo && (
-                <section className="flex flex-col gap-4">
-                    <h2 className="text-2xl font-bold text-foreground">Model video</h2>
-                    <ModelVideo url={plan.modelVideo} title={plan.name} />
+                    {plan.modelVideo && (
+                        <div className="flex w-full flex-col gap-3 md:max-w-xl md:flex-1">
+                            <h2 className="text-2xl font-bold text-foreground">
+                                Model video
+                            </h2>
+                            <ModelVideo url={plan.modelVideo} title={plan.name} />
+                        </div>
+                    )}
                 </section>
             )}
 

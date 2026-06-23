@@ -15,6 +15,8 @@ import {
     Search,
     CalendarClock,
     Settings,
+    PhoneCall,
+    Plug,
 } from "lucide-react";
 import { AgentDetailSidebar } from "../agents/[id]/_components/AgentDetailSidebar";
 import {
@@ -69,7 +71,13 @@ const adminGroups: NavGroup[] = [
     {
         label: "Platform",
         items: [
+            { title: "Contacts", href: "/dashboard/contacts", icon: PhoneCall },
             { title: "Members", href: "/dashboard/members", icon: UserCog },
+            {
+                title: "Integrations",
+                href: "/dashboard/integrations",
+                icon: Plug,
+            },
         ],
     },
 ];

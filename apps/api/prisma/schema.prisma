@@ -19,6 +19,24 @@ enum CommunityStatus {
   SOLD_OUT
 }
 
+// Disposition of a marketing lead, owned by the internal marketing team.
+enum LeadStatus {
+  NEW
+  ATTEMPTING
+  CONTACTED
+  CONVERTED
+  NOT_INTERESTED
+  DO_NOT_CALL
+}
+
+// Last outreach action the marketing team took on a lead.
+enum LastOutreach {
+  NONE
+  COLD_CALL
+  VOICEMAIL
+  TEXT
+}
+
 // ─── Geography ────────────────────────────────────────────────────────────────
 
 model Region {
@@ -253,7 +271,15 @@ model Organization {
   // --- additionalFields: white-label branding + access control ---
   serviceStatus    String       @default("active") // "active" | "suspended" (payment gate)
   customDomain     String?      @unique // agent domain, resolved by Host header
-  domainStatus     String? // "pending" | "active" (Cloudflare)
+  domainStatus     String? // "pending" | "provisioning" | "active" (Vercel)
+  // ── Per-custom-domain Mapbox token (minted via the Tokens API) ──
+  // A public (pk.*) token URL-restricted to `customDomain`, so the map loads
+  // straight from Mapbox's CDN instead of our proxy. Subdomain/apex sites use
+  // the shared NEXT_PUBLIC_MAPBOX_TOKEN instead and leave these null.
+  mapboxPublicToken String? // pk.* restricted to customDomain (served to the client)
+  mapboxTokenId     String? // Mapbox token id, for PATCH/DELETE
+  mapboxTokenStatus String? // "active" | "failed" (null = none minted yet)
+  mapboxTokenError  String?  @db.Text // last mint/update error, surfaced in the domain panel
   brandColor       String? // primary theme color (hex) — legacy single-color fallback
   theme            String?      @db.Text // JSON-serialized ThemeConfig (colors + radius + fonts, light/dark)
   siteName         String? // site name + <title>/SEO
@@ -362,4 +388,46 @@ model Invitation {
   inviter        User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
 
   @@map("invitation")
+}
+
+// ─── Marketing contacts (internal only) ────────────────────────────────────────
+// Engaged contacts (opened/clicked/replied) pulled from OUR single GHL location
+// for the internal marketing team's call workflow. NOT tenant-scoped — this is a
+// global table for platform staff only, unlike the per-agent tables above.
+model MarketingContact {
+  id             String       @id @default(cuid())
+  ghlContactId   String       @unique // GHL contact id — upsert key, prevents duplicates
+  firstName      String?
+  lastName       String?
+  email          String?
+  phone          String? // local source of truth; pushed to GHL when changed
+  tags           String[] // opened/clicked/replied (+ any others from GHL)
+  leadStatus     LeadStatus   @default(NEW)
+  lastOutreach   LastOutreach @default(NONE)
+  note           String?      @db.Text
+  phoneSyncedAt  DateTime? // last successful phone push to GHL
+  phoneSyncError String?      @db.Text // last push error (null = ok), surfaced in UI
+  lastFetchedAt  DateTime? // last time a GHL sync refreshed this row
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([leadStatus])
+  @@index([lastOutreach])
+}
+
+// Singleton row holding credentials for OUR GHL location, managed from the
+// platform Integrations page. The Private Integration Token is stored
+// AES-256-GCM encrypted (`tokenCipher`); `tokenLast4` is kept only for masked
+// display. Never expose the token over the API.
+model GhlIntegration {
+  id             String    @id @default("ghl") // enforced singleton
+  locationId     String
+  tokenCipher    String    @db.Text // encrypted Private Integration Token
+  tokenLast4     String // last 4 chars, for masked display only
+  status         String?   @default("connected") // "connected" | "error"
+  lastError      String?   @db.Text
+  lastVerifiedAt DateTime?
+  updatedById    String? // platform user who last saved it
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 }

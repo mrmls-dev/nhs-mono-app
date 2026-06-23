@@ -37,6 +37,7 @@ export default async function Home({ searchParams }: HomeProps) {
             countyId={county}
             countyBounds={countyBounds}
             countyName={countyName}
+            mapboxToken={agent.mapboxToken}
         />
     );
 }

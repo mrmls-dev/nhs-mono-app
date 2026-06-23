@@ -87,6 +87,14 @@ Maps default to SE Florida: `[-80.3, 26.35]`, zoom `7.75`.
 
 `MAPBOX_SERVER_TOKEN` (server-only, **no** `NEXT_PUBLIC_` prefix) powers the `/api/mapbox/[...path]` proxy. Because tenants run on arbitrary custom domains/subdomains, a URL-restricted public token would 403 the map on every new domain. Instead, the map's `transformRequest` (`apps/web/lib/mapbox.ts`) reroutes all `*.mapbox.com` traffic through the proxy, which injects this unrestricted token server-side. It needs scopes `styles:read`, `styles:tiles`, `fonts:read` and **no URL restrictions**. Set it in `apps/web/.env.local` locally and in the Vercel project env for production.
 
+GoHighLevel credentials for the internal marketing feature are configured in the dashboard at `/dashboard/integrations` (preferred) and stored **encrypted** in the `GhlIntegration` row. `GHL_API_TOKEN` + `GHL_LOCATION_ID` env vars (API only, server-only, **no** `NEXT_PUBLIC_` prefix) are an optional fallback when no integration has been saved.
+
+### Internal Marketing Contacts (platform-staff only)
+
+`/dashboard/contacts` is an **internal-only** page (not for white-label agent tenants) for our own marketing team. "Fetch latest" pulls engaged contacts (tagged `opened`/`clicked`/`replied`) from **our single GHL location** into the global `MarketingContact` table — upserted by `ghlContactId` so repeated fetches never duplicate, and re-syncs never clobber the team's local phone/status/outreach/note. The team edits a phone, Lead Status, Last Outreach, and Note per row; only a changed phone is pushed back to GHL. API: `apps/api/src/marketing-contacts/` (guarded `@Roles("admin")`) over the `apps/api/src/ghl/` client; web fetcher at `apps/web/lib/api/marketing-contacts.ts`. Unlike `AgentCounty`/`AgentHiddenCommunity`, this table is **not** tenant-scoped.
+
+**GHL connection** — managed at `/dashboard/integrations` (`apps/api/src/integrations/`, `@Roles("admin")`). The Private Integration Token is verified live on save, then stored AES-256-GCM encrypted (`GhlIntegration.tokenCipher`) via `CryptoService` (`apps/api/src/common/crypto.ts`, key derived from `BETTER_AUTH_SECRET`). The token is **write-only** — the API only ever returns a masked `tokenLast4`. `GhlService` reads creds from this row, falling back to env vars.
+
 ## Coding Conventions & Agent Skills
 
 See [AGENTS.md](AGENTS.md) for all coding requirements and the full list of agent skill files to read before writing code.

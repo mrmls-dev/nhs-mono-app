@@ -107,3 +107,13 @@ export type Member = Prisma.MemberModel
  * 
  */
 export type Invitation = Prisma.InvitationModel
+/**
+ * Model MarketingContact
+ * 
+ */
+export type MarketingContact = Prisma.MarketingContactModel
+/**
+ * Model GhlIntegration
+ * 
+ */
+export type GhlIntegration = Prisma.GhlIntegrationModel

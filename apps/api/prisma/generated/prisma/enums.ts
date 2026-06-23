@@ -16,3 +16,25 @@ export const CommunityStatus = {
 } as const
 
 export type CommunityStatus = (typeof CommunityStatus)[keyof typeof CommunityStatus]
+
+
+export const LeadStatus = {
+  NEW: 'NEW',
+  ATTEMPTING: 'ATTEMPTING',
+  CONTACTED: 'CONTACTED',
+  CONVERTED: 'CONVERTED',
+  NOT_INTERESTED: 'NOT_INTERESTED',
+  DO_NOT_CALL: 'DO_NOT_CALL'
+} as const
+
+export type LeadStatus = (typeof LeadStatus)[keyof typeof LeadStatus]
+
+
+export const LastOutreach = {
+  NONE: 'NONE',
+  COLD_CALL: 'COLD_CALL',
+  VOICEMAIL: 'VOICEMAIL',
+  TEXT: 'TEXT'
+} as const
+
+export type LastOutreach = (typeof LastOutreach)[keyof typeof LastOutreach]

@@ -11,10 +11,10 @@ import Map, {
 import type { MapRef } from "react-map-gl/mapbox";
 import Link from "next/link";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { mapTransformRequest } from "@/lib/mapbox";
 
 export type CommunityPin = {
     id: string;
+    slug: string;
     name: string;
     location: string;
     status: string;
@@ -73,9 +73,12 @@ const SE_FL = { longitude: -80.3, latitude: 26.35, zoom: 7.75 } as const;
 export default function ListingMap({
     communities,
     countyBounds,
+    mapboxToken,
 }: {
     communities: CommunityPin[];
     countyBounds?: CountyBounds;
+    /** Agent's domain-restricted token (custom domains); falls back to shared. */
+    mapboxToken?: string | null;
 }) {
     const [activeId, setActiveId] = useState<string | null>(null);
     const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -133,8 +136,9 @@ export default function ListingMap({
     return (
         <Map
             ref={mapRef}
-            mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-            transformRequest={mapTransformRequest}
+            mapboxAccessToken={
+                mapboxToken ?? process.env.NEXT_PUBLIC_MAPBOX_TOKEN
+            }
             initialViewState={initialViewState}
             style={{ width: "100%", height: "100%" }}
             mapStyle="mapbox://styles/mapbox/streets-v12"
@@ -224,7 +228,7 @@ export default function ListingMap({
                                 </p>
                             )}
                             <Link
-                                href={`/communities/${active.id}`}
+                                href={`/communities/${active.slug}`}
                                 className="mt-1 text-center text-xs font-semibold py-1.5 rounded-md transition-opacity hover:opacity-90"
                                 style={{ background: "#c9a84c", color: "#0b1d3a" }}
                             >

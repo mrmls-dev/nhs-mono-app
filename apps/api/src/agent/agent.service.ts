@@ -9,6 +9,7 @@ import {
 } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { VercelDomainsService } from "../vercel/vercel.service";
+import { MapboxTokensService } from "../mapbox/mapbox-tokens.service";
 import { StorageService } from "../storage/storage.service";
 import {
     AUTH_INSTANCE,
@@ -19,6 +20,9 @@ import type { Auth } from "../auth/auth";
 import type { CreateAgentDto } from "./dto/create-agent.dto";
 import type { UpdateAgentDto } from "./dto/update-agent.dto";
 import type { UpdateBrandingDto } from "./dto/update-branding.dto";
+
+/** Per-custom-domain Mapbox token state surfaced to the domain panel. */
+type MapboxTokenStatus = "active" | "failed";
 
 /** Org row + its owner — shaped for the admin Agents table. */
 const orgWithOwner = {
@@ -37,6 +41,7 @@ export class AgentService {
         @Inject(AUTH_INSTANCE) private readonly auth: Auth,
         private readonly prisma: PrismaService,
         private readonly vercel: VercelDomainsService,
+        private readonly mapboxTokens: MapboxTokensService,
         private readonly storage: StorageService
     ) {}
 
@@ -83,12 +88,18 @@ export class AgentService {
      */
     async getByDomain(host: string | undefined) {
         const domain = normalizeHost(host);
+        // A custom-domain match gets its own domain-restricted Mapbox token. The
+        // same org reached via its {slug} subdomain must NOT (that token is
+        // restricted to the custom domain) — it falls back to the shared token.
+        const byCustom = await this.resolveByCustomDomain(domain);
+        if (byCustom) {
+            return this.toPublicAgent(byCustom, { includeMapboxToken: true });
+        }
         const org =
-            (await this.resolveByCustomDomain(domain)) ??
             (await this.resolveBySubdomain(domain)) ??
             (await this.getDefaultOrg());
         if (!org) throw new NotFoundException("No agent configured");
-        return this.toPublicAgent(org);
+        return this.toPublicAgent(org, { includeMapboxToken: false });
     }
 
     private resolveByCustomDomain(domain: string | null) {
@@ -377,6 +388,16 @@ export class AgentService {
         }
         // The free subdomain is best-effort (won't block deletion).
         await this.unregisterSubdomain(org.slug);
+        // Drop the domain-restricted Mapbox token too (best-effort).
+        if (org.mapboxTokenId) {
+            try {
+                await this.mapboxTokens.deleteToken(org.mapboxTokenId);
+            } catch (err) {
+                this.logger.warn(
+                    `Failed to delete Mapbox token during agent removal: ${(err as Error).message}`
+                );
+            }
+        }
 
         await this.prisma.$transaction(async (tx) => {
             // Cascades members + invitations.
@@ -408,10 +429,10 @@ export class AgentService {
         return { id, deleted: true };
     }
 
-    // ── Custom domains (Cloudflare for SaaS) ───────────────────────────────────
+    // ── Custom domains (Vercel-native) ──────────────────────────────────────────
 
     async setDomain(id: string, domain: string) {
-        await this.assertExists(id);
+        const org = await this.assertExists(id);
         const clash = await this.prisma.organization.findUnique({
             where: { customDomain: domain },
         });
@@ -426,7 +447,62 @@ export class AgentService {
             where: { id },
             data: { customDomain: domain, domainStatus: result.status },
         });
+        // Mint (or repoint) the domain-restricted map token now, before DNS goes
+        // live, so it's ready by the time the domain serves. Best-effort: a
+        // Mapbox hiccup must not fail the domain op — it's retried when the
+        // domain panel is reopened (see getDomainSetup).
+        await this.ensureMapboxToken({
+            id,
+            customDomain: domain,
+            mapboxTokenId: org.mapboxTokenId,
+        });
         return result;
+    }
+
+    /**
+     * Ensure the agent has a public Mapbox token URL-restricted to its current
+     * custom domain: PATCH the existing token to the new domain, or mint a fresh
+     * one. Persists `mapboxTokenStatus` ("active"/"failed") so a failure surfaces
+     * in the domain panel and can be retried — it never throws. Returns the
+     * resulting status (null when there's no custom domain to act on).
+     */
+    private async ensureMapboxToken(org: {
+        id: string;
+        customDomain: string | null;
+        mapboxTokenId: string | null;
+    }): Promise<MapboxTokenStatus | null> {
+        if (!org.customDomain) return null;
+        try {
+            const token = org.mapboxTokenId
+                ? await this.mapboxTokens.updateTokenUrls(
+                      org.mapboxTokenId,
+                      org.customDomain
+                  )
+                : await this.mapboxTokens.createToken(org.customDomain);
+            await this.prisma.organization.update({
+                where: { id: org.id },
+                data: {
+                    mapboxPublicToken: token.token,
+                    mapboxTokenId: token.id,
+                    mapboxTokenStatus: "active",
+                    mapboxTokenError: null,
+                },
+            });
+            return "active";
+        } catch (err) {
+            const message = (err as Error).message;
+            this.logger.warn(
+                `Mapbox token sync failed for ${org.customDomain}: ${message}`
+            );
+            await this.prisma.organization.update({
+                where: { id: org.id },
+                data: {
+                    mapboxTokenStatus: "failed",
+                    mapboxTokenError: message,
+                },
+            });
+            return "failed";
+        }
     }
 
     /**
@@ -447,10 +523,22 @@ export class AgentService {
                 data: { domainStatus: result.status },
             });
         }
+        // Retry a token that failed to mint (or was never minted) while the panel
+        // is open, so a transient Mapbox outage self-heals on the next visit.
+        let mapboxTokenStatus =
+            org.mapboxTokenStatus as MapboxTokenStatus | null;
+        if (mapboxTokenStatus !== "active") {
+            mapboxTokenStatus = await this.ensureMapboxToken({
+                id,
+                customDomain: org.customDomain,
+                mapboxTokenId: org.mapboxTokenId,
+            });
+        }
         return {
             domain: org.customDomain,
             status: result.status,
             dnsInstructions: result.dnsInstructions,
+            mapboxTokenStatus,
         };
     }
 
@@ -472,9 +560,27 @@ export class AgentService {
         if (org.customDomain) {
             await this.vercel.removeDomain(org.customDomain);
         }
+        // Tear down the domain-restricted map token (best-effort — a leftover
+        // token is harmless, and we still clear the columns below).
+        if (org.mapboxTokenId) {
+            try {
+                await this.mapboxTokens.deleteToken(org.mapboxTokenId);
+            } catch (err) {
+                this.logger.warn(
+                    `Failed to delete Mapbox token for ${org.customDomain}: ${(err as Error).message}`
+                );
+            }
+        }
         await this.prisma.organization.update({
             where: { id },
-            data: { customDomain: null, domainStatus: null },
+            data: {
+                customDomain: null,
+                domainStatus: null,
+                mapboxPublicToken: null,
+                mapboxTokenId: null,
+                mapboxTokenStatus: null,
+                mapboxTokenError: null,
+            },
         });
     }
 
@@ -820,7 +926,7 @@ export class AgentService {
         };
     }
 
-    private toPublicAgent(org: BaseOrg) {
+    private toPublicAgent(org: BaseOrg, opts: { includeMapboxToken: boolean }) {
         return {
             id: org.id,
             name: org.name,
@@ -839,6 +945,9 @@ export class AgentService {
             subdomain: agentSubdomain(org.slug),
             customDomain: org.customDomain,
             domainStatus: org.domainStatus,
+            // Only the custom-domain entry point gets the domain-restricted token;
+            // subdomain/apex sites use the shared client token (null here).
+            mapboxToken: opts.includeMapboxToken ? org.mapboxPublicToken : null,
         };
     }
 }

@@ -62,14 +62,14 @@ export default function CommunityCard({ community }: { community: Community }) {
 
     return (
         <Link href={`/communities/${community.slug}`} className="group block">
-            <Card className="overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+            <Card className="overflow-hidden py-0 shadow-sm transition-shadow hover:shadow-md">
                 <div className="flex flex-col sm:flex-row">
-                    <div className="relative sm:w-2/5 aspect-4/3 sm:aspect-auto bg-muted overflow-hidden">
+                    <div className="relative aspect-4/3 overflow-hidden bg-muted sm:aspect-auto sm:w-2/5">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                             src={community.image}
                             alt={community.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
                         <Badge
                             className={`absolute top-3 left-3 rounded-full ${
@@ -82,8 +82,8 @@ export default function CommunityCard({ community }: { community: Community }) {
                         </Badge>
                     </div>
 
-                    <CardContent className="flex-1 p-5 flex flex-col gap-2">
-                        <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
+                    <CardContent className="flex flex-1 flex-col gap-2 p-5">
+                        <h3 className="text-xl font-bold text-foreground transition-colors group-hover:text-primary">
                             {community.name}
                         </h3>
 
@@ -92,7 +92,8 @@ export default function CommunityCard({ community }: { community: Community }) {
                         </p>
 
                         <p className="text-sm font-semibold text-primary">
-                            {community.floorPlans?.length || 0} Floor Plans Available
+                            {community.floorPlans?.length || 0} Floor Plans
+                            Available
                         </p>
 
                         <p className="text-sm text-foreground">
@@ -109,8 +110,8 @@ export default function CommunityCard({ community }: { community: Community }) {
                             From {community.sqftFrom} Sq. Ft.
                         </p>
 
-                        <div className="mt-auto pt-3 border-t border-border">
-                            <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                        <div className="mt-auto border-t border-border pt-3">
+                            <p className="text-xs tracking-wide text-muted-foreground uppercase">
                                 Pricing starting from
                             </p>
                             <p className="text-2xl font-bold text-foreground">

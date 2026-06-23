@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -10,6 +11,7 @@ import {
     Trash2,
     RefreshCw,
     ShieldCheck,
+    MapPinned,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -56,7 +58,11 @@ export function DomainEditor({ agent }: { agent: Agent }) {
     // Vercel is the source of truth: fetch the live DNS records (routing record
     // + any TXT ownership challenge) whenever a domain is configured. The TXT
     // appears only while Vercel requires it and disappears once verified.
-    const { data: setup, isLoading: setupLoading } = useQuery({
+    const {
+        data: setup,
+        isLoading: setupLoading,
+        refetch: refetchSetup,
+    } = useQuery({
         queryKey: ["agent-domain", agent.id],
         queryFn: () => getDomainSetup(agent.id),
         enabled: Boolean(domain),
@@ -134,6 +140,23 @@ export function DomainEditor({ agent }: { agent: Agent }) {
     const copy = (value: string) => {
         navigator.clipboard?.writeText(value);
         toast.success("Copied to clipboard.");
+    };
+
+    // Re-fetching the setup re-runs the server's mint retry, so a failed map
+    // token can self-heal on demand without a separate endpoint.
+    const [retryingToken, setRetryingToken] = useState(false);
+    const retryMapboxToken = async () => {
+        setRetryingToken(true);
+        try {
+            const { data } = await refetchSetup();
+            if (data?.mapboxTokenStatus === "active") {
+                toast.success("Map is ready for this domain.");
+            } else if (data?.mapboxTokenStatus === "failed") {
+                toast.error("Map setup still failing — please try again shortly.");
+            }
+        } finally {
+            setRetryingToken(false);
+        }
     };
 
     const subdomainUrl = agent.subdomain ? `https://${agent.subdomain}` : null;
@@ -268,6 +291,47 @@ export function DomainEditor({ agent }: { agent: Agent }) {
                                 </Field>
                             </FieldGroup>
                         </form>
+                    )}
+
+                    {domain && setup?.mapboxTokenStatus === "failed" && (
+                        <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-destructive/30 bg-destructive/5 p-4">
+                            <div className="flex items-start gap-3">
+                                <MapPinned className="mt-0.5 size-5 shrink-0 text-destructive" />
+                                <div className="flex flex-col gap-0.5">
+                                    <span className="text-sm font-medium text-foreground">
+                                        Map setup failed
+                                    </span>
+                                    <span className="text-xs text-muted-foreground">
+                                        We couldn&apos;t create the map token for
+                                        this domain, so the map may not load on it.
+                                        Retry below, or contact support if it keeps
+                                        failing.
+                                    </span>
+                                </div>
+                            </div>
+                            <Button
+                                variant="outline"
+                                onClick={retryMapboxToken}
+                                disabled={retryingToken}
+                            >
+                                {retryingToken ? (
+                                    <Loader2
+                                        data-icon="inline-start"
+                                        className="animate-spin"
+                                    />
+                                ) : (
+                                    <RefreshCw data-icon="inline-start" />
+                                )}
+                                Retry map setup
+                            </Button>
+                        </div>
+                    )}
+
+                    {domain && setup?.mapboxTokenStatus === "active" && (
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <MapPinned className="size-4 text-emerald-600 dark:text-emerald-400" />
+                            Map is ready for this domain.
+                        </div>
                     )}
                 </CardContent>
             </Card>

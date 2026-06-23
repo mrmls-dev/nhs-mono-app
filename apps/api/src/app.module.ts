@@ -8,11 +8,15 @@ import { FloorPlanModule } from "./floor-plan/floor-plan.module";
 import { StorageModule } from "./storage/storage.module";
 import { AgentModule } from "./agent/agent.module";
 import { StaffModule } from "./staff/staff.module";
+import { MarketingContactsModule } from "./marketing-contacts/marketing-contacts.module";
+import { IntegrationsModule } from "./integrations/integrations.module";
+import { CryptoModule } from "./common/crypto.module";
 
 @Module({
     imports: [
         PrismaModule,
         AuthModule,
+        CryptoModule,
         RegionModule,
         CountyModule,
         CommunityModule,
@@ -20,6 +24,8 @@ import { StaffModule } from "./staff/staff.module";
         StorageModule,
         AgentModule,
         StaffModule,
+        MarketingContactsModule,
+        IntegrationsModule,
     ],
     controllers: [],
     providers: [],
