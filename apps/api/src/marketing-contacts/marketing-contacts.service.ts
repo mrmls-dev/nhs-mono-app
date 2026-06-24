@@ -1,7 +1,9 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { Prisma } from "../../prisma/generated/prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 import { GhlService } from "../ghl/ghl.service";
 import type { UpdateMarketingContactDto } from "./dto/update-marketing-contact.dto";
+import type { ListMarketingContactsDto } from "./dto/list-marketing-contacts.dto";
 
 /**
  * Campaign-engagement tags we pull from GHL. These are added by the email
@@ -9,7 +11,17 @@ import type { UpdateMarketingContactDto } from "./dto/update-marketing-contact.d
  */
 const ENGAGEMENT_TAGS = ["opened", "clicked", "replied"];
 
+/** Contacts carrying any of these tags are never imported or shown. */
+const EXCLUDED_TAGS = ["agent"];
+
 export type SyncResult = { created: number; updated: number; total: number };
+
+export type PaginatedContacts = {
+    data: Awaited<ReturnType<PrismaService["marketingContact"]["findMany"]>>;
+    total: number;
+    page: number;
+    pageSize: number;
+};
 
 @Injectable()
 export class MarketingContactsService {
@@ -20,11 +32,47 @@ export class MarketingContactsService {
         private readonly ghl: GhlService
     ) {}
 
-    /** Every stored contact, newest first. */
-    listContacts() {
-        return this.prisma.marketingContact.findMany({
-            orderBy: { createdAt: "desc" },
-        });
+    /**
+     * Paginated contacts, newest first, with an optional free-text search
+     * (name/email/phone) + status filter. Excluded tags are filtered at the GHL
+     * sync, so nothing is masked here.
+     */
+    async listContacts(
+        params: ListMarketingContactsDto
+    ): Promise<PaginatedContacts> {
+        const { page, pageSize, q, status } = params;
+        const term = q?.trim();
+
+        const where: Prisma.MarketingContactWhereInput = {
+            ...(status ? { leadStatus: status } : {}),
+            ...(term
+                ? {
+                      OR: [
+                          {
+                              firstName: {
+                                  contains: term,
+                                  mode: "insensitive",
+                              },
+                          },
+                          { lastName: { contains: term, mode: "insensitive" } },
+                          { email: { contains: term, mode: "insensitive" } },
+                          { phone: { contains: term } },
+                      ],
+                  }
+                : {}),
+        };
+
+        const [data, total] = await this.prisma.$transaction([
+            this.prisma.marketingContact.findMany({
+                where,
+                orderBy: { createdAt: "desc" },
+                skip: (page - 1) * pageSize,
+                take: pageSize,
+            }),
+            this.prisma.marketingContact.count({ where }),
+        ]);
+
+        return { data, total, page, pageSize };
     }
 
     /**
@@ -36,7 +84,15 @@ export class MarketingContactsService {
      * This is what prevents duplicate rows on repeated fetches.
      */
     async sync(): Promise<SyncResult> {
-        const contacts = await this.ghl.searchContactsByTags(ENGAGEMENT_TAGS);
+        // The exclusion is applied in the GHL query; this filter is a safety net
+        // in case GHL doesn't honor the `not_contains` operator.
+        const fetched = await this.ghl.searchContactsByTags(
+            ENGAGEMENT_TAGS,
+            EXCLUDED_TAGS
+        );
+        const contacts = fetched.filter(
+            (c) => !c.tags.some((t) => EXCLUDED_TAGS.includes(t))
+        );
         const now = new Date();
 
         const existing = await this.prisma.marketingContact.findMany({

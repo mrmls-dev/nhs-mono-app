@@ -5,6 +5,7 @@ import {
     Param,
     Patch,
     Post,
+    Query,
     UseGuards,
 } from "@nestjs/common";
 import { MarketingContactsService } from "./marketing-contacts.service";
@@ -12,6 +13,7 @@ import { SessionGuard } from "../auth/session.guard";
 import { RolesGuard } from "../auth/roles.guard";
 import { Roles } from "../auth/auth.decorators";
 import { UpdateMarketingContactDto } from "./dto/update-marketing-contact.dto";
+import { ListMarketingContactsDto } from "./dto/list-marketing-contacts.dto";
 
 /**
  * Internal marketing contact workflow. Platform staff only (owner satisfies
@@ -23,10 +25,10 @@ import { UpdateMarketingContactDto } from "./dto/update-marketing-contact.dto";
 export class MarketingContactsController {
     constructor(private readonly service: MarketingContactsService) {}
 
-    /** List every stored contact, newest first. */
+    /** Paginated contacts (newest first) with optional search + status filter. */
     @Get()
-    findAll() {
-        return this.service.listContacts();
+    findAll(@Query() query: ListMarketingContactsDto) {
+        return this.service.listContacts(query);
     }
 
     /** Pull the latest engaged contacts from GHL and upsert (no duplicates). */

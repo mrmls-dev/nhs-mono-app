@@ -1,10 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+    keepPreviousData,
+    useMutation,
+    useQuery,
+    useQueryClient,
+} from "@tanstack/react-query";
 import {
     Loader2,
     RefreshCw,
@@ -13,6 +18,8 @@ import {
     Users,
     TriangleAlert,
     Lock,
+    ChevronLeft,
+    ChevronRight,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@workspace/ui/components/button";
@@ -63,6 +70,8 @@ import {
     type LeadStatus,
 } from "@/api/marketing-contacts";
 
+const PAGE_SIZE = 20;
+
 const editSchema = z.object({
     phone: z.string().max(40, "Too long").optional(),
     leadStatus: z.enum(LEAD_STATUSES),
@@ -91,18 +100,42 @@ export function ContactsClient() {
     const qc = useQueryClient();
 
     const [search, setSearch] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState<LeadStatus | "ALL">("ALL");
+    const [page, setPage] = useState(1);
     const [editTarget, setEditTarget] = useState<MarketingContact | null>(null);
 
-    const {
-        data: contacts,
-        isPending,
-        isError,
-    } = useQuery<MarketingContact[]>({
-        queryKey: ["marketing-contacts"],
-        queryFn: getMarketingContacts,
-        enabled: isPlatformAdmin(session?.user),
+    // Debounce the search box; reset to the first page on a new term.
+    useEffect(() => {
+        const t = setTimeout(() => {
+            setDebouncedSearch(search);
+            setPage(1);
+        }, 300);
+        return () => clearTimeout(t);
+    }, [search]);
+
+    const isAdmin = isPlatformAdmin(session?.user);
+
+    const { data, isPending, isError, isPlaceholderData } = useQuery({
+        queryKey: [
+            "marketing-contacts",
+            { page, q: debouncedSearch, status: statusFilter },
+        ],
+        queryFn: () =>
+            getMarketingContacts({
+                page,
+                pageSize: PAGE_SIZE,
+                q: debouncedSearch,
+                status: statusFilter === "ALL" ? undefined : statusFilter,
+            }),
+        enabled: isAdmin,
+        placeholderData: keepPreviousData,
     });
+
+    const contacts = data?.data ?? [];
+    const total = data?.total ?? 0;
+    const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    const filtersActive = debouncedSearch !== "" || statusFilter !== "ALL";
 
     const syncMutation = useMutation({
         mutationFn: syncMarketingContacts,
@@ -153,27 +186,7 @@ export function ContactsClient() {
         onError: (err: Error) => toast.error(err.message),
     });
 
-    const filtered = useMemo(() => {
-        const q = search.trim().toLowerCase();
-        return (contacts ?? []).filter((c) => {
-            if (statusFilter !== "ALL" && c.leadStatus !== statusFilter) {
-                return false;
-            }
-            if (!q) return true;
-            const haystack = [
-                c.firstName,
-                c.lastName,
-                c.email,
-                c.phone,
-            ]
-                .filter(Boolean)
-                .join(" ")
-                .toLowerCase();
-            return haystack.includes(q);
-        });
-    }, [contacts, search, statusFilter]);
-
-    if (!isPlatformAdmin(session?.user)) {
+    if (!isAdmin) {
         return (
             <Empty className="border border-dashed">
                 <EmptyHeader>
@@ -194,6 +207,9 @@ export function ContactsClient() {
     };
     const editErrors = editForm.formState.errors;
 
+    const rangeStart = total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
+    const rangeEnd = Math.min(page * PAGE_SIZE, total);
+
     return (
         <div className="flex flex-col gap-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
@@ -202,8 +218,7 @@ export function ContactsClient() {
                         Contacts
                     </h1>
                     <p className="text-sm text-muted-foreground">
-                        Engaged leads from your email campaigns ·{" "}
-                        {contacts?.length ?? 0} total
+                        Engaged leads from your email campaigns · {total} total
                     </p>
                 </div>
                 <Button
@@ -232,7 +247,10 @@ export function ContactsClient() {
                 </div>
                 <Select
                     value={statusFilter}
-                    onValueChange={(v) => setStatusFilter(v as LeadStatus | "ALL")}
+                    onValueChange={(v) => {
+                        setStatusFilter(v as LeadStatus | "ALL");
+                        setPage(1);
+                    }}
                 >
                     <SelectTrigger className="w-48">
                         <SelectValue placeholder="All statuses" />
@@ -250,7 +268,7 @@ export function ContactsClient() {
 
             {isPending ? (
                 <div className="flex flex-col gap-2">
-                    {Array.from({ length: 5 }).map((_, i) => (
+                    {Array.from({ length: 8 }).map((_, i) => (
                         <Skeleton key={i} className="h-12 w-full rounded-lg" />
                     ))}
                 </div>
@@ -258,110 +276,138 @@ export function ContactsClient() {
                 <p className="text-sm text-destructive">
                     Could not load contacts. Make sure the API is running.
                 </p>
-            ) : filtered.length > 0 ? (
-                <div className="overflow-hidden rounded-lg border">
-                    <table className="w-full text-sm">
-                        <thead>
-                            <tr className="border-b bg-muted/50 text-left text-muted-foreground">
-                                <th className="px-4 py-3 font-medium">Contact</th>
-                                <th className="px-4 py-3 font-medium">Phone</th>
-                                <th className="px-4 py-3 font-medium hidden lg:table-cell">
-                                    Tags
-                                </th>
-                                <th className="px-4 py-3 font-medium">Status</th>
-                                <th className="px-4 py-3 font-medium hidden md:table-cell">
-                                    Last outreach
-                                </th>
-                                <th className="px-4 py-3 font-medium text-right">
-                                    <span className="sr-only">Actions</span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filtered.map((c, i) => (
-                                <tr
-                                    key={c.id}
-                                    className={`transition-colors hover:bg-muted/50 ${
-                                        i < filtered.length - 1 ? "border-b" : ""
-                                    }`}
-                                >
-                                    <td className="px-4 py-3">
-                                        <div className="flex flex-col">
-                                            <span className="font-medium">
-                                                {fullName(c)}
-                                            </span>
-                                            <span className="text-xs text-muted-foreground">
-                                                {c.email ?? "—"}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <div className="flex items-center gap-1.5">
-                                            <span
+            ) : contacts.length > 0 ? (
+                <>
+                    <div
+                        className={`overflow-hidden rounded-lg border transition-opacity ${
+                            isPlaceholderData ? "opacity-60" : ""
+                        }`}
+                    >
+                        <table className="w-full text-sm">
+                            <thead>
+                                <tr className="border-b bg-muted/50 text-left text-muted-foreground">
+                                    <th className="px-4 py-3 font-medium">
+                                        Contact
+                                    </th>
+                                    <th className="px-4 py-3 font-medium">
+                                        Phone
+                                    </th>
+                                    <th className="px-4 py-3 font-medium">
+                                        Status
+                                    </th>
+                                    <th className="px-4 py-3 font-medium hidden md:table-cell">
+                                        Last outreach
+                                    </th>
+                                    <th className="px-4 py-3 font-medium text-right">
+                                        <span className="sr-only">Actions</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {contacts.map((c, i) => (
+                                    <tr
+                                        key={c.id}
+                                        className={`transition-colors hover:bg-muted/50 ${
+                                            i < contacts.length - 1
+                                                ? "border-b"
+                                                : ""
+                                        }`}
+                                    >
+                                        <td className="px-4 py-3">
+                                            <div className="flex flex-col">
+                                                <span className="font-medium">
+                                                    {fullName(c)}
+                                                </span>
+                                                <span className="text-xs text-muted-foreground">
+                                                    {c.email ?? "—"}
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <div className="flex items-center gap-1.5">
+                                                <span
+                                                    className={
+                                                        c.phone
+                                                            ? ""
+                                                            : "text-muted-foreground"
+                                                    }
+                                                >
+                                                    {c.phone ?? "Add number"}
+                                                </span>
+                                                {c.phoneSyncError && (
+                                                    <TriangleAlert
+                                                        className="size-3.5 text-amber-600"
+                                                        aria-label="Phone not synced to GHL"
+                                                    />
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <Badge
+                                                variant="outline"
                                                 className={
-                                                    c.phone
-                                                        ? ""
-                                                        : "text-muted-foreground"
+                                                    STATUS_TONE[c.leadStatus]
                                                 }
                                             >
-                                                {c.phone ?? "Add number"}
-                                            </span>
-                                            {c.phoneSyncError && (
-                                                <TriangleAlert
-                                                    className="size-3.5 text-amber-600"
-                                                    aria-label="Phone not synced to GHL"
-                                                />
-                                            )}
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-3 hidden lg:table-cell">
-                                        <div className="flex flex-wrap gap-1">
-                                            {c.tags.length > 0 ? (
-                                                c.tags.map((t) => (
-                                                    <Badge
-                                                        key={t}
-                                                        variant="secondary"
-                                                        className="font-normal"
-                                                    >
-                                                        {t}
-                                                    </Badge>
-                                                ))
-                                            ) : (
-                                                <span className="text-muted-foreground">
-                                                    —
-                                                </span>
-                                            )}
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <Badge
-                                            variant="outline"
-                                            className={STATUS_TONE[c.leadStatus]}
-                                        >
-                                            {LEAD_STATUS_LABELS[c.leadStatus]}
-                                        </Badge>
-                                    </td>
-                                    <td className="px-4 py-3 text-muted-foreground hidden md:table-cell">
-                                        {LAST_OUTREACH_LABELS[c.lastOutreach]}
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <div className="flex justify-end">
-                                            <Button
-                                                variant="ghost"
-                                                size="icon-sm"
-                                                aria-label={`Edit ${fullName(c)}`}
-                                                className="text-muted-foreground hover:text-foreground"
-                                                onClick={() => setEditTarget(c)}
-                                            >
-                                                <SquarePen />
-                                            </Button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                                                {LEAD_STATUS_LABELS[c.leadStatus]}
+                                            </Badge>
+                                        </td>
+                                        <td className="px-4 py-3 text-muted-foreground hidden md:table-cell">
+                                            {LAST_OUTREACH_LABELS[c.lastOutreach]}
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <div className="flex justify-end">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon-sm"
+                                                    aria-label={`Edit ${fullName(c)}`}
+                                                    className="text-muted-foreground hover:text-foreground"
+                                                    onClick={() =>
+                                                        setEditTarget(c)
+                                                    }
+                                                >
+                                                    <SquarePen />
+                                                </Button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* Pagination */}
+                    <div className="flex items-center justify-between gap-3">
+                        <p className="text-sm text-muted-foreground">
+                            {rangeStart}–{rangeEnd} of {total}
+                        </p>
+                        <div className="flex items-center gap-2">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                                disabled={page <= 1 || isPlaceholderData}
+                            >
+                                <ChevronLeft data-icon="inline-start" />
+                                Previous
+                            </Button>
+                            <span className="text-sm text-muted-foreground">
+                                Page {page} of {totalPages}
+                            </span>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                    setPage((p) => Math.min(totalPages, p + 1))
+                                }
+                                disabled={page >= totalPages || isPlaceholderData}
+                            >
+                                Next
+                                <ChevronRight data-icon="inline-end" />
+                            </Button>
+                        </div>
+                    </div>
+                </>
             ) : (
                 <Empty className="border border-dashed">
                     <EmptyHeader>
@@ -369,17 +415,17 @@ export function ContactsClient() {
                             <Users />
                         </EmptyMedia>
                         <EmptyTitle>
-                            {contacts && contacts.length > 0
+                            {filtersActive
                                 ? "No matching contacts"
                                 : "No contacts yet"}
                         </EmptyTitle>
                         <EmptyDescription>
-                            {contacts && contacts.length > 0
+                            {filtersActive
                                 ? "Try a different search or status filter."
                                 : "Click “Fetch latest” to pull engaged contacts from GHL."}
                         </EmptyDescription>
                     </EmptyHeader>
-                    {(!contacts || contacts.length === 0) && (
+                    {!filtersActive && (
                         <EmptyContent>
                             <Button
                                 onClick={() => syncMutation.mutate()}

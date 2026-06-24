@@ -93,18 +93,27 @@ export class GhlService {
     }
 
     /**
-     * All contacts in our location carrying any of the given tags. We query one
-     * tag at a time (each paginated) and de-duplicate by contact id — simpler
-     * and more robust than nested OR-group filters, and the engaged set is small.
+     * All contacts in our location carrying any of `tags` but none of
+     * `excludeTags`. We query one tag at a time (each paginated) and
+     * de-duplicate by contact id — simpler and more robust than nested OR-group
+     * filters, and the engaged set is small. The exclusion is pushed down to the
+     * GHL query (a `not_contains` filter) so excluded contacts are never fetched.
      *
-     * NOTE: verify the `tags`/`contains` filter operator against the live
-     * Search Contacts docs if GHL changes the schema.
+     * NOTE: verify the `tags` `contains`/`not_contains` operators against the
+     * live Search Contacts docs if GHL changes the schema.
      */
-    async searchContactsByTags(tags: string[]): Promise<GhlContact[]> {
+    async searchContactsByTags(
+        tags: string[],
+        excludeTags: string[] = []
+    ): Promise<GhlContact[]> {
         const creds = await this.resolveCreds();
         const byId = new Map<string, GhlContact>();
         for (const tag of tags) {
-            for (const contact of await this.searchByTag(tag, creds)) {
+            for (const contact of await this.searchByTag(
+                tag,
+                excludeTags,
+                creds
+            )) {
                 byId.set(contact.id, contact);
             }
         }
@@ -113,16 +122,27 @@ export class GhlService {
 
     private async searchByTag(
         tag: string,
+        excludeTags: string[],
         creds: GhlCreds
     ): Promise<GhlContact[]> {
         const collected: GhlContact[] = [];
         let searchAfter: unknown[] | undefined;
 
+        // Engagement tag must be present; excluded tags must be absent (ANDed).
+        const filters = [
+            { field: "tags", operator: "contains", value: tag },
+            ...excludeTags.map((t) => ({
+                field: "tags",
+                operator: "not_contains",
+                value: t,
+            })),
+        ];
+
         for (let page = 0; page < MAX_PAGES; page++) {
             const body: Record<string, unknown> = {
                 locationId: creds.locationId,
                 pageLimit: PAGE_LIMIT,
-                filters: [{ field: "tags", operator: "contains", value: tag }],
+                filters,
             };
             if (searchAfter) body.searchAfter = searchAfter;
 
