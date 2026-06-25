@@ -21,15 +21,10 @@ import {
     CardTitle,
 } from "@workspace/ui/components/card";
 import { Button } from "@workspace/ui/components/button";
+import { Skeleton } from "@workspace/ui/components/skeleton";
 import { useSession, isPlatformAdmin } from "@/lib/auth-client";
 import { getMyAgent } from "@/api/agent";
-
-const adminStats = [
-    { label: "Communities", value: 0, icon: Building2 },
-    { label: "Regions", value: 0, icon: Map },
-    { label: "Counties", value: 0, icon: MapPinned },
-    { label: "Floor Plans", value: 0, icon: LayoutTemplate },
-];
+import { getOverviewStats } from "@/api/stats";
 
 const agentStats = [
     { label: "Visitors (30d)", value: "—", icon: Eye },
@@ -39,6 +34,18 @@ const agentStats = [
 ];
 
 function AdminOverview() {
+    const { data: stats, isPending, isError } = useQuery({
+        queryKey: ["overview-stats"],
+        queryFn: getOverviewStats,
+    });
+
+    const adminStats = [
+        { label: "Communities", value: stats?.communities, icon: Building2 },
+        { label: "Regions", value: stats?.regions, icon: Map },
+        { label: "Counties", value: stats?.counties, icon: MapPinned },
+        { label: "Floor Plans", value: stats?.floorPlans, icon: LayoutTemplate },
+    ];
+
     return (
         <div className="flex flex-col gap-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
@@ -64,7 +71,13 @@ function AdminOverview() {
                         <CardHeader>
                             <CardDescription>{stat.label}</CardDescription>
                             <CardTitle className="text-3xl">
-                                {stat.value}
+                                {isPending ? (
+                                    <Skeleton className="h-9 w-12" />
+                                ) : isError ? (
+                                    "—"
+                                ) : (
+                                    stat.value
+                                )}
                             </CardTitle>
                         </CardHeader>
                         <CardContent>

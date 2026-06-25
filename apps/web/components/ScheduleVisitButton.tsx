@@ -28,7 +28,7 @@ export default function ScheduleVisitButton({
 
     return (
         <Button asChild className={cn(sizeClasses[size], className)}>
-            <Link href={href} target="_blank" rel="noopener noreferrer">
+            <Link href={href} rel="noopener noreferrer">
                 <CalendarDays className="size-4 shrink-0" aria-hidden />
                 Schedule a Visit
             </Link>

@@ -80,7 +80,6 @@ export default async function MarketingLayout({
                         <PublicThemeToggle />
                         <a
                             href="https://nationalhousesearch.com"
-                            target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex h-8 items-center gap-1.5 rounded px-3 text-xs font-semibold text-muted-foreground transition-colors hover:bg-border hover:text-foreground sm:h-10 sm:px-5 sm:text-sm"
                         >
@@ -114,7 +113,7 @@ export default async function MarketingLayout({
                             alt={siteName}
                             width={145}
                             height={65}
-                            className="object-contain brightness-0 invert"
+                            className="object-contain"
                         />
                         <p className="text-sm font-semibold tracking-wide text-secondary-foreground/80">
                             {agent.footerText ?? ""}
