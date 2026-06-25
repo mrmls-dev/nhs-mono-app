@@ -41,23 +41,37 @@ export class MarketingContactsService {
         params: ListMarketingContactsDto
     ): Promise<PaginatedContacts> {
         const { page, pageSize, q, status } = params;
-        const term = q?.trim();
+        // Split into words so "Jane Doe" matches firstName="Jane" + lastName="Doe":
+        // every token must match SOME field (AND of tokens, OR of fields).
+        const tokens = q?.trim().split(/\s+/).filter(Boolean) ?? [];
 
         const where: Prisma.MarketingContactWhereInput = {
             ...(status ? { leadStatus: status } : {}),
-            ...(term
+            ...(tokens.length
                 ? {
-                      OR: [
-                          {
-                              firstName: {
-                                  contains: term,
-                                  mode: "insensitive",
+                      AND: tokens.map((tok) => ({
+                          OR: [
+                              {
+                                  firstName: {
+                                      contains: tok,
+                                      mode: "insensitive" as const,
+                                  },
                               },
-                          },
-                          { lastName: { contains: term, mode: "insensitive" } },
-                          { email: { contains: term, mode: "insensitive" } },
-                          { phone: { contains: term } },
-                      ],
+                              {
+                                  lastName: {
+                                      contains: tok,
+                                      mode: "insensitive" as const,
+                                  },
+                              },
+                              {
+                                  email: {
+                                      contains: tok,
+                                      mode: "insensitive" as const,
+                                  },
+                              },
+                              { phone: { contains: tok } },
+                          ],
+                      })),
                   }
                 : {}),
         };
