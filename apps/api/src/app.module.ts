@@ -9,6 +9,7 @@ import { StorageModule } from "./storage/storage.module";
 import { AgentModule } from "./agent/agent.module";
 import { StaffModule } from "./staff/staff.module";
 import { MarketingContactsModule } from "./marketing-contacts/marketing-contacts.module";
+import { BuyerLeadsModule } from "./buyer-leads/buyer-leads.module";
 import { IntegrationsModule } from "./integrations/integrations.module";
 import { StatsModule } from "./stats/stats.module";
 import { CryptoModule } from "./common/crypto.module";
@@ -26,6 +27,7 @@ import { CryptoModule } from "./common/crypto.module";
         AgentModule,
         StaffModule,
         MarketingContactsModule,
+        BuyerLeadsModule,
         IntegrationsModule,
         StatsModule,
     ],

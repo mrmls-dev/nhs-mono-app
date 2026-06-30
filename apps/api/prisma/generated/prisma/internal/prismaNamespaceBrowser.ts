@@ -67,6 +67,7 @@ export const ModelName = {
   AgentCounty: 'AgentCounty',
   AgentHiddenCommunity: 'AgentHiddenCommunity',
   AgentFloorPlanVideo: 'AgentFloorPlanVideo',
+  BuyerLead: 'BuyerLead',
   Member: 'Member',
   Invitation: 'Invitation',
   MarketingContact: 'MarketingContact',
@@ -349,6 +350,30 @@ export const AgentFloorPlanVideoScalarFieldEnum = {
 } as const
 
 export type AgentFloorPlanVideoScalarFieldEnum = (typeof AgentFloorPlanVideoScalarFieldEnum)[keyof typeof AgentFloorPlanVideoScalarFieldEnum]
+
+
+export const BuyerLeadScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  email: 'email',
+  phone: 'phone',
+  consent: 'consent',
+  location: 'location',
+  countyId: 'countyId',
+  homeType: 'homeType',
+  bedrooms: 'bedrooms',
+  bathrooms: 'bathrooms',
+  budget: 'budget',
+  matchCount: 'matchCount',
+  leadStatus: 'leadStatus',
+  note: 'note',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BuyerLeadScalarFieldEnum = (typeof BuyerLeadScalarFieldEnum)[keyof typeof BuyerLeadScalarFieldEnum]
 
 
 export const MemberScalarFieldEnum = {

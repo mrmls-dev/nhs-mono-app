@@ -120,6 +120,11 @@ export type AgentHiddenCommunity = Prisma.AgentHiddenCommunityModel
  */
 export type AgentFloorPlanVideo = Prisma.AgentFloorPlanVideoModel
 /**
+ * Model BuyerLead
+ * 
+ */
+export type BuyerLead = Prisma.BuyerLeadModel
+/**
  * Model Member
  * 
  */

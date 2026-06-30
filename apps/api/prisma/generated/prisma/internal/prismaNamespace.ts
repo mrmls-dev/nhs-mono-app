@@ -400,6 +400,7 @@ export const ModelName = {
   AgentCounty: 'AgentCounty',
   AgentHiddenCommunity: 'AgentHiddenCommunity',
   AgentFloorPlanVideo: 'AgentFloorPlanVideo',
+  BuyerLead: 'BuyerLead',
   Member: 'Member',
   Invitation: 'Invitation',
   MarketingContact: 'MarketingContact',
@@ -419,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "region" | "county" | "community" | "amenity" | "communityAmenity" | "school" | "floorPlanModel" | "floorPlanModelMedia" | "user" | "session" | "account" | "verification" | "organization" | "agentCounty" | "agentHiddenCommunity" | "agentFloorPlanVideo" | "member" | "invitation" | "marketingContact" | "ghlIntegration"
+    modelProps: "region" | "county" | "community" | "amenity" | "communityAmenity" | "school" | "floorPlanModel" | "floorPlanModelMedia" | "user" | "session" | "account" | "verification" | "organization" | "agentCounty" | "agentHiddenCommunity" | "agentFloorPlanVideo" | "buyerLead" | "member" | "invitation" | "marketingContact" | "ghlIntegration"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1607,6 +1608,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    BuyerLead: {
+      payload: Prisma.$BuyerLeadPayload<ExtArgs>
+      fields: Prisma.BuyerLeadFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BuyerLeadFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerLeadPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BuyerLeadFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerLeadPayload>
+        }
+        findFirst: {
+          args: Prisma.BuyerLeadFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerLeadPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BuyerLeadFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerLeadPayload>
+        }
+        findMany: {
+          args: Prisma.BuyerLeadFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerLeadPayload>[]
+        }
+        create: {
+          args: Prisma.BuyerLeadCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerLeadPayload>
+        }
+        createMany: {
+          args: Prisma.BuyerLeadCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BuyerLeadCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerLeadPayload>[]
+        }
+        delete: {
+          args: Prisma.BuyerLeadDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerLeadPayload>
+        }
+        update: {
+          args: Prisma.BuyerLeadUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerLeadPayload>
+        }
+        deleteMany: {
+          args: Prisma.BuyerLeadDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BuyerLeadUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BuyerLeadUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerLeadPayload>[]
+        }
+        upsert: {
+          args: Prisma.BuyerLeadUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerLeadPayload>
+        }
+        aggregate: {
+          args: Prisma.BuyerLeadAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBuyerLead>
+        }
+        groupBy: {
+          args: Prisma.BuyerLeadGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BuyerLeadGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BuyerLeadCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BuyerLeadCountAggregateOutputType> | number
+        }
+      }
+    }
     Member: {
       payload: Prisma.$MemberPayload<ExtArgs>
       fields: Prisma.MemberFieldRefs
@@ -2204,6 +2279,30 @@ export const AgentFloorPlanVideoScalarFieldEnum = {
 export type AgentFloorPlanVideoScalarFieldEnum = (typeof AgentFloorPlanVideoScalarFieldEnum)[keyof typeof AgentFloorPlanVideoScalarFieldEnum]
 
 
+export const BuyerLeadScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  email: 'email',
+  phone: 'phone',
+  consent: 'consent',
+  location: 'location',
+  countyId: 'countyId',
+  homeType: 'homeType',
+  bedrooms: 'bedrooms',
+  bathrooms: 'bathrooms',
+  budget: 'budget',
+  matchCount: 'matchCount',
+  leadStatus: 'leadStatus',
+  note: 'note',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BuyerLeadScalarFieldEnum = (typeof BuyerLeadScalarFieldEnum)[keyof typeof BuyerLeadScalarFieldEnum]
+
+
 export const MemberScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
@@ -2539,6 +2638,7 @@ export type GlobalOmitConfig = {
   agentCounty?: Prisma.AgentCountyOmit
   agentHiddenCommunity?: Prisma.AgentHiddenCommunityOmit
   agentFloorPlanVideo?: Prisma.AgentFloorPlanVideoOmit
+  buyerLead?: Prisma.BuyerLeadOmit
   member?: Prisma.MemberOmit
   invitation?: Prisma.InvitationOmit
   marketingContact?: Prisma.MarketingContactOmit

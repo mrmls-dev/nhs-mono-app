@@ -536,10 +536,6 @@ export type MarketingContactUpdatetagsInput = {
   push?: string | string[]
 }
 
-export type EnumLeadStatusFieldUpdateOperationsInput = {
-  set?: $Enums.LeadStatus
-}
-
 export type EnumLastOutreachFieldUpdateOperationsInput = {
   set?: $Enums.LastOutreach
 }

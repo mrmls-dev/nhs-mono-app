@@ -52,6 +52,9 @@ export default async function CommunitiesSection({
     countyBounds,
     countyName,
     mapboxToken,
+    bedsMin,
+    bathsMin,
+    priceMax,
 }: {
     agentId: string;
     countyId?: string;
@@ -59,12 +62,27 @@ export default async function CommunitiesSection({
     countyName?: string;
     /** Agent's domain-restricted Mapbox token (null on subdomain/apex sites). */
     mapboxToken?: string | null;
+    /** Buyer-match filters: show communities offering at least this many beds/baths,
+        within the given price ceiling. A community with more beds/baths still qualifies. */
+    bedsMin?: number;
+    bathsMin?: number;
+    priceMax?: number;
 }) {
     const all = await getPublicCommunities(agentId);
 
-    const filtered = countyId
-        ? all.filter((c) => c.countyId === countyId)
-        : all;
+    const hasMatchFilters =
+        bedsMin !== undefined ||
+        bathsMin !== undefined ||
+        priceMax !== undefined;
+
+    const filtered = all.filter((c) => {
+        if (countyId && c.countyId !== countyId) return false;
+        // Spec filters only apply to communities that have floor plans (priced).
+        if (bedsMin !== undefined && c.bedsMin < bedsMin) return false;
+        if (bathsMin !== undefined && Number(c.bathsMin) < bathsMin) return false;
+        if (priceMax !== undefined && Number(c.priceFrom) > priceMax) return false;
+        return true;
+    });
     const data = filtered.map(toCard);
 
     const pins: CommunityPin[] = filtered
@@ -107,10 +125,12 @@ export default async function CommunitiesSection({
                             </h2>
                             <p className="text-sm text-muted-foreground">
                                 {data.length > 0
-                                    ? `${data.length} ${data.length === 1 ? "community" : "communities"} available`
-                                    : countyName
-                                      ? "No communities listed yet"
-                                      : "Explore new construction across all counties"}
+                                    ? `${data.length} ${data.length === 1 ? "community" : "communities"}${hasMatchFilters ? " matching your search" : " available"}`
+                                    : hasMatchFilters
+                                      ? "No matches — try widening your search"
+                                      : countyName
+                                        ? "No communities listed yet"
+                                        : "Explore new construction across all counties"}
                             </p>
                         </div>
                         <ScheduleVisitButton size="sm" />
@@ -123,12 +143,14 @@ export default async function CommunitiesSection({
                             </div>
                             <div className="flex flex-col gap-1">
                                 <p className="text-lg font-semibold text-foreground">
-                                    No communities yet in{" "}
-                                    {countyName ?? "this county"}
+                                    {hasMatchFilters
+                                        ? "No homes match your search"
+                                        : `No communities yet in ${countyName ?? "this county"}`}
                                 </p>
                                 <p className="max-w-xs text-sm text-muted-foreground">
-                                    We&rsquo;re actively expanding into this
-                                    area. Check back soon for new communities.
+                                    {hasMatchFilters
+                                        ? "Try adjusting your beds, baths, or budget to see more communities."
+                                        : "We’re actively expanding into this area. Check back soon for new communities."}
                                 </p>
                             </div>
                         </div>

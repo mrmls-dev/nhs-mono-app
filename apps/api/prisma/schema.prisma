@@ -312,6 +312,7 @@ model Organization {
   assignedCounties AgentCounty[]
   hiddenCommunities AgentHiddenCommunity[]
   floorPlanVideos  AgentFloorPlanVideo[]
+  buyerLeads       BuyerLead[]
   createdAt        DateTime     @default(now())
 
   @@map("organization")
@@ -361,6 +362,35 @@ model AgentFloorPlanVideo {
 
   @@unique([organizationId, floorPlanId])
   @@index([organizationId])
+}
+
+// Buyer-match leads captured by the public marketing home page's survey.
+// Tenant-scoped: every lead belongs to the agent (Organization) whose site
+// produced it, so an agent only ever sees the leads from their own domain.
+// `location`..`matchCount` are a snapshot of the buyer's survey answers.
+model BuyerLead {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  firstName      String
+  lastName       String
+  email          String
+  phone          String
+  consent        Boolean      @default(false)
+  location       String?
+  countyId       String?
+  homeType       String?
+  bedrooms       String?
+  bathrooms      String?
+  budget         String?
+  matchCount     Int?
+  leadStatus     LeadStatus   @default(NEW)
+  note           String?      @db.Text
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([organizationId])
+  @@index([leadStatus])
 }
 
 model Member {

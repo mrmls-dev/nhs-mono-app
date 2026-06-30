@@ -1,43 +1,75 @@
 import { headers } from "next/headers";
-import { getPublicCounties } from "@/api/county";
 import { getAgentByDomain } from "@/api/agent";
-import CommunitiesSection from "@/components/CommunitiesSection";
-import type { CountyBounds } from "@/components/ListingMap";
+import { getPublicCounties } from "@/api/county";
+import { getPublicCommunities } from "@/api/community";
+import { formatPrice, formatRange } from "@/lib/format";
+import HomeHero from "@/components/HomeHero";
+import HomeTrustStats from "@/components/HomeTrustStats";
+import HomeWhyNewConstruction from "@/components/HomeWhyNewConstruction";
+import HomeMonthlySavings from "@/components/HomeMonthlySavings";
+import HomeFaq from "@/components/HomeFaq";
+import HomeFeaturedCommunities, {
+    type FeaturedCommunity,
+} from "@/components/HomeFeaturedCommunities";
+import HomeHowItWorks from "@/components/HomeHowItWorks";
+import HomeBlog from "@/components/HomeBlog";
+import HomeCtaBand from "@/components/HomeCtaBand";
+import type { CountyOption } from "@/lib/home-data";
 
-type HomeProps = { searchParams: Promise<{ county?: string }> };
+export default async function Home() {
+    // Resolve the agent so the survey is attributed to this tenant, and its
+    // location step + featured communities come from the agent's catalog.
+    let agentId: string | undefined;
+    let counties: CountyOption[] | undefined;
+    let featured: FeaturedCommunity[] = [];
 
-export default async function Home({ searchParams }: HomeProps) {
-    const { county } = await searchParams;
+    try {
+        const host = (await headers()).get("host") ?? undefined;
+        const agent = await getAgentByDomain(host);
+        agentId = agent.id;
 
-    // Resolve the agent for this request so the catalog is scoped to its
-    // assigned counties + visible communities.
-    const host = (await headers()).get("host") ?? undefined;
-    const agent = await getAgentByDomain(host);
+        const [countyList, communities] = await Promise.all([
+            getPublicCounties(agent.id),
+            getPublicCommunities(agent.id),
+        ]);
 
-    let countyName: string | undefined;
-    let countyBounds: CountyBounds | undefined;
+        counties = countyList.map((c) => ({ id: c.id, name: c.name }));
 
-    if (county) {
-        const counties = await getPublicCounties(agent.id);
-        const found = counties.find((c) => c.id === county);
-        if (found) {
-            countyName = found.name;
-            countyBounds = {
-                north: found.boundsNorth,
-                south: found.boundsSouth,
-                east: found.boundsEast,
-                west: found.boundsWest,
-            };
-        }
+        featured = communities
+            .filter((c) => c.status === "NOW_SELLING")
+            .slice(0, 3)
+            .map((c) => {
+                const hasPlans = c._count.floorPlans > 0;
+                return {
+                    slug: c.slug,
+                    name: c.name,
+                    location: c.location,
+                    image: c.image,
+                    county: c.county?.name ?? "",
+                    beds: hasPlans
+                        ? formatRange(c.bedsMin, c.bedsMax, "Bed")
+                        : "—",
+                    plans: c._count.floorPlans,
+                    priceFrom: hasPlans ? formatPrice(c.priceFrom) : "—",
+                };
+            });
+    } catch {
+        // API/agent unavailable — render the page without live data.
     }
 
     return (
-        <CommunitiesSection
-            agentId={agent.id}
-            countyId={county}
-            countyBounds={countyBounds}
-            countyName={countyName}
-            mapboxToken={agent.mapboxToken}
-        />
+        <main className="flex flex-col">
+            <HomeHero counties={counties} agentId={agentId} />
+            <HomeTrustStats />
+            <HomeWhyNewConstruction />
+            <HomeMonthlySavings />
+            {featured.length > 0 && (
+                <HomeFeaturedCommunities communities={featured} />
+            )}
+            <HomeHowItWorks />
+            <HomeFaq />
+            <HomeBlog />
+            <HomeCtaBand />
+        </main>
     );
 }

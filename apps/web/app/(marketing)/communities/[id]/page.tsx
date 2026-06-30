@@ -62,14 +62,14 @@ export default async function CommunityPage({ params }: Props) {
         <main className="container mx-auto flex flex-col gap-8 px-4 py-6 md:gap-12 md:px-5 md:py-8">
             <div className="flex flex-col gap-3">
                 <nav className="text-sm text-muted-foreground">
-                    <Link href="/" className="hover:text-primary">
+                    <Link href="/communities" className="hover:text-primary">
                         Communities
                     </Link>
                     <span className="mx-2">/</span>
                     <span className="text-foreground">{community.name}</span>
                 </nav>
                 <Link
-                    href="/"
+                    href="/communities"
                     className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
                 >
                     <ArrowLeft className="size-4" aria-hidden />

@@ -76,7 +76,9 @@ export class MarketingContactsService {
                 : {}),
         };
 
-        const [data, total] = await this.prisma.$transaction([
+        // Read-only list+count need no atomicity; a batch `$transaction`
+        // intermittently times out (P2028) against the Neon pooler.
+        const [data, total] = await Promise.all([
             this.prisma.marketingContact.findMany({
                 where,
                 orderBy: { createdAt: "desc" },

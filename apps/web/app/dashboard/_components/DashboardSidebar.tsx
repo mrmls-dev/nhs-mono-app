@@ -17,6 +17,7 @@ import {
     Settings,
     PhoneCall,
     Plug,
+    Inbox,
 } from "lucide-react";
 import { AgentDetailSidebar } from "../agents/[id]/_components/AgentDetailSidebar";
 import {
@@ -72,6 +73,11 @@ const adminGroups: NavGroup[] = [
         label: "Platform",
         items: [
             { title: "Contacts", href: "/dashboard/contacts", icon: PhoneCall },
+            {
+                title: "Buyer Leads",
+                href: "/dashboard/buyer-leads",
+                icon: Inbox,
+            },
             { title: "Members", href: "/dashboard/members", icon: UserCog },
             {
                 title: "Integrations",
@@ -88,6 +94,11 @@ const agentGroups: NavGroup[] = [
         label: "Your site",
         items: [
             { title: "Communities", href: "/dashboard/listings", icon: Building2 },
+            {
+                title: "Buyer Leads",
+                href: "/dashboard/buyer-leads",
+                icon: Inbox,
+            },
             { title: "Branding", href: "/dashboard/branding", icon: Palette },
             { title: "SEO", href: "/dashboard/seo", icon: Search },
             { title: "Domain", href: "/dashboard/domain", icon: Globe },

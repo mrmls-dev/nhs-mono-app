@@ -17,12 +17,12 @@ export default function MarketingNotFound() {
                     We couldn&rsquo;t find that page
                 </h1>
                 <p className="max-w-md text-sm text-muted-foreground">
-                    The community or page you&rsquo;re looking for may have moved,
-                    sold out, or isn&rsquo;t available in this area.
+                    The community or page you&rsquo;re looking for may have
+                    moved, sold out, or isn&rsquo;t available in this area.
                 </p>
             </div>
             <Link
-                href="/"
+                href="/communities"
                 className="inline-flex h-11 items-center gap-2 rounded-md bg-primary px-6 font-semibold text-primary-foreground transition-opacity hover:opacity-90"
             >
                 <Home className="size-4" />

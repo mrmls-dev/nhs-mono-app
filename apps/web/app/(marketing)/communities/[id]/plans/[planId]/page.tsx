@@ -56,7 +56,7 @@ export default async function FloorPlanPage({ params }: Props) {
         <main className="container mx-auto px-4 md:px-5 py-6 md:py-8 flex flex-col gap-8 md:gap-12">
             <div className="flex flex-col gap-3">
                 <nav className="text-sm text-muted-foreground">
-                    <Link href="/" className="hover:text-primary">
+                    <Link href="/communities" className="hover:text-primary">
                         Communities
                     </Link>
                     <span className="mx-2">/</span>

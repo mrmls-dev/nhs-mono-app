@@ -259,6 +259,17 @@ export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
 }
 
+export type IntNullableFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
+  in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  notIn?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedIntNullableFilter<$PrismaModel> | number | null
+}
+
 export type EnumLeadStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.LeadStatus | Prisma.EnumLeadStatusFieldRefInput<$PrismaModel>
   in?: $Enums.LeadStatus[] | Prisma.ListEnumLeadStatusFieldRefInput<$PrismaModel>
@@ -266,11 +277,20 @@ export type EnumLeadStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumLeadStatusFilter<$PrismaModel> | $Enums.LeadStatus
 }
 
-export type EnumLastOutreachFilter<$PrismaModel = never> = {
-  equals?: $Enums.LastOutreach | Prisma.EnumLastOutreachFieldRefInput<$PrismaModel>
-  in?: $Enums.LastOutreach[] | Prisma.ListEnumLastOutreachFieldRefInput<$PrismaModel>
-  notIn?: $Enums.LastOutreach[] | Prisma.ListEnumLastOutreachFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumLastOutreachFilter<$PrismaModel> | $Enums.LastOutreach
+export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
+  in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  notIn?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _avg?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+  _sum?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
 }
 
 export type EnumLeadStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -281,6 +301,13 @@ export type EnumLeadStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumLeadStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumLeadStatusFilter<$PrismaModel>
+}
+
+export type EnumLastOutreachFilter<$PrismaModel = never> = {
+  equals?: $Enums.LastOutreach | Prisma.EnumLastOutreachFieldRefInput<$PrismaModel>
+  in?: $Enums.LastOutreach[] | Prisma.ListEnumLastOutreachFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LastOutreach[] | Prisma.ListEnumLastOutreachFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLastOutreachFilter<$PrismaModel> | $Enums.LastOutreach
 }
 
 export type EnumLastOutreachWithAggregatesFilter<$PrismaModel = never> = {
@@ -547,11 +574,31 @@ export type NestedEnumLeadStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumLeadStatusFilter<$PrismaModel> | $Enums.LeadStatus
 }
 
-export type NestedEnumLastOutreachFilter<$PrismaModel = never> = {
-  equals?: $Enums.LastOutreach | Prisma.EnumLastOutreachFieldRefInput<$PrismaModel>
-  in?: $Enums.LastOutreach[] | Prisma.ListEnumLastOutreachFieldRefInput<$PrismaModel>
-  notIn?: $Enums.LastOutreach[] | Prisma.ListEnumLastOutreachFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumLastOutreachFilter<$PrismaModel> | $Enums.LastOutreach
+export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
+  in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  notIn?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _avg?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+  _sum?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
+}
+
+export type NestedFloatNullableFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
+  in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
+  notIn?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
+  lt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
 }
 
 export type NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -562,6 +609,13 @@ export type NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumLeadStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumLeadStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumLastOutreachFilter<$PrismaModel = never> = {
+  equals?: $Enums.LastOutreach | Prisma.EnumLastOutreachFieldRefInput<$PrismaModel>
+  in?: $Enums.LastOutreach[] | Prisma.ListEnumLastOutreachFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LastOutreach[] | Prisma.ListEnumLastOutreachFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLastOutreachFilter<$PrismaModel> | $Enums.LastOutreach
 }
 
 export type NestedEnumLastOutreachWithAggregatesFilter<$PrismaModel = never> = {

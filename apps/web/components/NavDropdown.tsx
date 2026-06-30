@@ -31,7 +31,7 @@ export default function NavDropdown({ counties }: { counties: County[] }) {
             <DropdownMenuContent align="end" className="min-w-48">
                 <DropdownMenuItem asChild>
                     <Link
-                        href="/"
+                        href="/communities"
                         className={cn(
                             "cursor-pointer",
                             !activeCounty && "font-semibold text-primary",
@@ -43,7 +43,7 @@ export default function NavDropdown({ counties }: { counties: County[] }) {
                 {counties.map((county) => (
                     <DropdownMenuItem key={county.id} asChild>
                         <Link
-                            href={`/?county=${county.id}`}
+                            href={`/communities?county=${county.id}`}
                             className={cn(
                                 "cursor-pointer",
                                 activeCounty === county.id &&

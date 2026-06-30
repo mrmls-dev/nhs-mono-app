@@ -6,6 +6,7 @@ import { Home } from "lucide-react";
 import { getPublicCounties } from "@/api/county";
 import { getAgentByDomain } from "@/api/agent";
 import NavDropdown from "@/components/NavDropdown";
+import FindMyMatchButton from "@/components/FindMyMatchButton";
 import { BrandThemeProvider } from "@/components/BrandThemeProvider";
 import { PublicThemeToggle } from "@/components/PublicThemeToggle";
 import { SiteSuspended } from "@/components/SiteSuspended";
@@ -78,14 +79,13 @@ export default async function MarketingLayout({
 
                     <div className="flex items-center gap-3">
                         <PublicThemeToggle />
-                        <a
-                            href="https://nationalhousesearch.com"
-                            rel="noopener noreferrer"
-                            className="inline-flex h-8 items-center gap-1.5 rounded px-3 text-xs font-semibold text-muted-foreground transition-colors hover:bg-border hover:text-foreground sm:h-10 sm:px-5 sm:text-sm"
+                        <Link
+                            href="/communities"
+                            className="hidden h-8 items-center gap-1.5 rounded px-3 text-xs font-semibold text-muted-foreground transition-colors hover:bg-border hover:text-foreground sm:inline-flex sm:h-10 sm:px-5 sm:text-sm"
                         >
-                            <Home className="size-3.5 shrink-0 sm:size-4" />
-                            Home
-                        </a>
+                            Communities
+                        </Link>
+                        <FindMyMatchButton />
                         <Suspense
                             fallback={
                                 <button
@@ -118,16 +118,6 @@ export default async function MarketingLayout({
                         <p className="text-sm font-semibold tracking-wide text-secondary-foreground/80">
                             {agent.footerText ?? ""}
                         </p>
-                    </div>
-
-                    <div className="flex items-center gap-1.5 text-secondary-foreground/40">
-                        <Home
-                            className="size-5"
-                            aria-label="Equal Housing Opportunity"
-                        />
-                        <span className="text-xs">
-                            Equal Housing Opportunity
-                        </span>
                     </div>
 
                     <div className="w-16 border-t border-secondary-foreground/20" />
