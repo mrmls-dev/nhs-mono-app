@@ -68,7 +68,7 @@ export default async function Home() {
             )}
             <HomeHowItWorks />
             <HomeFaq />
-            <HomeBlog />
+            {/* <HomeBlog /> */}
             <HomeCtaBand />
         </main>
     );
